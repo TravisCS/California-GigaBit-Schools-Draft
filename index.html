@@ -686,10 +686,7 @@ a{color:var(--link)}
 button,input,select{font-family:var(--serif);font-size:14px;color:var(--ink)}
 .card{background:var(--panel);color:var(--ink);border-radius:8px;box-shadow:var(--shadow)}
 #titlecard{position:absolute;z-index:800;top:calc(10px + env(safe-area-inset-top,0px));left:calc(56px + env(safe-area-inset-left,0px));max-width:min(430px,calc(100vw - 400px));padding:10px 14px}
-#titlecard .head{display:flex;justify-content:space-between;align-items:center;gap:10px}
 #titlecard h1{font-size:19px;margin:0;font-weight:700;text-wrap:balance;line-height:1.2}
-#titlecard .body{margin-top:4px}
-#titlecard.min .body{display:none}
 #titlecard .sub{margin:0;color:var(--muted);font-size:13.5px;line-height:1.35}
 #titlecard .stat{margin:6px 0 0;font-size:14px;line-height:1.35}
 #titlecard .stat b{font-variant-numeric:tabular-nums}
@@ -798,11 +795,10 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 
 <div id="map" role="region" aria-label="Map of California schools by broadband speed"></div>
 
-<div id="titlecard" class="card min">
-  <div class="head"><h1>California Schools Outside Gigabit Coverage</h1><button class="btn" id="tcToggle" aria-expanded="false">Show</button></div>
-  <div class="body">
+<div id="titlecard" class="card">
+  <h1>California Schools Outside Gigabit Coverage</h1>
+  <div class="body" hidden>
   <p class="sub">Public K-12 schools in census blocks where no one subscribes to a 1 Gbps fixed download plan, by district, with the fastest subscribed speed at each school's block.</p>
-  <p class="stat" id="stat">Loading data</p>
   </div>
   <div class="row">
     <span class="seg" role="group" aria-label="Basemap"><button id="bmSat" aria-pressed="true">Satellite</button><button id="bmStr" aria-pressed="false">Street</button></span>
@@ -851,6 +847,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
     <button class="btn x" id="closeAbout">Close</button>
     <h2 id="aboutH">About the data</h2>
     <p class="note" style="font-size:14px">Map by Travis Cody Smith. Made <span class="made"></span>.</p>
+    <p class="note" style="font-size:14px" id="stat">Loading data</p>
     <p><b>In short:</b> 781 of California's 10,351 public schools (460 districts in 56 counties, 283,360 students) sit in census blocks where the fastest fixed broadband anyone subscribes to is under 1 Gbps download. Another 72 schools (26,049 students) sit where the state map has no speed data. The other 9,498 schools are in gigabit blocks. The map's live count includes both groups, so it shows 853 schools in 494 districts across 57 counties. Speeds are the fastest plan with at least one subscriber in the block, as reported to the CPUC, not what providers advertise.</p>
 
 <table>
@@ -1318,8 +1315,6 @@ function wire(){
   var aw=document.getElementById("auditWhat");if(aw)aw.onclick=function(e){e.preventDefault();openAbout();var t=document.getElementById("audit");if(t)t.scrollIntoView({block:"start"});};
   ab.addEventListener("click",function(e){if(e.target===ab)closeAbout()});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!ab.hidden)closeAbout()});
-  var tcEl=document.getElementById("titlecard"),tt=document.getElementById("tcToggle");
-  tt.onclick=function(){var min=tcEl.classList.toggle("min");tt.textContent=min?"Show":"Hide";tt.setAttribute("aria-expanded",String(!min));fitControls();if(!Object.keys(countyMode).some(function(k){return countyMode[k]}))map.fitBounds(allBounds(),fitPad());};
   var lg=document.getElementById("legend"),lt=document.getElementById("legToggle");
   lt.onclick=function(){var min=lg.classList.toggle("min");lt.textContent=min?"Show":"Hide";lt.setAttribute("aria-expanded",String(!min));fitControls();};
   window.addEventListener("resize",fitControls);
