@@ -7,7 +7,7 @@ Abstract: Interactive statewide map of California census blocks where the fastes
 Purpose: Portfolio sample for a BEAD and broadband consulting application (CTC Technology and Energy, California). Shows school-level broadband gap analysis from official state and federal data.
 
 Author and contact: Travis Cody Smith
-Created: 2026-10-28. Last update: 2026-10-28 (added area tap cards).
+Created: 2026-10-28. Last update: 2026-10-28 (area tap cards; "Tap opens" switch for schools, areas or both; school dots drawn above group dots; cards restyled with stat tiles and sections).
 
 Spatial extent (WGS 84 degrees): west -124.596, south 32.226, east -114.248, north 42.094.
 Coordinate system: sources read in WGS 84 / Pseudo-Mercator (EPSG:3857); school points in WGS 84 (EPSG:4326); displayed in EPSG:3857.
