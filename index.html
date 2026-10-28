@@ -1044,6 +1044,9 @@ function render(){
   updateCounts();fitControls();
 }
 function L_name(k){return (LEA[k]&&LEA[k][0])||("District "+k)}
+var EDGEQ="https://nces.ed.gov/opengis/rest/services/K12_School_Locations/EDGE_ADMINDATA_PUBLICSCH_2425/MapServer/1/query?outFields=*&returnGeometry=false&f=html&where=";
+function schoolLink(id){var nc=D.noCCD&&D.noCCD.s.indexOf(id)>=0;return nc?'<a href="'+EDGEQ+encodeURIComponent("NCESSCH='"+id+"'")+'" target="_blank" rel="noopener">NCES 2024-25 record</a> (not yet in the NCES school search)':'<a href="https://nces.ed.gov/ccd/schoolsearch/school_detail.asp?ID='+esc(id)+'" target="_blank" rel="noopener">NCES school record</a>'}
+function districtLink(k){var nc=D.noCCD&&D.noCCD.d.indexOf(k)>=0;return nc?'<a href="'+EDGEQ+encodeURIComponent("LEAID='"+k+"'")+'" target="_blank" rel="noopener">NCES 2024-25 records for this district</a> (not yet in the NCES district search)':'<a href="https://nces.ed.gov/ccd/districtsearch/district_detail.asp?ID2='+esc(k)+'" target="_blank" rel="noopener">NCES district record</a>'}
 
 function tierPill(t){return '<span class="pill" style="background:'+TIERS[t].color+(t>=4&&t<=5?';color:#1d2320':'')+'">'+esc(TIERS[t].label)+'</span>'}
 function schoolCard(s){
@@ -1057,7 +1060,7 @@ function schoolCard(s){
   '<p class="sec"><i>School</i></p>'+
   '<table><tr><td>Locale</td><td>'+esc(loc)+'</td></tr>'+
   '<tr><td>NCES ID</td><td>'+esc(s[0])+'</td></tr></table>'+
-  '<p class="src">Sources: <a href="https://nces.ed.gov/ccd/schoolsearch/school_detail.asp?ID='+esc(s[0])+'" target="_blank" rel="noopener">NCES school record</a> | <a href="'+D.links.cpuc+'" target="_blank" rel="noopener">CPUC broadband map</a> | <a href="'+D.links.ncesLayer+'" target="_blank" rel="noopener">NCES EDGE 2024-25 layer</a></p></div>';
+  '<p class="src">Sources: '+schoolLink(s[0])+' | <a href="'+D.links.cpuc+'" target="_blank" rel="noopener">CPUC broadband map</a> | <a href="'+D.links.ncesLayer+'" target="_blank" rel="noopener">NCES EDGE 2024-25 layer</a></p></div>';
 }
 function districtCard(k,arr){
   var dm=dominant(arr),c=dm.counts,max=Math.max.apply(null,c),enr=0;arr.forEach(function(s){if(s[6]>0)enr+=s[6]});
@@ -1065,7 +1068,7 @@ function districtCard(k,arr){
   return '<div class="pc"><h3>'+esc(L_name(k))+'</h3><p class="meta">'+esc(arr[0][7])+' County. NCES district ID '+esc(k)+'</p>'+
   '<div class="kv"><div><b>'+fmt(arr.length)+'</b><span>schools below gigabit</span></div><div><b>'+(enr?fmt(enr):'n/a')+'</b><span>students, 2024-25</span></div></div>'+
   '<p class="sec"><i>Schools by fastest download</i></p><div class="bars">'+rows+'</div>'+
-  '<p class="src">Tap a school dot for its card, or the district name above the dots for this one. <a href="https://nces.ed.gov/ccd/districtsearch/district_detail.asp?ID2='+esc(k)+'" target="_blank" rel="noopener">NCES district record</a></p></div>';
+  '<p class="src">Tap a school dot for its card, or the district name above the dots for this one. '+districtLink(k)+'</p></div>';
 }
 
 function buildLegend(){
