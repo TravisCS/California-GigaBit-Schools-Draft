@@ -719,6 +719,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .dot.county{border-style:double;border-width:4px}
 .chip{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:0;font-size:12.5px;white-space:nowrap;box-shadow:var(--shadow);font-family:var(--serif);display:inline-flex;transform:translate(-50%,calc(-100% - 12px))}
 .chip span{padding:2px 8px}
+.chip .ck{padding:2px 6px 2px 8px;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;border-right:1px solid var(--rule)}
 .chip.county{transform:translate(-50%,calc(-100% - 44px))}
 .chip .cn{cursor:pointer;color:var(--link);text-decoration:underline;text-decoration-color:rgba(11,87,208,.4)}
 .chip .cg{cursor:pointer;border-left:1px solid var(--rule);color:var(--muted)}
@@ -876,7 +877,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>School source.</b> National Center for Education Statistics (NCES), EDGE Public School Characteristics 2024-25, published April 27, 2026. California has 10,351 schools in this file. School names, districts, addresses, enrollment, county and locale come from it. On October 28, 2026 every mapped school was re-checked against that layer by ID: all 853 positions agree to within 1 m, and names, districts, addresses and enrollment match exactly. The file includes 7 "Future" schools not yet open, 6 "New" schools and 2 with a changed boundary or agency; their cards say so under Status.</li>
 <li><b>How schools were picked.</b> School locations were drawn from the NCES service and compared with the speed layer. Schools in or near any block below 1 Gbps (1,342 records) were then pulled from the NCES service by location, and each was given its tier as in note 6. Schools that turned out to be in gigabit blocks were dropped from the dots.</li>
 <li><b>Area cards.</b> Tapping a shaded area outlines one connected patch of 400 m cells that share the same fastest download (8,824 patches statewide) and shows its size, the counties of the schools inside it, and the share of land within 5 km of the tapped point in each tier. Sizes are true ground area, corrected for the Web Mercator stretch. For gigabit patches it also shows the split between 2 Gbps or more, 1 to 1.99 Gbps and placeholder values. A school is listed in a patch when its 400 m cell (or a touching cell) falls in that patch, so a school can appear in a patch of a different color than its own tier (note 7).</li>
-<li><b>Getting around.</b> Tap a dot to spread it and zoom in. A county with one district or four or fewer schools goes straight to its schools, and a one-school district opens that school's card at once. Gathering a district zooms back out to its county, and gathering a county zooms back out to the state. Every card has a Close button, and school and district cards have a button that zooms back out to the whole district or county. The target button under the zoom control returns to the whole state, and Escape closes any card.</li>
+<li><b>Getting around.</b> Tap a dot to spread it and zoom in. A county with one district or four or fewer schools goes straight to its schools, and a one-school district opens that school's card at once. Gathering a district zooms back out to its county, and gathering a county zooms back out to its third of the state (north, central or south). The target button under the zoom control shows the whole state. Every card has a Close button, and school and district cards have a button that zooms back out to the whole district or county. The target button under the zoom control returns to the whole state, and Escape closes any card.</li>
 <li><b>Grouping.</b> Ringed dots are counties and plain dots are districts (NCES local education agency, so a single-school charter counts as its own district). The number is the count of schools shown, and the color is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
 <li><b>Limitations.</b> Census blocks can be large in rural areas, and a school near a block edge may take its neighbor's speed. Reported speeds are advertised plan speeds, not measured speeds. A school's own connection (often a dedicated circuit through E-Rate or the CENIC K12 High Speed Network) can be much faster than what homes in the same block can buy, so this map shows neighborhood access, not the school's circuit. Enrollment of 0 or below means NCES did not report it.</li>
 <li><b>Basemaps.</b> USGS The National Map: Imagery Only (data refreshed June 2024) and USGS Topo (data refreshed September 4, 2026). Both are U.S. government works in the public domain. They are shown as single statewide images, so they blur when zoomed in close.</li>
@@ -1025,7 +1026,7 @@ function dotIcon(n,color,cls,label){
     html:'<div class="dot '+cls+'" style="width:'+d+'px;height:'+d+'px;background:'+color+';color:'+inkOn(color)+';font-size:'+fs+'px" aria-hidden="true">'+fmt(n)+'</div>'});
 }
 function chip(latlng,name,fnGather,fnCard){
-  var html='<span class="chip'+(fnCard?'':' county')+'">'+(fnCard?'<span class="cn" role="button" title="Open the card for '+esc(name)+'">'+esc(name)+'</span>':'<span>'+esc(name)+'</span>')+'<span class="cg" role="button" title="Gather '+esc(name)+'">gather</span></span>';
+  var html='<span class="chip'+(fnCard?'':' county')+'"><span class="ck">'+(fnCard?'District':'County')+'</span>'+(fnCard?'<span class="cn" role="button" title="Open the card for '+esc(name)+'">'+esc(name)+'</span>':'<span>'+esc(name)+'</span>')+'<span class="cg" role="button" title="Gather '+esc(name)+'">gather</span></span>';
   var m=L.marker(latlng,{icon:L.divIcon({className:"",iconSize:[0,0],html:html}),zIndexOffset:900,keyboard:true,title:(fnCard?"Open the card for ":"Gather ")+name,interactive:true});
   m.on("click",function(e){var t=e.originalEvent&&e.originalEvent.target;if(t&&t.classList.contains("cn")&&fnCard)fnCard();else fnGather();});
   m.on("add",function(){var el=m.getElement();if(!el)return;el.querySelectorAll(".cn,.cg").forEach(function(sp){sp.setAttribute("tabindex","0");sp.addEventListener("keydown",function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();ev.stopPropagation();if(sp.classList.contains("cn")&&fnCard)fnCard();else fnGather();}})})});
@@ -1038,6 +1039,7 @@ function groups(){
   return byC;
 }
 
+function regionBounds(lat){var band=lat>=38.3?2:(lat>=35.3?1:0);var pts=S.filter(function(s){var b=s[9]>=38.3?2:(s[9]>=35.3?1:0);return b===band}).map(function(s){return[s[9],s[10]]});return L.latLngBounds(pts).pad(0.06)}
 function allBounds(){return L.latLngBounds(S.map(function(s){return[s[9],s[10]]})).pad(0.04)}
 function fitPad(){
   var tc=document.getElementById("titlecard"),lg=document.getElementById("legend"),narrow=window.innerWidth<=760;
@@ -1080,7 +1082,7 @@ function render(){
       layer.addLayer(m);
     }else{
       var cen2=centroid(all);
-      chipLayer.addLayer(chip(topOf(all),c+" County",function(){countyMode[c]=0;Object.keys(dists).forEach(function(k){delete spread[k]});map.closePopup();render();map.flyToBounds(allBounds(),Object.assign(fitPad(),{duration:0.8}));}));
+      chipLayer.addLayer(chip(topOf(all),c,function(){countyMode[c]=0;Object.keys(dists).forEach(function(k){delete spread[k]});map.closePopup();render();map.flyToBounds(regionBounds(cen2[0]),Object.assign(fitPad(),{duration:0.8}));}));
       Object.keys(dists).forEach(function(k){
         var arr=dists[k],dm=dominant(arr),cen=centroid(arr),nm=(L_name(k));
         if(spread[k]){
