@@ -724,6 +724,10 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .chip .cg{cursor:pointer;border-left:1px solid var(--rule);color:var(--muted)}
 .chip .cn:hover,.chip .cg:hover{background:var(--chip)}
 .leaflet-div-icon{background:transparent;border:0}
+.leaflet-tooltip.tt{background:#fff;color:#1d1c19;border:1px solid #c9c3b2;border-radius:4px;padding:5px 9px;font-family:var(--serif);font-size:13px;line-height:1.3;box-shadow:0 2px 8px rgba(0,0,0,.3);white-space:nowrap}
+.leaflet-tooltip.tt b{font-size:14px}
+.tt-hint{color:#5f5b50;font-size:12px}
+.leaflet-tooltip-top.tt:before{border-top-color:#fff}
 .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#1d1c19;box-shadow:0 3px 14px rgba(0,0,0,.35)}
 .leaflet-popup-content-wrapper{border-radius:6px}
 .leaflet-popup-content{margin:12px 14px;font-family:var(--serif);font-size:15px;line-height:1.4;min-width:240px;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);overflow:auto;overscroll-behavior:contain}
@@ -935,6 +939,7 @@ var METH=["Read at the school's own census block","Block at the school had no co
 var D,S=[],LEA={},map,overlay,ovCanvas,ovBase,base={},layer,chipLayer,countyMode={},spread={},tapMode="S";
 var fmt=function(n){return n.toLocaleString("en-US")};
 function plural(n,one,many){return n===1?one:(many||one+"s")}
+var TT={direction:"top",offset:[0,-10],opacity:1,className:"tt"};
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
 var CanvasOverlay=L.ImageOverlay.extend({
@@ -1054,6 +1059,7 @@ function render(){
       var dm=dominant(all),cen=centroid(all);
       var nd=Object.keys(dists).length;
       var m=L.marker(cen,{icon:dotIcon(all.length,TIERS[dm.tier].color,"county",""),title:c+" County: "+fmt(all.length)+" "+plural(all.length,"school")+" in "+nd+" "+plural(nd,"district"),riseOnHover:true});
+      m.bindTooltip('<b>'+esc(c)+' County</b><br>'+fmt(all.length)+' '+plural(all.length,"school")+' in '+nd+' '+plural(nd,"district")+'<br><span class="tt-hint">Tap to spread</span>',TT);
       m.on("click",function(){countyMode[c]=1;map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);});
       layer.addLayer(m);
     }else{
@@ -1066,10 +1072,12 @@ function render(){
           arr.forEach(function(s){
             var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"",iconSize:[16,16],iconAnchor:[8,8],popupAnchor:[0,-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,title:s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)",""),riseOnHover:true});
             cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
+            cm.bindTooltip('<b>'+esc(s[1])+'</b><br>'+esc(TIERS[s[11]].label.replace(" (area only)",""))+'<br><span class="tt-hint">Tap for its card</span>',TT);
             layer.addLayer(cm);
           });
         }else{
           var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",""),title:nm+": "+fmt(arr.length)+" "+plural(arr.length,"school"),riseOnHover:true});
+          m.bindTooltip('<b>'+esc(nm)+'</b><br>'+fmt(arr.length)+' '+plural(arr.length,"school")+', '+esc(c)+' County<br><span class="tt-hint">Tap to spread</span>',TT);
           m.on("click",function(){spread[k]=1;map.closePopup();render();flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),11);});
           layer.addLayer(m);
         }
