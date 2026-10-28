@@ -876,7 +876,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>School source.</b> National Center for Education Statistics (NCES), EDGE Public School Characteristics 2024-25, published April 27, 2026. California has 10,351 schools in this file. School names, districts, addresses, enrollment, county and locale come from it. On October 28, 2026 every mapped school was re-checked against that layer by ID: all 853 positions agree to within 1 m, and names, districts, addresses and enrollment match exactly. The file includes 7 "Future" schools not yet open, 6 "New" schools and 2 with a changed boundary or agency; their cards say so under Status.</li>
 <li><b>How schools were picked.</b> School locations were drawn from the NCES service and compared with the speed layer. Schools in or near any block below 1 Gbps (1,342 records) were then pulled from the NCES service by location, and each was given its tier as in note 6. Schools that turned out to be in gigabit blocks were dropped from the dots.</li>
 <li><b>Area cards.</b> Tapping a shaded area outlines one connected patch of 400 m cells that share the same fastest download (8,824 patches statewide) and shows its size, the counties of the schools inside it, and the share of land within 5 km of the tapped point in each tier. Sizes are true ground area, corrected for the Web Mercator stretch. For gigabit patches it also shows the split between 2 Gbps or more, 1 to 1.99 Gbps and placeholder values. A school is listed in a patch when its 400 m cell (or a touching cell) falls in that patch, so a school can appear in a patch of a different color than its own tier (note 7).</li>
-<li><b>Getting around.</b> Tap a dot to spread it and zoom in. A county with one district or four or fewer schools goes straight to its schools, and a one-school district opens that school's card at once. Every card has a Close button, and school and district cards have a button that zooms back out to the whole district or county. The target button under the zoom control returns to the whole state, and Escape closes any card.</li>
+<li><b>Getting around.</b> Tap a dot to spread it and zoom in. A county with one district or four or fewer schools goes straight to its schools, and a one-school district opens that school's card at once. Gathering a district zooms back out to its county, and gathering a county zooms back out to the state. Every card has a Close button, and school and district cards have a button that zooms back out to the whole district or county. The target button under the zoom control returns to the whole state, and Escape closes any card.</li>
 <li><b>Grouping.</b> Ringed dots are counties and plain dots are districts (NCES local education agency, so a single-school charter counts as its own district). The number is the count of schools shown, and the color is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
 <li><b>Limitations.</b> Census blocks can be large in rural areas, and a school near a block edge may take its neighbor's speed. Reported speeds are advertised plan speeds, not measured speeds. A school's own connection (often a dedicated circuit through E-Rate or the CENIC K12 High Speed Network) can be much faster than what homes in the same block can buy, so this map shows neighborhood access, not the school's circuit. Enrollment of 0 or below means NCES did not report it.</li>
 <li><b>Basemaps.</b> USGS The National Map: Imagery Only (data refreshed June 2024) and USGS Topo (data refreshed September 4, 2026). Both are U.S. government works in the public domain. They are shown as single statewide images, so they blur when zoomed in close.</li>
@@ -1080,11 +1080,11 @@ function render(){
       layer.addLayer(m);
     }else{
       var cen2=centroid(all);
-      chipLayer.addLayer(chip(topOf(all),c+" County",function(){countyMode[c]=0;Object.keys(dists).forEach(function(k){delete spread[k]});map.closePopup();render();}));
+      chipLayer.addLayer(chip(topOf(all),c+" County",function(){countyMode[c]=0;Object.keys(dists).forEach(function(k){delete spread[k]});map.closePopup();render();map.flyToBounds(allBounds(),Object.assign(fitPad(),{duration:0.8}));}));
       Object.keys(dists).forEach(function(k){
         var arr=dists[k],dm=dominant(arr),cen=centroid(arr),nm=(L_name(k));
         if(spread[k]){
-          chipLayer.addLayer(chip(topOf(arr),nm,function(){delete spread[k];map.closePopup();render();},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(k,arr)).openOn(map);}));
+          chipLayer.addLayer(chip(topOf(arr),nm,function(){delete spread[k];map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(k,arr)).openOn(map);}));
           arr.forEach(function(s){
             var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"",iconSize:[16,16],iconAnchor:[8,8],popupAnchor:[0,-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,title:s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)",""),riseOnHover:true});
             cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
@@ -1096,9 +1096,9 @@ function render(){
           m.bindTooltip('<b>'+esc(nm)+'</b><br>'+fmt(arr.length)+' '+plural(arr.length,"school")+', '+esc(c)+' County<br><span class="tt-hint">'+(arr.length===1?'Tap to open the school':'Tap to show its schools')+'</span>',TT);
           m.on("click",function(){
             spread[k]=1;map.closePopup();render();
-            var b=L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3);
+            var b=L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.15);
             if(arr.length===1){var s1=arr[0];afterMove(function(){flyTo(b,11)},function(){L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([s1[9],s1[10]]).setContent(schoolCard(s1)).openOn(map)})}
-            else flyTo(b,11);
+            else flyTo(b,13);
           });
           layer.addLayer(m);
         }
@@ -1253,7 +1253,7 @@ function loadAreas(){
     var t=ev.target.closest?ev.target:null;if(!t)return;
     var b=t.closest("[data-area]");if(b){var p=b.getAttribute("data-area").split(",");map.closePopup();openArea(L.latLng(+p[0],+p[1]));return}
     if(t.closest("[data-close]")){map.closePopup();return}
-    var dd=t.closest("[data-district]");if(dd){var k=dd.getAttribute("data-district"),arr=S.filter(function(x){return x[2]===k&&visible(x)});map.closePopup();if(arr.length)flyTo(L.latLngBounds(arr.map(function(x){return[x[9],x[10]]})).pad(0.3),11);return}
+    var dd=t.closest("[data-district]");if(dd){var k=dd.getAttribute("data-district"),arr=S.filter(function(x){return x[2]===k&&visible(x)});map.closePopup();if(arr.length)flyTo(L.latLngBounds(arr.map(function(x){return[x[9],x[10]]})).pad(0.15),arr.length===1?11:13);return}
     var dc=t.closest("[data-county]");if(dc){var c=dc.getAttribute("data-county"),a=S.filter(function(x){return x[7]===c&&visible(x)});map.closePopup();if(a.length)flyTo(L.latLngBounds(a.map(function(x){return[x[9],x[10]]})).pad(0.15),10);return}
   });
   map.on("popupopen",function(e){if(window.innerWidth<=760)map.getContainer().classList.add("card-open");if(e.popup)fillPhoto(e.popup)});
