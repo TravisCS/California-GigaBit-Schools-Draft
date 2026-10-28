@@ -957,6 +957,13 @@ function init(){
   map.attributionControl.setPrefix(false);
   // a finger that drifts a few pixels is still a tap, not a drag (Leaflet's default is 3 px)
   if(map.dragging&&map.dragging._draggable)map.dragging._draggable.options.clickTolerance=(navigator.maxTouchPoints>0||L.Browser.mobile)?14:5;
+  // Self-heal: if the browser lost the mouse-up that ends a drag, Leaflet keeps thinking a drag is in progress,
+  // swallows every click and hover label, and leaves the grabbing cursor. Clear that state as soon as the mouse
+  // moves with no button held, and when the pointer leaves the window.
+  function healDrag(){var dr=map.dragging&&map.dragging._draggable;if(dr&&(dr._moving||dr._moved)){if(dr.finishDrag)dr.finishDrag();dr._moved=false;dr._moving=false;L.Draggable._dragging=false;document.body.classList.remove("leaflet-dragging")}}
+  document.addEventListener("mousemove",function(e){if(e.buttons===0)healDrag()},true);
+  window.addEventListener("blur",healDrag);
+  document.addEventListener("mouseleave",healDrag);
   map.attributionControl.addAttribution('Basemap: <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map</a> | Speeds: <a href="https://www.broadbandmap.ca.gov/" target="_blank" rel="noopener">CPUC</a> | Schools: <a href="https://nces.ed.gov/programs/edge/Geographic/SchoolLocations" target="_blank" rel="noopener">NCES EDGE</a>');
   var b=D.bounds;
   map.setMaxBounds(L.latLngBounds(b.max));
