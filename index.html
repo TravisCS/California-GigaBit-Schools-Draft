@@ -1152,8 +1152,9 @@ function districtCard(k,arr){
   return '<div class="pc"><h3>'+esc(L_name(k))+'</h3><p class="meta">'+esc(arr[0][7])+' County. NCES district ID '+esc(k)+'<br><a href="'+gmaps(L_name(k)+', '+arr[0][7]+' County, California')+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
   '<div class="kv"><div><b>'+fmt(arr.length-nNo)+'</b><span>'+plural(arr.length-nNo,"school")+' below gigabit</span></div>'+(nNo?'<div><b>'+fmt(nNo)+'</b><span>no speed data</span></div>':'')+'<div><b>'+(enr?fmt(enr):'Not reported')+'</b><span>students, 2024-25</span></div></div>'+
   '<p class="sec"><i>Schools by fastest download</i></p><div class="bars">'+rows+'</div>'+
+  '<p class="sec"><i>Schools in this district</i></p><ul class="alist">'+arr.slice().sort(function(x,y){return(x[11]===7?6.5:x[11])-(y[11]===7?6.5:y[11])||(y[6]||0)-(x[6]||0)}).map(function(x){return '<li><button type="button" class="alink" data-school="'+esc(x[0])+'">'+esc(x[1])+' <small>'+esc(TIERS[x[11]].label.replace(" (area only)",""))+(x[6]>0?', '+fmt(x[6])+' students':'')+'</small></button></li>'}).join('')+'</ul>'+
   '<p class="closerow"><button type="button" class="btn" data-close="1">Close</button><button type="button" class="btn" data-county="'+esc(arr[0][7])+'">All of '+esc(arr[0][7])+' County</button></p>'+
-  '<p class="src">Tap a school dot for its card, or the district name below the dots for this one. '+districtLink(k)+'</p></div>';
+  '<p class="src">Tap a school above or its dot for its card. '+districtLink(k)+'</p></div>';
 }
 
 function buildLegend(){
@@ -1213,6 +1214,7 @@ function loadAreas(){
     var t=ev.target.closest?ev.target:null;if(!t)return;
     var b=t.closest("[data-area]");if(b){var p=b.getAttribute("data-area").split(",");map.closePopup();openArea(L.latLng(+p[0],+p[1]));return}
     if(t.closest("[data-close]")){map.closePopup();return}
+    var ds=t.closest("[data-school]");if(ds){var id=ds.getAttribute("data-school"),sch=S.filter(function(x){return x[0]===id})[0];if(sch){map.closePopup();go({t:"s",s:sch})}return}
     var dd=t.closest("[data-district]");if(dd){var k=dd.getAttribute("data-district"),arr=S.filter(function(x){return x[2]===k&&visible(x)});map.closePopup();if(arr.length)flyTo(L.latLngBounds(arr.map(function(x){return[x[9],x[10]]})).pad(0.15),arr.length===1?11:13);return}
     var dc=t.closest("[data-county]");if(dc){var c=dc.getAttribute("data-county"),a=S.filter(function(x){return x[7]===c&&visible(x)});map.closePopup();if(a.length)flyTo(L.latLngBounds(a.map(function(x){return[x[9],x[10]]})).pad(0.15),10);return}
   });
