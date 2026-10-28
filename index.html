@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>California Schools Outside Gigabit Coverage</title></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>California Public Schools Without Gigabit Broadband</title></head><body>
 <style>
 /* required styles */
 
@@ -686,7 +686,11 @@ a{color:var(--link)}
 button,input,select{font-family:var(--serif);font-size:14px;color:var(--ink)}
 .card{background:var(--panel);color:var(--ink);border-radius:8px;box-shadow:var(--shadow)}
 #titlecard{position:absolute;z-index:800;top:calc(10px + env(safe-area-inset-top,0px));left:calc(56px + env(safe-area-inset-left,0px));max-width:min(430px,calc(100vw - 400px));padding:10px 14px}
+#titlecard .head{display:flex;justify-content:space-between;align-items:center;gap:10px}
 #titlecard h1{font-size:19px;margin:0;font-weight:700;text-wrap:balance;line-height:1.2}
+#tcMin{padding:0 9px;font-size:18px;line-height:24px;min-width:30px}
+#titlecard.min .rows{display:none}
+#titlecard.min h1{font-size:16px}
 #titlecard .sub{margin:0;color:var(--muted);font-size:13.5px;line-height:1.35}
 #titlecard .stat{margin:6px 0 0;font-size:14px;line-height:1.35}
 #titlecard .stat b{font-variant-numeric:tabular-nums}
@@ -796,7 +800,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <div id="map" role="region" aria-label="Map of California schools by broadband speed"></div>
 
 <div id="titlecard" class="card">
-  <h1>California Schools Outside Gigabit Coverage</h1>
+  <div class="head"><h1>California Public Schools Without Gigabit Broadband</h1><button class="btn" id="tcMin" aria-expanded="true" title="Hide the controls">&#8211;</button></div>
+  <div class="rows">
   <div class="body" hidden>
   <p class="sub">Public K-12 schools in census blocks where no one subscribes to a 1 Gbps fixed download plan, by district, with the fastest subscribed speed at each school's block.</p>
   </div>
@@ -807,6 +812,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
   <div class="row" style="margin-top:6px">
     <span class="lbl">Tap opens:</span>
     <span class="seg" role="group" aria-label="What a tap opens"><button id="tapS" aria-pressed="true">Schools</button><button id="tapA" aria-pressed="false">Areas</button><button id="tapB" aria-pressed="false">Both</button></span>
+  </div>
   </div>
 </div>
 
@@ -907,7 +913,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <p class="hang">Agafonkin, V. (2023). <i>Leaflet</i> (Version 1.9.4) [Computer software]. <a href="https://leafletjs.com/" target="_blank" rel="noopener">https://leafletjs.com/</a></p>
 
 <h3>How to cite this map</h3>
-<p class="hang" id="apa">Smith, T. C. (2026). <i>California schools outside gigabit coverage</i> [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/</p>
+<p class="hang" id="apa">Smith, T. C. (2026). <i>California public schools without gigabit broadband</i> [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/</p>
 <p><button class="btn" id="copyApa">Copy citation</button></p>
 <p class="note" style="font-size:13.5px"><i>Note.</i> Speeds from California Public Utilities Commission (2026), data as of December 31, 2024. Schools from National Center for Education Statistics (2026). Basemap from U.S. Geological Survey (2024, 2026); state outline from U.S. Census Bureau (2026). Built with Leaflet; code generated with Claude and not yet reviewed by the author.</p>
 
@@ -1315,6 +1321,8 @@ function wire(){
   var aw=document.getElementById("auditWhat");if(aw)aw.onclick=function(e){e.preventDefault();openAbout();var t=document.getElementById("audit");if(t)t.scrollIntoView({block:"start"});};
   ab.addEventListener("click",function(e){if(e.target===ab)closeAbout()});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!ab.hidden)closeAbout()});
+  var tcEl=document.getElementById("titlecard"),tm=document.getElementById("tcMin");
+  tm.onclick=function(){var min=tcEl.classList.toggle("min");tm.innerHTML=min?"+":"&#8211;";tm.title=min?"Show the controls":"Hide the controls";tm.setAttribute("aria-expanded",String(!min));fitControls();};
   var lg=document.getElementById("legend"),lt=document.getElementById("legToggle");
   lt.onclick=function(){var min=lg.classList.toggle("min");lt.textContent=min?"Show":"Hide";lt.setAttribute("aria-expanded",String(!min));fitControls();};
   window.addEventListener("resize",fitControls);

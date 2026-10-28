@@ -1,6 +1,6 @@
-# Metadata: California schools outside gigabit coverage
+# Metadata: California public schools without gigabit broadband
 
-Title: California Schools Outside Gigabit Coverage
+Title: California Public Schools Without Gigabit Broadband
 
 Abstract: Interactive statewide map of California census blocks where the fastest fixed consumer broadband download reported to the CPUC is under 1 Gbps, with the public K-12 schools that sit in those blocks. Schools are grouped by county and district, can be spread out to individual schools, and are colored by speed tier. 781 schools (460 districts, 56 counties, 283,360 students) are in blocks under 1 Gbps; 72 more (26,049 students) have no speed data at their block; 9,498 are in gigabit blocks.
 
@@ -45,7 +45,7 @@ Code and layout generated with Claude (Anthropic), which also gathered and proce
 All sources are U.S. or California government data. Credit the CPUC for speeds, NCES for schools and USGS The National Map for basemaps with any copy of the map.
 
 ## Citation (APA)
-Smith, T. C. (2026). *California schools outside gigabit coverage* [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/
+Smith, T. C. (2026). *California public schools without gigabit broadband* [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/
 
 Figure note: *Note.* Speeds from California Public Utilities Commission (2026), data as of December 31, 2024. Schools from National Center for Education Statistics (2026). Basemap from U.S. Geological Survey (2024, 2026). Built with Leaflet; code generated with Claude and not yet reviewed by the author.
 
