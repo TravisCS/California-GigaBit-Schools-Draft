@@ -1162,8 +1162,7 @@ function areaCard(id,a,rc,latlng){
     '<tr><td>Area size</td><td>'+(size<10?size.toFixed(1):fmt(Math.round(size)))+' sq km</td></tr>';
   if(t===6&&a[4])rows+='<tr><td>Gigabit mix</td><td>2 Gbps or more '+a[4][0]+'%, 1 to 1.99 Gbps '+a[4][1]+'%'+(a[4][2]?', placeholder value '+a[4][2]+'%':'')+'</td></tr>';
   rows+=cn.length?'<tr><td>County</td><td>'+esc(cn.slice(0,3).join(", "))+(cn.length>3?" and "+(cn.length-3)+" more":"")+'</td></tr>':'';
-  var sl=sch.length?fmt(sch.length)+(enr?', '+fmt(enr)+' students':''):'None';
-  rows+='<tr><td>Schools inside</td><td>'+(t===6?(sch.length?sl+' mapped along its slower edges; gigabit schools are not drawn':'Gigabit schools are not drawn'):sl)+'</td></tr>';
+  rows+='<tr><td>Students</td><td>'+(sch.length?(enr?fmt(enr)+' enrolled (2024-25)':'Not reported'):'None')+(t===6&&sch.length?', at schools mapped along its slower edges':'')+'</td></tr>';
   if(near&&t!==6)rows+='<tr><td>Nearest school</td><td>'+near+'</td></tr>';
   rows+='<tr><td>Tapped point</td><td>'+latlng.lat.toFixed(4)+', '+latlng.lng.toFixed(4)+'</td></tr>';
   var m=mix5km(rc,latlng),bars="",max=1;m.c.forEach(function(v){if(v>max)max=v});if(m.none>max)max=m.none;
