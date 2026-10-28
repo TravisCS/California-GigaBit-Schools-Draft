@@ -746,6 +746,9 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .pc .kv b{display:block;font-size:1.3rem;line-height:1.1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .pc .kv b.t{font-size:1.05rem;line-height:1.15}
 .pc .kv span{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:#5f5b50}
+.pc .kvbtn{all:unset;cursor:pointer;background:#efece2;border-radius:3px;padding:5px 8px;flex:1;min-width:0;display:block;box-sizing:border-box;border:1px solid #d9d4c4}
+.pc .kvbtn:hover,.pc .kvbtn:focus-visible{background:#e6e2d4;outline:2px solid var(--accent)}
+.pc .kvbtn .hint{display:block;text-transform:none;letter-spacing:0;color:#1f4e79;font-size:.72rem;margin-top:2px}
 .pc .sec{border-top:1px solid #c9c3b2;padding-top:6px;margin:8px 0 0;font-size:.9rem}
 .pc .sec i{display:block;margin-bottom:3px}
 .pc table{border-collapse:collapse;width:100%;font-size:.88rem;margin:2px 0 4px}
@@ -1100,8 +1103,11 @@ function render(){
         var arr=dists[k],dm=dominant(arr),cen=centroid(arr),nm=(L_name(k));
         if(spread[k]){
           chipLayer.addLayer(chip(bottomOf(arr),nm,function(){delete spread[k];map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(k,arr)).openOn(map);}));
+          var stacks={};arr.forEach(function(s){var key=s[9].toFixed(4)+","+s[10].toFixed(4);(stacks[key]=stacks[key]||[]).push(s)});
           arr.forEach(function(s){
-            var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"",iconSize:[16,16],iconAnchor:[8,8],popupAnchor:[0,-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,title:s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)",""),riseOnHover:true});
+            var key=s[9].toFixed(4)+","+s[10].toFixed(4),grp=stacks[key],dx=0,dy=0;
+            if(grp.length>1){var i=grp.indexOf(s),ang=-Math.PI/2+i*2*Math.PI/grp.length,rad=grp.length===2?9:12;dx=Math.round(Math.cos(ang)*rad);dy=Math.round(Math.sin(ang)*rad)}
+            var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"",iconSize:[16,16],iconAnchor:[8-dx,8-dy],popupAnchor:[dx,dy-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,title:s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)","")+(grp.length>1?" (shares a site with "+(grp.length-1)+" other "+plural(grp.length-1,"school")+")":""),riseOnHover:true});
             cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
             cm.bindTooltip('<b>'+esc(s[1])+'</b><br>'+esc(TIERS[s[11]].label.replace(" (area only)",""))+'<br><span class="tt-hint">Tap for its card</span>',TT);
             layer.addLayer(cm);
@@ -1150,11 +1156,11 @@ function districtCard(k,arr){
   var dm=dominant(arr),c=dm.counts,max=Math.max.apply(null,c),enr=0,nNo=0;arr.forEach(function(s){if(s[6]>0)enr+=s[6];if(s[11]===7)nNo++});
   var rows="";for(var i=0;i<NT;i++){if(!c[i])continue;rows+='<span>'+esc(TIERS[i].label)+'</span><span class="bar" style="width:'+Math.max(6,Math.round(c[i]/max*100))+'%;background:'+TIERS[i].color+'"></span><span>'+c[i]+'</span>'}
   return '<div class="pc"><h3>'+esc(L_name(k))+'</h3><p class="meta">'+esc(arr[0][7])+' County. NCES district ID '+esc(k)+'<br><a href="'+gmaps(L_name(k)+', '+arr[0][7]+' County, California')+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
-  '<div class="kv"><div><b>'+fmt(arr.length-nNo)+'</b><span>'+plural(arr.length-nNo,"school")+' below gigabit</span></div>'+(nNo?'<div><b>'+fmt(nNo)+'</b><span>no speed data</span></div>':'')+'<div><b>'+(enr?fmt(enr):'Not reported')+'</b><span>students, 2024-25</span></div></div>'+
+  '<div class="kv"><button type="button" class="kvbtn" data-list="1" aria-expanded="false" title="List the schools"><b>'+fmt(arr.length-nNo)+'</b><span>'+plural(arr.length-nNo,"school")+' below gigabit</span><span class="hint">tap to list</span></button>'+(nNo?'<div><b>'+fmt(nNo)+'</b><span>no speed data</span></div>':'')+'<div><b>'+(enr?fmt(enr):'Not reported')+'</b><span>students, 2024-25</span></div></div>'+
   '<p class="sec"><i>Schools by fastest download</i></p><div class="bars">'+rows+'</div>'+
-  '<p class="sec"><i>Schools in this district</i></p><ul class="alist">'+arr.slice().sort(function(x,y){return(x[11]===7?6.5:x[11])-(y[11]===7?6.5:y[11])||(y[6]||0)-(x[6]||0)}).map(function(x){return '<li><button type="button" class="alink" data-school="'+esc(x[0])+'">'+esc(x[1])+' <small>'+esc(TIERS[x[11]].label.replace(" (area only)",""))+(x[6]>0?', '+fmt(x[6])+' students':'')+'</small></button></li>'}).join('')+'</ul>'+
+  '<div class="dlist" hidden><p class="sec"><i>Schools in this district</i></p><ul class="alist">'+arr.slice().sort(function(x,y){return(x[11]===7?6.5:x[11])-(y[11]===7?6.5:y[11])||(y[6]||0)-(x[6]||0)}).map(function(x){return '<li><button type="button" class="alink" data-school="'+esc(x[0])+'">'+esc(x[1])+' <small>'+esc(TIERS[x[11]].label.replace(" (area only)",""))+(x[6]>0?', '+fmt(x[6])+' students':'')+'</small></button></li>'}).join('')+'</ul></div>'+
   '<p class="closerow"><button type="button" class="btn" data-close="1">Close</button><button type="button" class="btn" data-county="'+esc(arr[0][7])+'">All of '+esc(arr[0][7])+' County</button></p>'+
-  '<p class="src">Tap a school above or its dot for its card. '+districtLink(k)+'</p></div>';
+  '<p class="src">Tap the schools tile for the list, or a dot for its card. '+districtLink(k)+'</p></div>';
 }
 
 function buildLegend(){
@@ -1214,6 +1220,7 @@ function loadAreas(){
     var t=ev.target.closest?ev.target:null;if(!t)return;
     var b=t.closest("[data-area]");if(b){var p=b.getAttribute("data-area").split(",");map.closePopup();openArea(L.latLng(+p[0],+p[1]));return}
     if(t.closest("[data-close]")){map.closePopup();return}
+    var dl=t.closest("[data-list]");if(dl){var box=dl.closest(".pc").querySelector(".dlist");var open=box.hidden;box.hidden=!open;dl.setAttribute("aria-expanded",String(open));dl.querySelector(".hint").textContent=open?"tap to hide":"tap to list";var pp=map._popup;if(pp&&pp._updateLayout){pp._updateLayout();pp._updatePosition();pp._adjustPan()}return}
     var ds=t.closest("[data-school]");if(ds){var id=ds.getAttribute("data-school"),sch=S.filter(function(x){return x[0]===id})[0];if(sch){map.closePopup();go({t:"s",s:sch})}return}
     var dd=t.closest("[data-district]");if(dd){var k=dd.getAttribute("data-district"),arr=S.filter(function(x){return x[2]===k&&visible(x)});map.closePopup();if(arr.length)flyTo(L.latLngBounds(arr.map(function(x){return[x[9],x[10]]})).pad(0.15),arr.length===1?11:13);return}
     var dc=t.closest("[data-county]");if(dc){var c=dc.getAttribute("data-county"),a=S.filter(function(x){return x[7]===c&&visible(x)});map.closePopup();if(a.length)flyTo(L.latLngBounds(a.map(function(x){return[x[9],x[10]]})).pad(0.15),10);return}
