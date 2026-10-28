@@ -731,6 +731,11 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .pc{color:#1d1c19}
 .pc a{color:#1f4e79}
 .pc h3{margin:0 0 2px;font-size:1.1rem;line-height:1.2}
+.pc .ph{margin:-12px -14px 10px;display:none}
+.pc .ph.on{display:block}
+.pc .ph img{display:block;width:100%;height:auto;max-height:200px;object-fit:cover;border-radius:6px 6px 0 0;background:#efece2}
+.pc .ph .cap{font-size:.7rem;color:#5f5b50;margin:3px 14px 0;line-height:1.3}
+.pc .ph .cap a{color:#5f5b50}
 .pc .meta{color:#5f5b50;font-size:.9rem;margin:0 0 8px}
 .pc .kv{display:flex;gap:8px;margin:0 0 8px}
 .pc .kv div{background:#efece2;border-radius:3px;padding:5px 8px;flex:1;min-width:0}
@@ -751,7 +756,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .alink{all:unset;cursor:pointer;display:block;padding:2px 4px;border-radius:3px;color:#1f4e79;font-size:.88rem}
 .alink small{color:#5f5b50}
 .alink:hover,.alink:focus-visible{background:#efece2}
-@media (max-width:760px){.leaflet-popup-content{font-size:13.5px;margin:10px 12px;max-height:55vh}.pc h3{font-size:1rem}.pc .kv b{font-size:1.1rem}}
+@media (max-width:760px){.leaflet-popup-content{font-size:13.5px;margin:10px 12px;max-height:55vh}.pc .ph{margin:-10px -12px 8px}.pc .ph img{max-height:150px}.pc .ph .cap{margin-left:12px}.pc h3{font-size:1rem}.pc .kv b{font-size:1.1rem}}
 .hl{pointer-events:none;image-rendering:pixelated}
 #a11y{position:absolute;z-index:850;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));margin:0;padding:0;list-style:none}
 #a11y li{margin:0}
@@ -761,6 +766,9 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 #credit{position:absolute;z-index:700;left:calc(8px + env(safe-area-inset-left,0px));bottom:calc(54px + env(safe-area-inset-bottom,0px));font-size:11.5px;padding:3px 7px;max-width:60vw}
 #north{position:absolute;z-index:700;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(90px + env(safe-area-inset-bottom,0px));width:28px;text-align:center;font-size:12px;font-weight:700;padding:3px 0}
 .leaflet-control-scale{margin-bottom:calc(6px + env(safe-area-inset-bottom,0px))!important}
+.leaflet-control-home a{font-size:20px;line-height:30px}
+.card-open .leaflet-control-home{visibility:hidden}
+.pc .closerow{margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap}
 .leaflet-control-scale-line{font-family:var(--serif);background:rgba(255,255,255,.85);color:#1d2320}
 .leaflet-control-attribution{font-family:var(--serif);font-size:11px;background:rgba(255,255,255,.85)!important;color:#1d2320}
 .leaflet-control-attribution a{color:#0b57d0}
@@ -869,10 +877,11 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>School source.</b> National Center for Education Statistics (NCES), EDGE Public School Characteristics 2024-25, published April 27, 2026. California has 10,351 schools in this file. School names, districts, addresses, enrollment, county and locale come from it. On October 28, 2026 every mapped school was re-checked against that layer by ID: all 853 positions agree to within 1 m, and names, districts, addresses and enrollment match exactly. The file includes 7 "Future" schools not yet open, 6 "New" schools and 2 with a changed boundary or agency; their cards say so under Status.</li>
 <li><b>How schools were picked.</b> School locations were drawn from the NCES service and compared with the speed layer. Schools in or near any block below 1 Gbps (1,342 records) were then pulled from the NCES service by location, and each was given its tier as in note 6. Schools that turned out to be in gigabit blocks were dropped from the dots.</li>
 <li><b>Area cards.</b> Tapping a shaded area outlines one connected patch of 400 m cells that share the same fastest download (8,824 patches statewide) and shows its size, the counties of the schools inside it, and the share of land within 5 km of the tapped point in each tier. Sizes are true ground area, corrected for the Web Mercator stretch. For gigabit patches it also shows the split between 2 Gbps or more, 1 to 1.99 Gbps and placeholder values. A school is listed in a patch when its 400 m cell (or a touching cell) falls in that patch, so a school can appear in a patch of a different color than its own tier (note 7).</li>
+<li><b>Getting around.</b> Tap a dot to spread it and zoom in. Every card has a Close button, and school and district cards have a button that zooms back out to the whole district or county. The target button under the zoom control returns to the whole state, and Escape closes any card.</li>
 <li><b>Grouping.</b> Ringed dots are counties and plain dots are districts (NCES local education agency, so a single-school charter counts as its own district). The number is the count of schools shown, and the color is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
 <li><b>Limitations.</b> Census blocks can be large in rural areas, and a school near a block edge may take its neighbor's speed. Reported speeds are advertised plan speeds, not measured speeds. A school's own connection (often a dedicated circuit through E-Rate or the CENIC K12 High Speed Network) can be much faster than what homes in the same block can buy, so this map shows neighborhood access, not the school's circuit. Enrollment of 0 or below means NCES did not report it.</li>
 <li><b>Basemaps.</b> USGS The National Map: Imagery Only (data refreshed June 2024) and USGS Topo (data refreshed September 4, 2026). Both are U.S. government works in the public domain. They are shown as single statewide images, so they blur when zoomed in close.</li>
-<li><b>Tools and AI use.</b> Built with Leaflet 1.9.4 and Python (NumPy, SciPy, Pillow). Code and layout generated with Claude (Anthropic), which also gathered and processed the data from the sources listed below. Data, placement and accuracy have not yet been reviewed by Travis Cody Smith. Projection: WGS 84 / Web Mercator (EPSG:3857).</li>
+<li><b>Tools and AI use.</b> Built with Leaflet 1.9.4 and Python (NumPy, SciPy, Pillow). Code and layout generated with Claude (Anthropic), which also gathered and processed the data from the sources listed below. Data, placement and accuracy have not yet been reviewed by Travis Cody Smith. School and district card photos, when shown, come live from Google Places (Text Search and Place Photos) under the map owner's key, are fetched only when a card opens, are not stored, and appear only when a key is set; without one the cards are unchanged. Projection: WGS 84 / Web Mercator (EPSG:3857).</li>
 </ol>
 
 <h3 id="audit">Link audit</h3>
@@ -908,6 +917,9 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" onerror="document.getElementById('loading').textContent='The map library did not load. Check your connection and reload.'"></script>
 <script>
+// Optional: a Google Maps Platform browser key (Places API (New) enabled, HTTP-referrer locked to this site).
+// Leave empty and cards simply show no photo.
+var GOOGLE_MAPS_KEY="";
 (function(){
 "use strict";
 if(typeof L==="undefined"){document.getElementById("loading").textContent="The map library did not load. Check your connection and reload.";return;}
@@ -952,6 +964,9 @@ function init(){
   base.str=L.imageOverlay(D.img.str,b.base,{interactive:false,className:"bm"});
   base.sat.addTo(map);
   L.control.scale({imperial:true,metric:true,position:"bottomleft"}).addTo(map);
+  var Home=L.Control.extend({onAdd:function(){var d=L.DomUtil.create("div","leaflet-bar leaflet-control-home");var a=L.DomUtil.create("a","",d);a.href="#";a.title="Zoom back out to the whole state";a.setAttribute("aria-label","Zoom back out to the whole state");a.innerHTML="&#8982;";L.DomEvent.on(a,"click",function(e){L.DomEvent.preventDefault(e);L.DomEvent.stopPropagation(e);map.closePopup();map.flyToBounds(L.latLngBounds(D.bounds.view),Object.assign(fitPad(),{duration:0.8}))});L.DomEvent.disableClickPropagation(d);return d}});
+  new Home({position:"topleft"}).addTo(map);
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!map._popup)return;if(e.key==="Escape"&&document.getElementById("about").hidden)map.closePopup()});
   ["titlecard","legend","north","credit"].forEach(function(id){var el=document.getElementById(id);map.getContainer().appendChild(el);L.DomEvent.disableClickPropagation(el);L.DomEvent.disableScrollPropagation(el);});
   map.fitBounds(b.view,fitPad());
   loadAreas();
@@ -1064,7 +1079,7 @@ function render(){
           });
         }else{
           var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",""),title:nm+": "+fmt(arr.length)+" "+plural(arr.length,"school"),riseOnHover:true});
-          m.on("click",function(){spread[k]=1;map.closePopup();render();flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12);});
+          m.on("click",function(){spread[k]=1;map.closePopup();render();flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),11);});
           layer.addLayer(m);
         }
       });
@@ -1080,11 +1095,66 @@ function gmaps(q){return 'https://www.google.com/maps/search/?api=1&query='+enco
 function schoolLink(id){var nc=D.noCCD&&D.noCCD.s.indexOf(id)>=0;return nc?'<a href="'+EDGEQ+encodeURIComponent("NCESSCH='"+id+"'")+'" target="_blank" rel="noopener">NCES 2024-25 record</a> (not yet in the NCES school search)':'<a href="https://nces.ed.gov/ccd/schoolsearch/school_detail.asp?ID='+esc(id)+'" target="_blank" rel="noopener">NCES school record</a>'}
 function districtLink(k){var nc=D.noCCD&&D.noCCD.d.indexOf(k)>=0;return nc?'<a href="'+EDGEQ+encodeURIComponent("LEAID='"+k+"'")+'" target="_blank" rel="noopener">NCES 2024-25 records for this district</a> (not yet in the NCES district search)':'<a href="https://nces.ed.gov/ccd/districtsearch/district_detail.asp?ID2='+esc(k)+'" target="_blank" rel="noopener">NCES district record</a>'}
 
+// ---- optional Google Places photo at the top of a card (needs GOOGLE_MAPS_KEY) ----
+// Fetched only when a card opens, one Text Search then one Place Photo (about 400 px wide), cached per NCES ID
+// for the session. No key, no match or any error: the slot stays empty and nothing else changes.
+var PHOTO_CACHE={},PHOTO_REQ={};
+function photoSlot(key,name,query,lat,lng,radius){
+  if(!GOOGLE_MAPS_KEY)return "";
+  PHOTO_REQ[key]={name:name,q:query,lat:lat,lng:lng,r:radius};
+  return '<div class="ph" data-ph="'+esc(key)+'"></div>';
+}
+function nameMatches(want,got){
+  var stop={"the":1,"and":1,"school":1,"schools":1,"district":1,"unified":1,"union":1,"elementary":1,"high":1,"academy":1,"charter":1,"office":1,"county":1,"of":1,"for":1};
+  var g=" "+String(got||"").toLowerCase().replace(/[^a-z0-9]+/g," ")+" ";
+  var toks=String(want||"").toLowerCase().replace(/[^a-z0-9]+/g," ").split(" ").filter(function(w){return w.length>2&&!stop[w]});
+  if(!toks.length)return true;
+  return toks.some(function(w){return g.indexOf(" "+w+" ")>=0});
+}
+function placePhoto(key){
+  if(PHOTO_CACHE[key])return PHOTO_CACHE[key];
+  var r=PHOTO_REQ[key];if(!r||!GOOGLE_MAPS_KEY)return Promise.resolve(null);
+  function once(){
+    return fetch("https://places.googleapis.com/v1/places:searchText",{method:"POST",headers:{"Content-Type":"application/json","X-Goog-Api-Key":GOOGLE_MAPS_KEY,"X-Goog-FieldMask":"places.id,places.displayName,places.photos"},
+      body:JSON.stringify({textQuery:r.q,maxResultCount:1,locationBias:{circle:{center:{latitude:r.lat,longitude:r.lng},radius:r.r}}})});
+  }
+  var p=once().then(function(res){
+    if(res.status===429||res.status===503)return new Promise(function(ok){setTimeout(ok,1200)}).then(once);
+    return res;
+  }).then(function(res){
+    if(!res.ok){return res.json().catch(function(){return{}}).then(function(ej){console.warn("Google Places photo lookup failed",res.status,ej&&ej.error&&ej.error.message||"");return null})}
+    return res.json().then(function(j){
+      var pl=(j.places||[])[0];var ph=pl&&(pl.photos||[])[0];
+      if(!pl||!ph||!ph.name)return null;
+      if(!nameMatches(r.name,pl.displayName&&pl.displayName.text))return null;
+      var au=(ph.authorAttributions||[])[0];
+      return{src:"https://places.googleapis.com/v1/"+ph.name+"/media?maxWidthPx=400&key="+encodeURIComponent(GOOGLE_MAPS_KEY),by:au&&au.displayName||"",uri:au&&au.uri||""};
+    });
+  }).catch(function(e){console.warn("Google Places photo lookup failed",e);return null});
+  p.then(function(v){if(v===null)PHOTO_CACHE[key]=Promise.resolve(null)});
+  PHOTO_CACHE[key]=p;return p;
+}
+// Re-measure and re-pan an open popup after its content grew, without popup.update(), which would rebuild the card from its source string and drop the photo.
+function relayout(popup){try{if(popup._updateLayout){popup._updateLayout();popup._updatePosition();if(popup.options.autoPan!==false)popup._adjustPan()}}catch(e){}}
+function fillPhoto(popup){
+  var el=popup.getElement&&popup.getElement();var slot=el&&el.querySelector(".ph[data-ph]");if(!slot)return;
+  var key=slot.getAttribute("data-ph");
+  placePhoto(key).then(function(v){
+    if(!v||!slot.isConnected||!popup.isOpen())return;
+    var img=new Image();img.alt="";
+    img.onload=function(){if(!slot.isConnected||!popup.isOpen())return;slot.innerHTML="";slot.appendChild(img);
+      var cap=document.createElement("div");cap.className="cap";cap.innerHTML="Photo: Google Maps"+(v.by?", "+(v.uri?'<a href="'+esc(v.uri)+'" target="_blank" rel="noopener">'+esc(v.by)+'</a>':esc(v.by)):"")+", loaded live";slot.appendChild(cap);
+      slot.classList.add("on");relayout(popup);};
+    img.onerror=function(){slot.remove()};
+    img.src=v.src;
+  });
+}
+
 function tierPill(t){return '<span class="pill" style="background:'+TIERS[t].color+';color:'+inkOn(TIERS[t].color)+'">'+esc(TIERS[t].label)+'</span>'}
 function schoolCard(s){
   var loc=LOCALE[s[8]]||"Not given";
   var en=s[6]>0?fmt(s[6]):"Not reported";
-  return '<div class="pc"><h3>'+esc(s[1])+'</h3><p class="meta">'+esc(L_name(s[2]))+'<br>'+esc(s[3])+', '+esc(s[4])+', CA '+esc(s[5])+' ('+esc(s[7])+' County)<br><a href="'+gmaps(s[1]+', '+s[3]+', '+s[4]+', CA '+s[5])+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
+  return '<div class="pc">'+photoSlot("s"+s[0],s[1],s[1]+', '+s[3]+', '+s[4]+', CA '+s[5],s[9],s[10],1500)+'<h3>'+esc(s[1])+'</h3><p class="meta">'+esc(L_name(s[2]))+'<br>'+esc(s[3])+', '+esc(s[4])+', CA '+esc(s[5])+' ('+esc(s[7])+' County)<br><a href="'+gmaps(s[1]+', '+s[3]+', '+s[4]+', CA '+s[5])+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
   '<div class="kv"><div><b class="t">'+esc(D.cls[s[12]])+'</b><span>fastest subscribed download here</span></div><div><b>'+en+'</b><span>students, 2024-25</span></div></div>'+
   '<p class="sec"><i>Broadband at this block</i></p>'+
   '<table><tr><td>Speed tier</td><td>'+tierPill(s[11])+'</td></tr>'+
@@ -1092,15 +1162,17 @@ function schoolCard(s){
   '<p class="sec"><i>School</i></p>'+
   '<table>'+(D.status&&D.status[s[0]]?'<tr><td>Status</td><td>'+esc(STATUS[D.status[s[0]]]||D.status[s[0]])+'</td></tr>':'')+'<tr><td>Locale</td><td>'+esc(loc)+'</td></tr>'+
   '<tr><td>NCES ID</td><td>'+esc(s[0])+'</td></tr></table>'+
-  '<p class="areabtn"><button type="button" class="btn" data-area="'+s[9]+','+s[10]+'">Card for the shaded area at this school</button></p>'+
+  '<p class="closerow"><button type="button" class="btn" data-close="1">Close</button><button type="button" class="btn" data-area="'+s[9]+','+s[10]+'">Shaded area here</button><button type="button" class="btn" data-district="'+esc(s[2])+'">All of '+esc(L_name(s[2]))+'</button></p>'+
   '<p class="src">Sources: '+schoolLink(s[0])+' | <a href="'+D.links.cpuc+'" target="_blank" rel="noopener">CPUC broadband map</a> | <a href="'+D.links.ncesLayer+'" target="_blank" rel="noopener">NCES EDGE 2024-25 layer</a></p></div>';
 }
 function districtCard(k,arr){
   var dm=dominant(arr),c=dm.counts,max=Math.max.apply(null,c),enr=0,nNo=0;arr.forEach(function(s){if(s[6]>0)enr+=s[6];if(s[11]===7)nNo++});
   var rows="";for(var i=0;i<NT;i++){if(!c[i])continue;rows+='<span>'+esc(TIERS[i].label)+'</span><span class="bar" style="width:'+Math.max(6,Math.round(c[i]/max*100))+'%;background:'+TIERS[i].color+'"></span><span>'+c[i]+'</span>'}
-  return '<div class="pc"><h3>'+esc(L_name(k))+'</h3><p class="meta">'+esc(arr[0][7])+' County. NCES district ID '+esc(k)+'<br><a href="'+gmaps(L_name(k)+', '+arr[0][7]+' County, California')+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
+  var dc=centroid(arr);
+  return '<div class="pc">'+photoSlot("d"+k,L_name(k),L_name(k)+' district office, '+arr[0][7]+' County, California',dc[0],dc[1],25000)+'<h3>'+esc(L_name(k))+'</h3><p class="meta">'+esc(arr[0][7])+' County. NCES district ID '+esc(k)+'<br><a href="'+gmaps(L_name(k)+', '+arr[0][7]+' County, California')+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
   '<div class="kv"><div><b>'+fmt(arr.length-nNo)+'</b><span>'+plural(arr.length-nNo,"school")+' below gigabit</span></div>'+(nNo?'<div><b>'+fmt(nNo)+'</b><span>no speed data</span></div>':'')+'<div><b>'+(enr?fmt(enr):'Not reported')+'</b><span>students, 2024-25</span></div></div>'+
   '<p class="sec"><i>Schools by fastest download</i></p><div class="bars">'+rows+'</div>'+
+  '<p class="closerow"><button type="button" class="btn" data-close="1">Close</button><button type="button" class="btn" data-county="'+esc(arr[0][7])+'">All of '+esc(arr[0][7])+' County</button></p>'+
   '<p class="src">Tap a school dot for its card, or the district name above the dots for this one. '+districtLink(k)+'</p></div>';
 }
 
@@ -1157,8 +1229,14 @@ function loadAreas(){
   }).catch(areasFailed);
   map.on("click",onAreaClick);
   map.on("popupclose",clearHL);
-  document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-area]");if(!b)return;var p=b.getAttribute("data-area").split(",");map.closePopup();openArea(L.latLng(+p[0],+p[1]));});
-  map.on("popupopen",function(){if(window.innerWidth<=760)map.getContainer().classList.add("card-open")});
+  document.addEventListener("click",function(ev){
+    var t=ev.target.closest?ev.target:null;if(!t)return;
+    var b=t.closest("[data-area]");if(b){var p=b.getAttribute("data-area").split(",");map.closePopup();openArea(L.latLng(+p[0],+p[1]));return}
+    if(t.closest("[data-close]")){map.closePopup();return}
+    var dd=t.closest("[data-district]");if(dd){var k=dd.getAttribute("data-district"),arr=S.filter(function(x){return x[2]===k&&visible(x)});map.closePopup();if(arr.length)flyTo(L.latLngBounds(arr.map(function(x){return[x[9],x[10]]})).pad(0.3),11);return}
+    var dc=t.closest("[data-county]");if(dc){var c=dc.getAttribute("data-county"),a=S.filter(function(x){return x[7]===c&&visible(x)});map.closePopup();if(a.length)flyTo(L.latLngBounds(a.map(function(x){return[x[9],x[10]]})).pad(0.15),10);return}
+  });
+  map.on("popupopen",function(e){if(window.innerWidth<=760)map.getContainer().classList.add("card-open");if(e.popup)fillPhoto(e.popup)});
   map.on("popupclose",function(){map.getContainer().classList.remove("card-open")});
 }
 function cellOf(latlng){
