@@ -720,6 +720,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .dot.county{border-style:double;border-width:4px}
 .chip{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:0;font-size:12.5px;white-space:nowrap;box-shadow:var(--shadow);font-family:var(--serif);display:inline-flex;transform:translate(-50%,calc(-100% - 12px))}
 .chip span{padding:2px 8px}
+.chip.county{transform:translate(-50%,calc(-100% - 44px))}
 .chip .cn{cursor:pointer;color:var(--link);text-decoration:underline;text-decoration-color:rgba(11,87,208,.4)}
 .chip .cg{cursor:pointer;border-left:1px solid var(--rule);color:var(--muted)}
 .chip .cn:hover,.chip .cg:hover{background:var(--chip)}
@@ -779,6 +780,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
   .leaflet-top.leaflet-left{top:calc(118px + env(safe-area-inset-top,0px))}
   #credit{display:none}
   #north{bottom:auto}
+  .card-open .leaflet-control-zoom,.card-open #north{visibility:hidden}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -918,6 +920,8 @@ var CanvasOverlay=L.ImageOverlay.extend({
 function init(){
   map=L.map("map",{preferCanvas:true,zoomControl:true,minZoom:5,maxZoom:13,zoomSnap:0.5,attributionControl:true,worldCopyJump:false});
   map.attributionControl.setPrefix(false);
+  // a finger that drifts a few pixels is still a tap, not a drag (Leaflet's default is 3 px)
+  if(map.dragging&&map.dragging._draggable)map.dragging._draggable.options.clickTolerance=L.Browser.touch?14:5;
   map.attributionControl.addAttribution('Basemap: <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map</a> | Speeds: <a href="https://www.broadbandmap.ca.gov/" target="_blank" rel="noopener">CPUC</a> | Schools: <a href="https://nces.ed.gov/programs/edge/Geographic/SchoolLocations" target="_blank" rel="noopener">NCES EDGE</a>');
   var b=D.bounds;
   map.fitBounds(b.view);
@@ -976,7 +980,7 @@ function dotIcon(n,color,cls,label){
     html:'<div class="dot '+cls+'" style="width:'+d+'px;height:'+d+'px;background:'+color+';font-size:'+fs+'px" role="button" aria-label="'+esc(label)+'">'+fmt(n)+'</div>'});
 }
 function chip(latlng,name,fnGather,fnCard){
-  var html='<span class="chip">'+(fnCard?'<span class="cn" role="button" title="Open the card for '+esc(name)+'">'+esc(name)+'</span>':'<span>'+esc(name)+'</span>')+'<span class="cg" role="button" title="Gather '+esc(name)+'">gather</span></span>';
+  var html='<span class="chip'+(fnCard?'':' county')+'">'+(fnCard?'<span class="cn" role="button" title="Open the card for '+esc(name)+'">'+esc(name)+'</span>':'<span>'+esc(name)+'</span>')+'<span class="cg" role="button" title="Gather '+esc(name)+'">gather</span></span>';
   var m=L.marker(latlng,{icon:L.divIcon({className:"",iconSize:[0,0],html:html}),zIndexOffset:900,keyboard:false,interactive:true});
   m.on("click",function(e){var t=e.originalEvent&&e.originalEvent.target;if(t&&t.classList.contains("cn")&&fnCard)fnCard();else fnGather();});
   return m;
@@ -988,6 +992,11 @@ function groups(){
   return byC;
 }
 
+function fitPad(){
+  var tc=document.getElementById("titlecard"),lg=document.getElementById("legend"),narrow=window.innerWidth<=760;
+  return {paddingTopLeft:L.point(narrow?20:60,tc.offsetTop+tc.offsetHeight+40),paddingBottomRight:narrow?L.point(20,lg.offsetHeight+30):L.point(lg.offsetWidth+40,30)};
+}
+function flyTo(b,maxZoom){var o=fitPad();o.maxZoom=maxZoom;o.duration=0.6;map.flyToBounds(b,o)}
 function fitControls(){
   var narrow=window.innerWidth<=760,tc=document.getElementById("titlecard"),lg=document.getElementById("legend");
   var tl=document.querySelector(".leaflet-top.leaflet-left"),bl=document.querySelector(".leaflet-bottom.leaflet-left"),nb=document.getElementById("north");
@@ -1009,7 +1018,7 @@ function render(){
     if(!countyMode[c]){
       var dm=dominant(all),cen=centroid(all);
       var m=L.marker(cen,{icon:dotIcon(all.length,TIERS[dm.tier].color,"county",c+" County, "+all.length+" schools"),title:c+" County: "+fmt(all.length)+" schools in "+Object.keys(dists).length+" districts",riseOnHover:true});
-      m.on("click",function(){countyMode[c]=1;map.closePopup();render();map.flyToBounds(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.25),{maxZoom:10,duration:0.6});});
+      m.on("click",function(){countyMode[c]=1;map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);});
       layer.addLayer(m);
     }else{
       var cen2=centroid(all);
@@ -1025,7 +1034,7 @@ function render(){
           });
         }else{
           var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",nm+", "+arr.length+" schools"),title:nm+": "+fmt(arr.length)+" schools",riseOnHover:true});
-          m.on("click",function(){spread[k]=1;map.closePopup();render();map.flyToBounds(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.4),{maxZoom:12,duration:0.6});});
+          m.on("click",function(){spread[k]=1;map.closePopup();render();flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12);});
           layer.addLayer(m);
         }
       });
@@ -1093,8 +1102,8 @@ function search(q){
 }
 function afterMove(fn){var done=false;map.once("moveend",function(){if(!done){done=true;fn()}});setTimeout(function(){if(!done){done=true;fn()}},1500)}
 function go(h){
-  if(h.t==="c"){countyMode[h.c]=1;render();var a=S.filter(function(s){return county(s)===h.c&&visible(s)});if(a.length)map.flyToBounds(L.latLngBounds(a.map(function(s){return[s[9],s[10]]})).pad(0.15),{maxZoom:10});return}
-  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;countyMode[county(arr[0])]=1;spread[h.k]=1;render();afterMove(function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});map.flyToBounds(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),{maxZoom:12});return}
+  if(h.t==="c"){countyMode[h.c]=1;render();var a=S.filter(function(s){return county(s)===h.c&&visible(s)});if(a.length)flyTo(L.latLngBounds(a.map(function(s){return[s[9],s[10]]})).pad(0.15),10);return}
+  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;countyMode[county(arr[0])]=1;spread[h.k]=1;render();afterMove(function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12);return}
   var s=h.s;if(!visible(s)){TIERS[s[11]].on=true;document.getElementById("tier"+s[11]).checked=true;paintOverlay()}
   countyMode[county(s)]=1;spread[s[2]]=1;render();afterMove(function(){L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([s[9],s[10]]).setContent(schoolCard(s)).openOn(map)});map.flyTo([s[9],s[10]],12);
 }
@@ -1109,6 +1118,8 @@ function loadAreas(){
   }).catch(function(){});
   map.on("click",onAreaClick);
   map.on("popupclose",clearHL);
+  map.on("popupopen",function(){if(window.innerWidth<=760)map.getContainer().classList.add("card-open")});
+  map.on("popupclose",function(){map.getContainer().classList.remove("card-open")});
 }
 function cellOf(latlng){
   var p=L.CRS.EPSG3857.project(latlng),g=AR.grid;
