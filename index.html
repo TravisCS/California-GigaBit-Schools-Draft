@@ -880,7 +880,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>Getting around.</b> Tap a dot to spread it and zoom in. A county with one district or four or fewer schools goes straight to its schools, and a one-school district opens that school's card at once. Gathering a district zooms back out to its county, and gathering a county zooms back out to its third of the state (north, central or south). The target button under the zoom control shows the whole state. Every card has a Close button, and school and district cards have a button that zooms back out to the whole district or county. The target button under the zoom control returns to the whole state, and Escape closes any card.</li>
 <li><b>Grouping.</b> Ringed dots are counties and plain dots are districts (NCES local education agency, so a single-school charter counts as its own district). The number is the count of schools shown, and the color is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
 <li><b>Limitations.</b> Census blocks can be large in rural areas, and a school near a block edge may take its neighbor's speed. Reported speeds are advertised plan speeds, not measured speeds. A school's own connection (often a dedicated circuit through E-Rate or the CENIC K12 High Speed Network) can be much faster than what homes in the same block can buy, so this map shows neighborhood access, not the school's circuit. Enrollment of 0 or below means NCES did not report it.</li>
-<li><b>Basemaps.</b> USGS The National Map: Imagery Only (data refreshed June 2024) and USGS Topo (data refreshed September 4, 2026). Both are U.S. government works in the public domain. They are shown as single statewide images, so they blur when zoomed in close.</li>
+<li><b>Basemaps and outline.</b> USGS The National Map tile services, USGS Imagery Topo (satellite imagery with roads, boundaries and labels) and USGS Topo, loaded live and public domain as U.S. government works. A single statewide image of each ships with the page underneath the tiles, so the map still reads if the tiles cannot load. The California outline is the generalized state boundary from the U.S. Census Bureau's TIGERweb service.</li>
 <li><b>Tools and AI use.</b> Built with Leaflet 1.9.4 and Python (NumPy, SciPy, Pillow). Code and layout generated with Claude (Anthropic), which also gathered and processed the data from the sources listed below. Data, placement and accuracy have not yet been reviewed by Travis Cody Smith.</li>
 </ol>
 
@@ -902,7 +902,9 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <p class="hang">California Public Utilities Commission. (2026). <i>California interactive broadband map: Fixed consumer downstream maximum, end of year 2024</i> [Data set; data as of December 31, 2024]. <a href="https://www.broadbandmap.ca.gov/" target="_blank" rel="noopener">https://www.broadbandmap.ca.gov/</a></p>
 <p class="hang">California Public Utilities Commission. (2026, April 1). <i>CPUC annual collected broadband data</i>. <a href="https://www.cpuc.ca.gov/industries-and-topics/internet-and-phone/broadband-mapping-program/cpuc-annual-collected-broadband-data" target="_blank" rel="noopener">https://www.cpuc.ca.gov/industries-and-topics/internet-and-phone/broadband-mapping-program/cpuc-annual-collected-broadband-data</a></p>
 <p class="hang">National Center for Education Statistics. (2026, April 27). <i>Public school characteristics 2024-25</i> [Data set]. U.S. Department of Education. <a href="https://nces.ed.gov/opengis/rest/services/K12_School_Locations/EDGE_ADMINDATA_PUBLICSCH_2425/MapServer/1" target="_blank" rel="noopener">https://nces.ed.gov/opengis/rest/services/K12_School_Locations/EDGE_ADMINDATA_PUBLICSCH_2425/MapServer/1</a></p>
+<p class="hang">U.S. Census Bureau. (2026). <i>TIGERweb: States</i> [Boundary service]. <a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer" target="_blank" rel="noopener">https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer</a></p>
 <p class="hang">U.S. Geological Survey. (2024). <i>USGS imagery only</i> [Basemap service]. The National Map. <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer" target="_blank" rel="noopener">https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer</a></p>
+<p class="hang">U.S. Geological Survey. (2026). <i>USGS imagery topo</i> [Basemap service]. The National Map. <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer" target="_blank" rel="noopener">https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer</a></p>
 <p class="hang">U.S. Geological Survey. (2026). <i>USGS topo</i> [Basemap service]. The National Map. <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer" target="_blank" rel="noopener">https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer</a></p>
 <p class="hang">Federal Communications Commission. (n.d.). <i>National broadband map</i> [Data set; availability as of December 31, 2025]. Retrieved October 28, 2026, from <a href="https://broadbandmap.fcc.gov/" target="_blank" rel="noopener">https://broadbandmap.fcc.gov/</a> (consulted, not used for the map)</p>
 <p class="hang">Agafonkin, V. (2023). <i>Leaflet</i> (Version 1.9.4) [Computer software]. <a href="https://leafletjs.com/" target="_blank" rel="noopener">https://leafletjs.com/</a></p>
@@ -910,7 +912,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <h3>How to cite this map</h3>
 <p class="hang" id="apa">Smith, T. C. (2026). <i>California schools outside gigabit coverage</i> [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/</p>
 <p><button class="btn" id="copyApa">Copy citation</button></p>
-<p class="note" style="font-size:13.5px"><i>Note.</i> Speeds from California Public Utilities Commission (2026), data as of December 31, 2024. Schools from National Center for Education Statistics (2026). Basemap from U.S. Geological Survey (2024, 2026). Built with Leaflet; code generated with Claude and not yet reviewed by the author.</p>
+<p class="note" style="font-size:13.5px"><i>Note.</i> Speeds from California Public Utilities Commission (2026), data as of December 31, 2024. Schools from National Center for Education Statistics (2026). Basemap from U.S. Geological Survey (2024, 2026); state outline from U.S. Census Bureau (2026). Built with Leaflet; code generated with Claude and not yet reviewed by the author.</p>
 
   </div>
 </div>
@@ -934,7 +936,7 @@ var NT=TIERS.length;
 var LOCALE={"11":"City, large","12":"City, midsize","13":"City, small","21":"Suburb, large","22":"Suburb, midsize","23":"Suburb, small","31":"Town, fringe","32":"Town, distant","33":"Town, remote","41":"Rural, fringe","42":"Rural, distant","43":"Rural, remote"};
 var STATUS={"Future":"Future school, not yet open (NCES 2024-25 status)","New":"New in 2024-25 (NCES status)","Changed Boundary/Agency":"Changed boundary or agency in 2024-25 (NCES status)"};
 var METH=["Read at the school's own census block","Block at the school had no color; nearest blocks within 300 m used","No block with speed data within 300 m"];
-var D,S=[],LEA={},map,overlay,ovCanvas,ovBase,base={},layer,chipLayer,countyMode={},spread={},tapMode="S";
+var D,S=[],LEA={},map,overlay,ovCanvas,ovBase,base={},tiles={},layer,chipLayer,countyMode={},spread={},tapMode="S";
 var fmt=function(n){return n.toLocaleString("en-US")};
 function plural(n,one,many){return n===1?one:(many||one+"s")}
 var TT={direction:"top",offset:[0,-10],opacity:1,className:"tt"};
@@ -965,9 +967,19 @@ function init(){
   map.attributionControl.addAttribution('Basemap: <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map</a> | Speeds: <a href="https://www.broadbandmap.ca.gov/" target="_blank" rel="noopener">CPUC</a> | Schools: <a href="https://nces.ed.gov/programs/edge/Geographic/SchoolLocations" target="_blank" rel="noopener">NCES EDGE</a>');
   var b=D.bounds;
   map.setMaxBounds(L.latLngBounds(b.max).pad(1));
-  base.sat=L.imageOverlay(D.img.sat,b.base,{interactive:false,className:"bm"});
-  base.str=L.imageOverlay(D.img.str,b.base,{interactive:false,className:"bm"});
-  base.sat.addTo(map);
+  var USGS="https://basemap.nationalmap.gov/arcgis/rest/services/";
+  var tileOpts={maxNativeZoom:16,maxZoom:16,attribution:""};
+  tiles.sat=L.tileLayer(USGS+"USGSImageryTopo/MapServer/tile/{z}/{y}/{x}",tileOpts);
+  tiles.str=L.tileLayer(USGS+"USGSTopo/MapServer/tile/{z}/{y}/{x}",tileOpts);
+  // the statewide images that ship with the page sit under the tiles, so the map still reads when tiles cannot load
+  base.sat=L.imageOverlay(D.img.sat,b.base,{interactive:false,className:"bm",pane:"tilePane",zIndex:-1});
+  base.str=L.imageOverlay(D.img.str,b.base,{interactive:false,className:"bm",pane:"tilePane",zIndex:-1});
+  base.sat.addTo(map);tiles.sat.addTo(map);
+  map.createPane("outline");map.getPane("outline").style.zIndex=450;map.getPane("outline").style.pointerEvents="none";
+  fetch("california.json").then(function(r){return r.json()}).then(function(gj){
+    L.geoJSON(gj,{pane:"outline",interactive:false,style:{color:"#000",weight:5,opacity:.35,fill:false}}).addTo(map);
+    L.geoJSON(gj,{pane:"outline",interactive:false,style:{color:"#fff",weight:2,opacity:.9,fill:false}}).addTo(map);
+  }).catch(function(){});
   L.control.scale({imperial:true,metric:true,position:"bottomleft"}).addTo(map);
   var Home=L.Control.extend({onAdd:function(){var d=L.DomUtil.create("div","leaflet-bar leaflet-control-home");var a=L.DomUtil.create("a","",d);a.href="#";a.title="Zoom back out to the whole state";a.setAttribute("aria-label","Zoom back out to the whole state");a.innerHTML="&#8982;";L.DomEvent.on(a,"click",function(e){L.DomEvent.preventDefault(e);L.DomEvent.stopPropagation(e);map.closePopup();map.flyToBounds(allBounds(),Object.assign(fitPad(),{duration:0.8}))});L.DomEvent.disableClickPropagation(d);return d}});
   new Home({position:"topleft"}).addTo(map);
@@ -1288,8 +1300,8 @@ function areaCard(id,a,rc,latlng){
 
 function wire(){
   var sat=document.getElementById("bmSat"),str=document.getElementById("bmStr");
-  sat.onclick=function(){map.getContainer().style.background="#102633";map.removeLayer(base.str);base.sat.addTo(map).bringToBack();sat.setAttribute("aria-pressed","true");str.setAttribute("aria-pressed","false")};
-  str.onclick=function(){map.getContainer().style.background="#bde5ff";map.removeLayer(base.sat);base.str.addTo(map).bringToBack();str.setAttribute("aria-pressed","true");sat.setAttribute("aria-pressed","false")};
+  sat.onclick=function(){map.getContainer().style.background="#102633";map.removeLayer(base.str);map.removeLayer(tiles.str);base.sat.addTo(map);tiles.sat.addTo(map);sat.setAttribute("aria-pressed","true");str.setAttribute("aria-pressed","false")};
+  str.onclick=function(){map.getContainer().style.background="#bde5ff";map.removeLayer(base.sat);map.removeLayer(tiles.sat);base.str.addTo(map);tiles.str.addTo(map);str.setAttribute("aria-pressed","true");sat.setAttribute("aria-pressed","false")};
   document.getElementById("showArea").onchange=paintOverlay;
   var tb={S:document.getElementById("tapS"),A:document.getElementById("tapA"),B:document.getElementById("tapB")};
   function setTap(m){tapMode=m;Object.keys(tb).forEach(function(k){tb[k].setAttribute("aria-pressed",String(k===m))});var mp=map.getPane("markerPane");if(mp)mp.style.pointerEvents=(m==="A")?"none":"";map.closePopup();}

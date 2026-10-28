@@ -27,7 +27,7 @@ Coordinate system: sources read in WGS 84 / Pseudo-Mercator (EPSG:3857); school 
 5. Grouped schools by county, then by NCES district ID (first 7 digits of the school ID). Group color is the most common tier.
 6. Generalized the speed layer to 400 m cells (most common tier, kept where at least 4 of 16 pixels are shaded) for display as coverage.png; exported the two USGS basemaps at 400 m as single images (sat.jpg, str.jpg).
 7. Split the 400 m layer into connected patches of one tier (8-connectivity, 8,824 patches) for the tap cards; stored patch IDs as areas.png and per-patch true ground area, cell bounds, gigabit sub-class shares and the mapped schools inside as areas.json (areas.py).
-8. Built the page (template.html, app.js, data.json) with Leaflet 1.9.4. No outside tiles; all layers ship with the page.
+8. Built the page (template.html, app.js, data.json) with Leaflet 1.9.4. Basemaps are USGS The National Map tile services loaded live (USGS Imagery Topo, USGS Topo), with the shipped statewide images as a fallback underneath; the California outline (california.json) is the generalized TIGERweb state boundary from the U.S. Census Bureau, fetched October 28, 2026.
 
 Tools: Python 3.13 (NumPy 2.5.3, SciPy 1.18.1, Pillow 12.3.0), Leaflet 1.9.4. Bulk capture and transcription run by four Claude Sonnet worker agents (846,146 tokens in total). Published at https://traviscs.github.io/California-GigaBit-Schools-Draft/ (GitHub Pages, repository TravisCS/California-GigaBit-Schools-Draft) and as a claude.ai artifact (https://claude.ai/artifact/HRmdQ8KehpESwc6PrRtwoZ, private until shared).
 
@@ -51,5 +51,5 @@ Figure note: *Note.* Speeds from California Public Utilities Commission (2026), 
 
 ## Files
 - index.html: the interactive map (same as the artifact)
-- data.json, coverage.png, areas.json, areas.png, sat.jpg, str.jpg: map data and images
+- data.json, coverage.png, areas.json, areas.png, sat.jpg, str.jpg, california.json: map data, images and the state outline
 - .map-source/: captured tiles, NCES query list and transcribed school rows (nces_rows.tsv), template.html, app.js, about.html, build scripts
