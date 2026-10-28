@@ -686,7 +686,10 @@ a{color:var(--link)}
 button,input,select{font-family:var(--serif);font-size:14px;color:var(--ink)}
 .card{background:var(--panel);color:var(--ink);border-radius:8px;box-shadow:var(--shadow)}
 #titlecard{position:absolute;z-index:800;top:calc(10px + env(safe-area-inset-top,0px));left:calc(56px + env(safe-area-inset-left,0px));max-width:min(430px,calc(100vw - 400px));padding:10px 14px}
-#titlecard h1{font-size:19px;margin:0 0 3px;font-weight:700;text-wrap:balance;line-height:1.2}
+#titlecard .head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+#titlecard h1{font-size:19px;margin:0;font-weight:700;text-wrap:balance;line-height:1.2}
+#titlecard .body{margin-top:4px}
+#titlecard.min .body{display:none}
 #titlecard .sub{margin:0;color:var(--muted);font-size:13.5px;line-height:1.35}
 #titlecard .stat{margin:6px 0 0;font-size:14px;line-height:1.35}
 #titlecard .stat b{font-variant-numeric:tabular-nums}
@@ -700,7 +703,7 @@ button,input,select{font-family:var(--serif);font-size:14px;color:var(--ink)}
 .btn{background:var(--chip);border:1px solid var(--rule);border-radius:6px;padding:4px 10px;cursor:pointer}
 .btn:hover,.seg button:hover{filter:brightness(.96)}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-#legend{position:absolute;z-index:800;top:calc(10px + env(safe-area-inset-top,0px));right:calc(10px + env(safe-area-inset-right,0px));width:300px;max-height:calc(100% - 60px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));overflow:auto;padding:10px 12px}
+#legend{position:absolute;z-index:800;bottom:calc(30px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:300px;max-height:min(52vh,calc(100% - 80px));overflow:auto;padding:10px 12px}
 #legend h2{font-size:17px;margin:0;font-weight:700}
 #legend.min .body{display:none}
 #legend .head{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -795,10 +798,12 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 
 <div id="map" role="region" aria-label="Map of California schools by broadband speed"></div>
 
-<div id="titlecard" class="card">
-  <h1>California Schools Outside Gigabit Coverage</h1>
+<div id="titlecard" class="card min">
+  <div class="head"><h1>California Schools Outside Gigabit Coverage</h1><button class="btn" id="tcToggle" aria-expanded="false">Show</button></div>
+  <div class="body">
   <p class="sub">Public K-12 schools in census blocks where no one subscribes to a 1 Gbps fixed download plan, by district, with the fastest subscribed speed at each school's block.</p>
   <p class="stat" id="stat">Loading data</p>
+  </div>
   <div class="row">
     <span class="seg" role="group" aria-label="Basemap"><button id="bmSat" aria-pressed="true">Satellite</button><button id="bmStr" aria-pressed="false">Street</button></span>
     <button class="btn" id="openAbout">About the data</button>
@@ -1301,6 +1306,8 @@ function wire(){
   var aw=document.getElementById("auditWhat");if(aw)aw.onclick=function(e){e.preventDefault();openAbout();var t=document.getElementById("audit");if(t)t.scrollIntoView({block:"start"});};
   ab.addEventListener("click",function(e){if(e.target===ab)closeAbout()});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!ab.hidden)closeAbout()});
+  var tcEl=document.getElementById("titlecard"),tt=document.getElementById("tcToggle");
+  tt.onclick=function(){var min=tcEl.classList.toggle("min");tt.textContent=min?"Show":"Hide";tt.setAttribute("aria-expanded",String(!min));fitControls();if(!Object.keys(countyMode).some(function(k){return countyMode[k]}))map.fitBounds(allBounds(),fitPad());};
   var lg=document.getElementById("legend"),lt=document.getElementById("legToggle");
   lt.onclick=function(){var min=lg.classList.toggle("min");lt.textContent=min?"Show":"Hide";lt.setAttribute("aria-expanded",String(!min));fitControls();};
   window.addEventListener("resize",fitControls);
