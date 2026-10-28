@@ -692,7 +692,7 @@ button,input,select{font-family:var(--serif);font-size:14px;color:var(--ink)}
 #titlecard .stat b{font-variant-numeric:tabular-nums}
 .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
 .lbl{color:var(--muted);font-size:13.5px}
-.leaflet-schools-pane.off{pointer-events:none}
+.sdot{width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.5);box-sizing:border-box;cursor:pointer}
 .seg{display:inline-flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
 .seg button{background:var(--panel);border:0;padding:4px 10px;cursor:pointer}
 .seg button+button{border-left:1px solid var(--rule)}
@@ -758,10 +758,6 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .alink:hover,.alink:focus-visible{background:#efece2}
 @media (max-width:760px){.leaflet-popup-content{font-size:13.5px;margin:10px 12px;max-height:55vh}.pc .ph{margin:-10px -12px 8px}.pc .ph img{max-height:150px}.pc .ph .cap{margin-left:12px}.pc h3{font-size:1rem}.pc .kv b{font-size:1.1rem}}
 .hl{pointer-events:none;image-rendering:pixelated}
-#a11y{position:absolute;z-index:850;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));margin:0;padding:0;list-style:none}
-#a11y li{margin:0}
-#a11y button{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;padding:0}
-#a11y button:focus{position:static;width:auto;height:auto;clip:auto;overflow:visible;white-space:normal;display:block;max-width:min(360px,calc(100vw - 40px));padding:6px 10px;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:6px;box-shadow:var(--shadow);outline:2px solid var(--accent);font-size:14px;text-align:left}
 .pc .areabtn{margin:8px 0 0}
 #credit{position:absolute;z-index:700;left:calc(8px + env(safe-area-inset-left,0px));bottom:calc(54px + env(safe-area-inset-bottom,0px));font-size:11.5px;padding:3px 7px;max-width:60vw}
 #north{position:absolute;z-index:700;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(90px + env(safe-area-inset-bottom,0px));width:28px;text-align:center;font-size:12px;font-weight:700;padding:3px 0}
@@ -844,7 +840,6 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <div id="north" class="card" aria-hidden="true">&#9650;<br>N</div>
 <div id="credit" class="card">Data: CPUC California Broadband Map (Dec 31, 2024), NCES EDGE 2024-25. Basemap: USGS The National Map.</div>
 <div id="loading" class="loading card">Loading map data</div>
-<ul id="a11y" aria-label="Schools shown on the map, for keyboard and screen reader users"></ul>
 
 <div id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutH">
   <div class="sheet card">
@@ -937,7 +932,7 @@ var NT=TIERS.length;
 var LOCALE={"11":"City, large","12":"City, midsize","13":"City, small","21":"Suburb, large","22":"Suburb, midsize","23":"Suburb, small","31":"Town, fringe","32":"Town, distant","33":"Town, remote","41":"Rural, fringe","42":"Rural, distant","43":"Rural, remote"};
 var STATUS={"Future":"Future school, not yet open (NCES 2024-25 status)","New":"New in 2024-25 (NCES status)","Changed Boundary/Agency":"Changed boundary or agency in 2024-25 (NCES status)"};
 var METH=["Read at the school's own census block","Block at the school had no color; nearest blocks within 300 m used","No block with speed data within 300 m"];
-var D,S=[],LEA={},map,overlay,ovCanvas,ovBase,base={},layer,chipLayer,schoolR,countyMode={},spread={},tapMode="S";
+var D,S=[],LEA={},map,overlay,ovCanvas,ovBase,base={},layer,chipLayer,countyMode={},spread={},tapMode="S";
 var fmt=function(n){return n.toLocaleString("en-US")};
 function plural(n,one,many){return n===1?one:(many||one+"s")}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -981,8 +976,6 @@ function init(){
   };
   img.onerror=function(){var st=document.getElementById("stat");st.insertAdjacentHTML("beforeend"," Coverage shading did not load; reload to try again.")};
   img.src=D.img.ov;
-  map.createPane("schools");map.getPane("schools").style.zIndex=650;
-  schoolR=L.canvas({pane:"schools",tolerance:7});
   layer=L.layerGroup().addTo(map);
   chipLayer=L.layerGroup().addTo(map);
   buildLegend();
@@ -1053,7 +1046,6 @@ function fitControls(){
 }
 function render(){
   layer.clearLayers();chipLayer.clearLayers();
-  var a11y=document.getElementById("a11y");if(a11y)a11y.innerHTML="";
   var byC=groups(),nS=0,nD=0,nC=0,enr=0,nNo=0,seenD={};
   Object.keys(byC).sort().forEach(function(c){
     var dists=byC[c],all=[];Object.keys(dists).forEach(function(k){all=all.concat(dists[k])});
@@ -1072,10 +1064,9 @@ function render(){
         if(spread[k]){
           chipLayer.addLayer(chip(topOf(arr),nm,function(){delete spread[k];map.closePopup();render();},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(k,arr)).openOn(map);}));
           arr.forEach(function(s){
-            var cm=L.circleMarker([s[9],s[10]],{renderer:schoolR,pane:"schools",radius:7,color:"#ffffff",weight:1.6,fillColor:TIERS[s[11]].color,fillOpacity:0.95,bubblingMouseEvents:false});
+            var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"",iconSize:[16,16],iconAnchor:[8,8],popupAnchor:[0,-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,title:s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)",""),riseOnHover:true});
             cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
             layer.addLayer(cm);
-            if(a11y){var li=document.createElement("li"),bt=document.createElement("button");bt.type="button";bt.textContent=s[1]+", "+L_name(s[2])+", "+TIERS[s[11]].label.replace(" (area only)","")+". Open card";bt.onclick=(function(sch){return function(){map.closePopup();map.setView([sch[9],sch[10]],Math.max(map.getZoom(),11));L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([sch[9],sch[10]]).setContent(schoolCard(sch)).openOn(map);}})(s);li.appendChild(bt);a11y.appendChild(li);}
           });
         }else{
           var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",""),title:nm+": "+fmt(arr.length)+" "+plural(arr.length,"school"),riseOnHover:true});
@@ -1328,7 +1319,7 @@ function wire(){
   str.onclick=function(){map.getContainer().style.background="#bde5ff";map.removeLayer(base.sat);base.str.addTo(map).bringToBack();str.setAttribute("aria-pressed","true");sat.setAttribute("aria-pressed","false")};
   document.getElementById("showArea").onchange=paintOverlay;
   var tb={S:document.getElementById("tapS"),A:document.getElementById("tapA"),B:document.getElementById("tapB")};
-  function setTap(m){tapMode=m;Object.keys(tb).forEach(function(k){tb[k].setAttribute("aria-pressed",String(k===m))});var pn=map.getPane("schools");if(pn)pn.classList.toggle("off",m==="A");var mp=map.getPane("markerPane");if(mp)mp.style.pointerEvents=(m==="A")?"none":"";map.closePopup();}
+  function setTap(m){tapMode=m;Object.keys(tb).forEach(function(k){tb[k].setAttribute("aria-pressed",String(k===m))});var mp=map.getPane("markerPane");if(mp)mp.style.pointerEvents=(m==="A")?"none":"";map.closePopup();}
   tb.S.onclick=function(){setTap("S")};tb.A.onclick=function(){setTap("A")};tb.B.onclick=function(){setTap("B")};
   document.getElementById("gatherAll").onclick=function(){setMode(0)};
   document.getElementById("districtsAll").onclick=function(){setMode(1)};
