@@ -753,6 +753,11 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .alink:hover,.alink:focus-visible{background:#efece2}
 @media (max-width:760px){.leaflet-popup-content{font-size:13.5px;margin:10px 12px;max-height:55vh}.pc h3{font-size:1rem}.pc .kv b{font-size:1.1rem}}
 .hl{pointer-events:none;image-rendering:pixelated}
+#a11y{position:absolute;z-index:850;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));margin:0;padding:0;list-style:none}
+#a11y li{margin:0}
+#a11y button{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;padding:0}
+#a11y button:focus{position:static;width:auto;height:auto;clip:auto;overflow:visible;white-space:normal;display:block;max-width:min(360px,calc(100vw - 40px));padding:6px 10px;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:6px;box-shadow:var(--shadow);outline:2px solid var(--accent);font-size:14px;text-align:left}
+.pc .areabtn{margin:8px 0 0}
 #credit{position:absolute;z-index:700;left:calc(8px + env(safe-area-inset-left,0px));bottom:calc(54px + env(safe-area-inset-bottom,0px));font-size:11.5px;padding:3px 7px;max-width:60vw}
 #north{position:absolute;z-index:700;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(90px + env(safe-area-inset-bottom,0px));width:28px;text-align:center;font-size:12px;font-weight:700;padding:3px 0}
 .leaflet-control-scale{margin-bottom:calc(6px + env(safe-area-inset-bottom,0px))!important}
@@ -831,6 +836,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <div id="north" class="card" aria-hidden="true">&#9650;<br>N</div>
 <div id="credit" class="card">Data: CPUC California Broadband Map (Dec 31, 2024), NCES EDGE 2024-25. Basemap: USGS The National Map.</div>
 <div id="loading" class="loading card">Loading map data</div>
+<ul id="a11y" aria-label="Schools shown on the map, for keyboard and screen reader users"></ul>
 
 <div id="about" hidden role="dialog" aria-modal="true" aria-labelledby="aboutH">
   <div class="sheet card">
@@ -1032,6 +1038,7 @@ function fitControls(){
 }
 function render(){
   layer.clearLayers();chipLayer.clearLayers();
+  var a11y=document.getElementById("a11y");if(a11y)a11y.innerHTML="";
   var byC=groups(),nS=0,nD=0,nC=0,enr=0,nNo=0,seenD={};
   Object.keys(byC).sort().forEach(function(c){
     var dists=byC[c],all=[];Object.keys(dists).forEach(function(k){all=all.concat(dists[k])});
@@ -1053,6 +1060,7 @@ function render(){
             var cm=L.circleMarker([s[9],s[10]],{renderer:schoolR,pane:"schools",radius:7,color:"#ffffff",weight:1.6,fillColor:TIERS[s[11]].color,fillOpacity:0.95,bubblingMouseEvents:false});
             cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
             layer.addLayer(cm);
+            if(a11y){var li=document.createElement("li"),bt=document.createElement("button");bt.type="button";bt.textContent=s[1]+", "+L_name(s[2])+", "+TIERS[s[11]].label.replace(" (area only)","")+". Open card";bt.onclick=(function(sch){return function(){map.closePopup();map.setView([sch[9],sch[10]],Math.max(map.getZoom(),11));L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([sch[9],sch[10]]).setContent(schoolCard(sch)).openOn(map);}})(s);li.appendChild(bt);a11y.appendChild(li);}
           });
         }else{
           var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",""),title:nm+": "+fmt(arr.length)+" "+plural(arr.length,"school"),riseOnHover:true});
@@ -1084,6 +1092,7 @@ function schoolCard(s){
   '<p class="sec"><i>School</i></p>'+
   '<table>'+(D.status&&D.status[s[0]]?'<tr><td>Status</td><td>'+esc(STATUS[D.status[s[0]]]||D.status[s[0]])+'</td></tr>':'')+'<tr><td>Locale</td><td>'+esc(loc)+'</td></tr>'+
   '<tr><td>NCES ID</td><td>'+esc(s[0])+'</td></tr></table>'+
+  '<p class="areabtn"><button type="button" class="btn" data-area="'+s[9]+','+s[10]+'">Card for the shaded area at this school</button></p>'+
   '<p class="src">Sources: '+schoolLink(s[0])+' | <a href="'+D.links.cpuc+'" target="_blank" rel="noopener">CPUC broadband map</a> | <a href="'+D.links.ncesLayer+'" target="_blank" rel="noopener">NCES EDGE 2024-25 layer</a></p></div>';
 }
 function districtCard(k,arr){
@@ -1148,6 +1157,7 @@ function loadAreas(){
   }).catch(areasFailed);
   map.on("click",onAreaClick);
   map.on("popupclose",clearHL);
+  document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-area]");if(!b)return;var p=b.getAttribute("data-area").split(",");map.closePopup();openArea(L.latLng(+p[0],+p[1]));});
   map.on("popupopen",function(){if(window.innerWidth<=760)map.getContainer().classList.add("card-open")});
   map.on("popupclose",function(){map.getContainer().classList.remove("card-open")});
 }
@@ -1160,9 +1170,13 @@ function cellLatLng(r,c){var g=AR.grid;return L.CRS.EPSG3857.unproject(L.point(g
 function km2mi(k){return k*0.386102}
 function clearHL(){if(hl){map.removeLayer(hl);hl=null}}
 function onAreaClick(e){
-  if(tapMode==="S"||!AR||!arIds||!document.getElementById("showArea").checked)return;
-  var rc=cellOf(e.latlng),id=idAt(rc[0],rc[1]);
-  if(!id)return;
+  if(tapMode==="S")return;
+  openArea(e.latlng);
+}
+function openArea(latlng){
+  if(!AR||!arIds||!document.getElementById("showArea").checked)return;
+  var rc=cellOf(latlng),id=idAt(rc[0],rc[1]),e={latlng:latlng};
+  if(!id){L.popup({maxWidth:300}).setLatLng(latlng).setContent('<div class="pc"><p class="note">No shaded area at this point: the state map has no speed data for this block.</p></div>').openOn(map);return}
   var a=AR.A[id-1];if(!a||!TIERS[a[0]].on)return;
   L.popup({maxWidth:330,offset:[0,-2]}).setLatLng(e.latlng).setContent(areaCard(id,a,rc,e.latlng)).openOn(map);
   drawHL(id,a);
