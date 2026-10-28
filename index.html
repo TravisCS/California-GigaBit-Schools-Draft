@@ -721,10 +721,10 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 #hits small{color:var(--muted)}
 .dot{display:flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-weight:700;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45);font-family:var(--serif);font-variant-numeric:tabular-nums;cursor:pointer;box-sizing:border-box}
 .dot.county{border-style:double;border-width:4px}
-.chip{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:0;font-size:12.5px;white-space:nowrap;box-shadow:var(--shadow);font-family:var(--serif);display:inline-flex;transform:translate(-50%,calc(-100% - 12px))}
+.chip{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:0;font-size:12.5px;white-space:nowrap;box-shadow:var(--shadow);font-family:var(--serif);display:inline-flex;transform:translate(-50%,14px)}
 .chip span{padding:2px 8px}
 .chip .ck{padding:2px 6px 2px 8px;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;border-right:1px solid var(--rule)}
-.chip.county{transform:translate(-50%,calc(-100% - 44px))}
+.chip.county{transform:translate(-50%,46px)}
 .chip .cn{cursor:pointer;color:var(--link);text-decoration:underline;text-decoration-color:rgba(11,87,208,.4)}
 .chip .cg{cursor:pointer;border-left:1px solid var(--rule);color:var(--muted)}
 .chip .cn:hover,.chip .cg:hover{background:var(--chip)}
@@ -832,7 +832,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
         <button class="btn" id="districtsAll">Districts</button>
         <button class="btn" id="spreadAll">Spread all</button>
       </div>
-      <p class="note">Ringed dots are counties, plain dots are districts, small dots are schools. The number is how many schools in the group match the speeds checked above, and the color is the most common speed among them. Tap a dot to spread it and zoom in (with "Tap opens" set to Schools or Both). The label above a spread district opens its card (tap the name) or gathers it (tap gather); a county label only gathers. Schools with gigabit at their block are counted in the legend but not drawn.</p>
+      <p class="note">Ringed dots are counties, plain dots are districts, small dots are schools. The number is how many schools in the group match the speeds checked above, and the color is the most common speed among them. Tap a dot to spread it and zoom in (with "Tap opens" set to Schools or Both). The label below a spread district opens its card (tap the name) or gathers it (tap gather); a county label only gathers. Schools with gigabit at their block are counted in the legend but not drawn.</p>
     </details>
     <details>
       <summary>Find a district or school</summary>
@@ -1030,6 +1030,7 @@ function county(s){return (LEA[s[2]]&&LEA[s[2]][1])||s[7]||"Unknown county"}
 
 function centroid(arr){var a=0,b=0;arr.forEach(function(s){a+=s[9];b+=s[10]});return[a/arr.length,b/arr.length]}
 function topOf(arr){var c=centroid(arr),t=-90;arr.forEach(function(s){if(s[9]>t)t=s[9]});return[t,c[1]]}
+function bottomOf(arr){var c=centroid(arr),t=90;arr.forEach(function(s){if(s[9]<t)t=s[9]});return[t,c[1]]}
 function dominant(arr){var c=TIERS.map(function(){return 0});arr.forEach(function(s){c[s[11]]++});var m=-1,k=0;for(var i=0;i<NT;i++)if(c[i]>m){m=c[i];k=i}return{tier:k,counts:c}}
 function dotIcon(n,color,cls,label){
   var d=Math.round(Math.min(64,(cls==="county"?24:18)+Math.sqrt(n)*(cls==="county"?2.6:3.2)));
@@ -1094,11 +1095,11 @@ function render(){
       layer.addLayer(m);
     }else{
       var cen2=centroid(all);
-      chipLayer.addLayer(chip(topOf(all),c,function(){countyMode[c]=0;Object.keys(dists).forEach(function(k){delete spread[k]});map.closePopup();render();map.flyToBounds(regionBounds(cen2[0]),Object.assign(fitPad(),{duration:0.8}));}));
+      chipLayer.addLayer(chip(bottomOf(all),c,function(){countyMode[c]=0;Object.keys(dists).forEach(function(k){delete spread[k]});map.closePopup();render();map.flyToBounds(regionBounds(cen2[0]),Object.assign(fitPad(),{duration:0.8}));}));
       Object.keys(dists).forEach(function(k){
         var arr=dists[k],dm=dominant(arr),cen=centroid(arr),nm=(L_name(k));
         if(spread[k]){
-          chipLayer.addLayer(chip(topOf(arr),nm,function(){delete spread[k];map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(k,arr)).openOn(map);}));
+          chipLayer.addLayer(chip(bottomOf(arr),nm,function(){delete spread[k];map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(k,arr)).openOn(map);}));
           arr.forEach(function(s){
             var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"",iconSize:[16,16],iconAnchor:[8,8],popupAnchor:[0,-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,title:s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)",""),riseOnHover:true});
             cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
@@ -1152,7 +1153,7 @@ function districtCard(k,arr){
   '<div class="kv"><div><b>'+fmt(arr.length-nNo)+'</b><span>'+plural(arr.length-nNo,"school")+' below gigabit</span></div>'+(nNo?'<div><b>'+fmt(nNo)+'</b><span>no speed data</span></div>':'')+'<div><b>'+(enr?fmt(enr):'Not reported')+'</b><span>students, 2024-25</span></div></div>'+
   '<p class="sec"><i>Schools by fastest download</i></p><div class="bars">'+rows+'</div>'+
   '<p class="closerow"><button type="button" class="btn" data-close="1">Close</button><button type="button" class="btn" data-county="'+esc(arr[0][7])+'">All of '+esc(arr[0][7])+' County</button></p>'+
-  '<p class="src">Tap a school dot for its card, or the district name above the dots for this one. '+districtLink(k)+'</p></div>';
+  '<p class="src">Tap a school dot for its card, or the district name below the dots for this one. '+districtLink(k)+'</p></div>';
 }
 
 function buildLegend(){
