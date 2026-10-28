@@ -29,7 +29,7 @@ Coordinate system: sources read in WGS 84 / Pseudo-Mercator (EPSG:3857); school 
 7. Split the 400 m layer into connected patches of one tier (8-connectivity, 8,824 patches) for the tap cards; stored patch IDs as areas.png and per-patch true ground area, cell bounds, gigabit sub-class shares and the mapped schools inside as areas.json (areas.py).
 8. Built the page (template.html, app.js, data.json) with Leaflet 1.9.4. No outside tiles; all layers ship with the page.
 
-Tools: Python 3.13 (NumPy 2.5.3, SciPy 1.18.1, Pillow 12.3.0), Leaflet 1.9.4. Bulk capture and transcription run by four Claude Sonnet worker agents (846,146 tokens in total). Hosted as a claude.ai artifact (https://claude.ai/artifact/HRmdQ8KehpESwc6PrRtwoZ, private until shared).
+Tools: Python 3.13 (NumPy 2.5.3, SciPy 1.18.1, Pillow 12.3.0), Leaflet 1.9.4. Bulk capture and transcription run by four Claude Sonnet worker agents (846,146 tokens in total). Published at https://traviscs.github.io/California-GigaBit-Schools-Draft/ (GitHub Pages, repository TravisCS/California-GigaBit-Schools-Draft) and as a claude.ai artifact (https://claude.ai/artifact/HRmdQ8KehpESwc6PrRtwoZ, private until shared).
 
 ## AI-use statement
 Code and layout generated with Claude (Anthropic), which also gathered and processed the data from the sources above. Data, placement and accuracy have not yet been reviewed by Travis Cody Smith.
@@ -45,7 +45,7 @@ Code and layout generated with Claude (Anthropic), which also gathered and proce
 All sources are U.S. or California government data. Credit the CPUC for speeds, NCES for schools and USGS The National Map for basemaps with any copy of the map.
 
 ## Citation (APA)
-Smith, T. C. (2026). *California schools outside gigabit coverage* [Interactive map]. https://claude.ai/artifact/HRmdQ8KehpESwc6PrRtwoZ
+Smith, T. C. (2026). *California schools outside gigabit coverage* [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/
 
 Figure note: *Note.* Speeds from California Public Utilities Commission (2026), data as of December 31, 2024. Schools from National Center for Education Statistics (2026). Basemap from U.S. Geological Survey (2024, 2026). Built with Leaflet; code generated with Claude and not yet reviewed by the author.
 

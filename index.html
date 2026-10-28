@@ -1,5 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>California Gigabit Gap Schools</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>California Schools Outside Gigabit Coverage</title></head><body>
 <style>
 /* required styles */
 
@@ -716,7 +715,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 #hits li button{all:unset;cursor:pointer;display:block;padding:3px 4px;font-size:14px;border-radius:4px}
 #hits li button:hover,#hits li button:focus-visible{background:var(--chip)}
 #hits small{color:var(--muted)}
-.dot{display:flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-weight:700;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45);font-family:var(--serif);text-shadow:0 0 2px rgba(0,0,0,.6);font-variant-numeric:tabular-nums;cursor:pointer;box-sizing:border-box}
+.dot{display:flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-weight:700;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45);font-family:var(--serif);font-variant-numeric:tabular-nums;cursor:pointer;box-sizing:border-box}
 .dot.county{border-style:double;border-width:4px}
 .chip{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:0;font-size:12.5px;white-space:nowrap;box-shadow:var(--shadow);font-family:var(--serif);display:inline-flex;transform:translate(-50%,calc(-100% - 12px))}
 .chip span{padding:2px 8px}
@@ -789,7 +788,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 
 <div id="titlecard" class="card">
   <h1>California Schools Outside Gigabit Coverage</h1>
-  <p class="sub">Public K-12 schools in census blocks where no fixed provider advertises 1 Gbps download, by district, with the fastest speed advertised at each school's block.</p>
+  <p class="sub">Public K-12 schools in census blocks where no one subscribes to a 1 Gbps fixed download plan, by district, with the fastest subscribed speed at each school's block.</p>
   <p class="stat" id="stat">Loading data</p>
   <div class="row">
     <span class="seg" role="group" aria-label="Basemap"><button id="bmSat" aria-pressed="true">Satellite</button><button id="bmStr" aria-pressed="false">Street</button></span>
@@ -805,7 +804,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
   <div class="head"><h2>Legend</h2><button class="btn" id="legToggle" aria-expanded="true">Hide</button></div>
   <div class="body">
     <details open>
-      <summary>Fastest advertised download</summary>
+      <summary>Fastest subscribed download</summary>
       <div id="tiers"></div>
       <label class="tier" style="grid-template-columns:18px 1fr"><input type="checkbox" id="showArea" checked><span>Shade coverage areas</span></label>
       <p class="note">With "Tap opens" set to Areas or Both, tap any shaded area for its card: speed, size, the speed mix within 3 miles and the schools inside.</p>
@@ -817,7 +816,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
         <button class="btn" id="districtsAll">Districts</button>
         <button class="btn" id="spreadAll">Spread all</button>
       </div>
-      <p class="note">Ringed dots are counties, plain dots are districts, small dots are schools. The number is how many schools in the group match the speeds checked above, and the color is the most common speed among them. Tap a dot to spread it and zoom in. The label above a spread group opens its card (tap the name) or gathers it (tap gather). Schools with gigabit at their block are counted in the legend but not drawn.</p>
+      <p class="note">Ringed dots are counties, plain dots are districts, small dots are schools. The number is how many schools in the group match the speeds checked above, and the color is the most common speed among them. Tap a dot to spread it and zoom in (with "Tap opens" set to Schools or Both). The label above a spread district opens its card (tap the name) or gathers it (tap gather); a county label only gathers. Schools with gigabit at their block are counted in the legend but not drawn.</p>
     </details>
     <details>
       <summary>Find a district or school</summary>
@@ -825,6 +824,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
       <ul id="hits"></ul>
     </details>
     <p class="note">Map by Travis Cody Smith, <span id="made"></span>. Web Mercator (EPSG:3857).</p>
+    <p class="note">Every link on this map was checked on October 28, 2026. <a href="#" id="auditWhat">What's this?</a></p>
   </div>
 </div>
 
@@ -837,10 +837,10 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
     <button class="btn x" id="closeAbout">Close</button>
     <h2 id="aboutH">About the data</h2>
     <p class="note" style="font-size:14px">Map by Travis Cody Smith. Made <span class="made"></span>.</p>
-    <p><b>In short:</b> 781 of California's 10,351 public schools (460 districts in 56 counties, 283,360 students) sit in census blocks where the fastest fixed broadband anyone subscribes to is under 1 Gbps download. Another 72 schools (26,049 students) sit where the state map has no speed data. The other 9,498 schools are in gigabit blocks.</p>
+    <p><b>In short:</b> 781 of California's 10,351 public schools (460 districts in 56 counties, 283,360 students) sit in census blocks where the fastest fixed broadband anyone subscribes to is under 1 Gbps download. Another 72 schools (26,049 students) sit where the state map has no speed data. The other 9,498 schools are in gigabit blocks. The map's live count includes both groups, so it shows 853 schools in 494 districts across 57 counties. Speeds are the fastest plan with at least one subscriber in the block, as reported to the CPUC, not what providers advertise.</p>
 
 <table>
-<tr><th>Fastest advertised download at the school's block</th><th>Schools</th></tr>
+<tr><th>Fastest subscribed download at the school's block</th><th>Schools</th></tr>
 <tr><td>Under 10 Mbps</td><td>19</td></tr>
 <tr><td>10 to 24 Mbps</td><td>27</td></tr>
 <tr><td>25 to 49 Mbps</td><td>103</td></tr>
@@ -860,7 +860,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>How speeds were read.</b> The CPUC layer was drawn at 100 m per pixel across the state from the CPUC map service, and each pixel was matched to the layer's own legend colors. A small number of blocks carry placeholder values of 1,000,000 Mbps or more (600 at 20,000,000 and 19 at 1,000,000); the CPUC legend leaves these unfilled, and this map treats them as gigabit.</li>
 <li><b>School speeds.</b> Each school's tier is read at its own location (599 schools). When the school's pixel fell on a block edge with no color, the nearest colored pixel within 300 m was used (182 schools). Schools with no colored block within 300 m are shown as "No speed data" (72 schools).</li>
 <li><b>Display shading.</b> The shaded area is generalized to 400 m cells (the most common tier in each cell) so the page loads quickly. School tiers use the finer 100 m reading, so a school can sit in a cell shaded a different color.</li>
-<li><b>School source.</b> National Center for Education Statistics (NCES), EDGE Public School Characteristics 2024-25, published April 27, 2026. California has 10,351 schools in this file. School names, districts, addresses, enrollment, county and locale come from it.</li>
+<li><b>School source.</b> National Center for Education Statistics (NCES), EDGE Public School Characteristics 2024-25, published April 27, 2026. California has 10,351 schools in this file. School names, districts, addresses, enrollment, county and locale come from it. On October 28, 2026 every mapped school was re-checked against that layer by ID: all 853 positions agree to within 1 m, and names, districts, addresses and enrollment match exactly. The file includes 7 "Future" schools not yet open, 6 "New" schools and 2 with a changed boundary or agency; their cards say so under Status.</li>
 <li><b>How schools were picked.</b> School locations were drawn from the NCES service and compared with the speed layer. Schools in or near any block below 1 Gbps (1,342 records) were then pulled from the NCES service by location, and each was given its tier as in note 6. Schools that turned out to be in gigabit blocks were dropped from the dots.</li>
 <li><b>Area cards.</b> Tapping a shaded area outlines one connected patch of 400 m cells that share the same fastest download (8,824 patches statewide) and shows its size, the counties of the schools inside it, and the share of land within 5 km of the tapped point in each tier. Sizes are true ground area, corrected for the Web Mercator stretch. For gigabit patches it also shows the split between 2 Gbps or more, 1 to 1.99 Gbps and placeholder values. A school is listed in a patch when its 400 m cell (or a touching cell) falls in that patch, so a school can appear in a patch of a different color than its own tier (note 7).</li>
 <li><b>Grouping.</b> Ringed dots are counties and plain dots are districts (NCES local education agency, so a single-school charter counts as its own district). The number is the count of schools shown, and the color is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
@@ -868,6 +868,20 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>Basemaps.</b> USGS The National Map: Imagery Only (data refreshed June 2024) and USGS Topo (data refreshed September 4, 2026). Both are U.S. government works in the public domain. They are shown as single statewide images, so they blur when zoomed in close.</li>
 <li><b>Tools and AI use.</b> Built with Leaflet 1.9.4 and Python (NumPy, SciPy, Pillow). Code and layout generated with Claude (Anthropic), which also gathered and processed the data from the sources listed below. Data, placement and accuracy have not yet been reviewed by Travis Cody Smith. Projection: WGS 84 / Web Mercator (EPSG:3857).</li>
 </ol>
+
+<h3 id="audit">Link audit</h3>
+<p>On October 28, 2026, every link on this map was opened and checked by nine Claude Sonnet agents running in parallel: eight took a slice each of the 1,347 school and district record links, and one took the 14 source, basemap and library links. A link counted as good only if the page loaded and showed the right school or district name. Rows that failed were refetched one at a time by hand before any change was made.</p>
+<table>
+<tr><th>Links</th><th>Count</th></tr>
+<tr><td>School and district records checked</td><td>1,347</td></tr>
+<tr><td>Source, basemap and library links checked</td><td>14</td></tr>
+<tr><td>Record links good as linked</td><td>1,332</td></tr>
+<tr><td>Record links rerouted to the NCES EDGE 2024-25 layer</td><td>11</td></tr>
+<tr><td>Record links whose name differs on the NCES page, link correct</td><td>3</td></tr>
+<tr><td>Record links with a transient server timeout, good on retry</td><td>1</td></tr>
+<tr><td>Source, basemap and library links good</td><td>14 of 14</td></tr>
+</table>
+<p class="note" style="font-size:13.5px">The 11 rerouted records are 7 schools and 4 single-school charter districts that are new or re-numbered in the 2024-25 file. The NCES school search site still runs on 2023-24 data, so it returned a blank form or a server error for them. Their cards link instead to the matching record in the EDGE 2024-25 layer this map is built from, and say so. The three name differences are Turner Academy (NCES omits "at Tokay Colony"), Barona Indian Charter District (NCES shows "Barona Charter District") and Murray Middle (the NCES search page still shows its former name, China Lake Junior High). The FCC link is blocked for scripts but opens in a browser.</p>
 
 <h3>Sources</h3>
 <p class="hang">California Public Utilities Commission. (2026). <i>California interactive broadband map: Fixed consumer downstream maximum, end of year 2024</i> [Data set; data as of December 31, 2024]. <a href="https://www.broadbandmap.ca.gov/" target="_blank" rel="noopener">https://www.broadbandmap.ca.gov/</a></p>
@@ -879,17 +893,18 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <p class="hang">Agafonkin, V. (2023). <i>Leaflet</i> (Version 1.9.4) [Computer software]. <a href="https://leafletjs.com/" target="_blank" rel="noopener">https://leafletjs.com/</a></p>
 
 <h3>How to cite this map</h3>
-<p class="hang" id="apa">Smith, T. C. (2026). <i>California schools outside gigabit coverage</i> [Interactive map]. https://claude.ai/artifact/HRmdQ8KehpESwc6PrRtwoZ</p>
+<p class="hang" id="apa">Smith, T. C. (2026). <i>California schools outside gigabit coverage</i> [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/</p>
 <p><button class="btn" id="copyApa">Copy citation</button></p>
 <p class="note" style="font-size:13.5px"><i>Note.</i> Speeds from California Public Utilities Commission (2026), data as of December 31, 2024. Schools from National Center for Education Statistics (2026). Basemap from U.S. Geological Survey (2024, 2026). Built with Leaflet; code generated with Claude and not yet reviewed by the author.</p>
 
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" onerror="document.getElementById('loading').textContent='The map library did not load. Check your connection and reload.'"></script>
 <script>
 (function(){
 "use strict";
+if(typeof L==="undefined"){document.getElementById("loading").textContent="The map library did not load. Check your connection and reload.";return;}
 var TIERS=[
  {label:"Under 10 Mbps",color:"#5e0f2f",on:true},
  {label:"10 to 24 Mbps",color:"#a3242b",on:true},
@@ -902,9 +917,11 @@ var TIERS=[
 ];
 var NT=TIERS.length;
 var LOCALE={"11":"City, large","12":"City, midsize","13":"City, small","21":"Suburb, large","22":"Suburb, midsize","23":"Suburb, small","31":"Town, fringe","32":"Town, distant","33":"Town, remote","41":"Rural, fringe","42":"Rural, distant","43":"Rural, remote"};
+var STATUS={"Future":"Future school, not yet open (NCES 2024-25 status)","New":"New in 2024-25 (NCES status)","Changed Boundary/Agency":"Changed boundary or agency in 2024-25 (NCES status)"};
 var METH=["Read at the school's own census block","Block at the school had no color; nearest blocks within 300 m used","No block with speed data within 300 m"];
 var D,S=[],LEA={},map,overlay,ovCanvas,ovBase,base={},layer,chipLayer,schoolR,countyMode={},spread={},tapMode="S";
 var fmt=function(n){return n.toLocaleString("en-US")};
+function plural(n,one,many){return n===1?one:(many||one+"s")}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
 var CanvasOverlay=L.ImageOverlay.extend({
@@ -921,16 +938,16 @@ function init(){
   map=L.map("map",{preferCanvas:true,zoomControl:true,minZoom:5,maxZoom:13,zoomSnap:0.5,attributionControl:true,worldCopyJump:false});
   map.attributionControl.setPrefix(false);
   // a finger that drifts a few pixels is still a tap, not a drag (Leaflet's default is 3 px)
-  if(map.dragging&&map.dragging._draggable)map.dragging._draggable.options.clickTolerance=L.Browser.touch?14:5;
+  if(map.dragging&&map.dragging._draggable)map.dragging._draggable.options.clickTolerance=(navigator.maxTouchPoints>0||L.Browser.mobile)?14:5;
   map.attributionControl.addAttribution('Basemap: <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map</a> | Speeds: <a href="https://www.broadbandmap.ca.gov/" target="_blank" rel="noopener">CPUC</a> | Schools: <a href="https://nces.ed.gov/programs/edge/Geographic/SchoolLocations" target="_blank" rel="noopener">NCES EDGE</a>');
   var b=D.bounds;
-  map.fitBounds(b.view);
   map.setMaxBounds(L.latLngBounds(b.max));
   base.sat=L.imageOverlay(D.img.sat,b.base,{interactive:false,className:"bm"});
   base.str=L.imageOverlay(D.img.str,b.base,{interactive:false,className:"bm"});
   base.sat.addTo(map);
   L.control.scale({imperial:true,metric:true,position:"bottomleft"}).addTo(map);
   ["titlecard","legend","north","credit"].forEach(function(id){var el=document.getElementById(id);map.getContainer().appendChild(el);L.DomEvent.disableClickPropagation(el);L.DomEvent.disableScrollPropagation(el);});
+  map.fitBounds(b.view,fitPad());
   loadAreas();
   // coverage overlay drawn into a canvas so tiers can be switched on and off
   var img=new Image();
@@ -941,6 +958,7 @@ function init(){
     overlay=new CanvasOverlay("",b.overlay,{canvas:ovCanvas,opacity:0.62,interactive:false});
     overlay.addTo(map);paintOverlay();
   };
+  img.onerror=function(){var st=document.getElementById("stat");st.insertAdjacentHTML("beforeend"," Coverage shading did not load; reload to try again.")};
   img.src=D.img.ov;
   map.createPane("schools");map.getPane("schools").style.zIndex=650;
   schoolR=L.canvas({pane:"schools",tolerance:7});
@@ -952,6 +970,7 @@ function init(){
 }
 
 var TIER_RGB=[];
+function inkOn(hex){var c=hexrgb(hex);var l=(0.2126*c[0]+0.7152*c[1]+0.0722*c[2])/255;return l>0.45?"#1d2320":"#ffffff"}
 function hexrgb(h){return[parseInt(h.substr(1,2),16),parseInt(h.substr(3,2),16),parseInt(h.substr(5,2),16)]}
 function paintOverlay(){
   if(!ovBase)return;
@@ -968,7 +987,7 @@ function paintOverlay(){
 }
 
 function visible(s){return TIERS[s[11]].on}
-function county(s){return s[7]||"Unknown county"}
+function county(s){return (LEA[s[2]]&&LEA[s[2]][1])||s[7]||"Unknown county"}
 
 function centroid(arr){var a=0,b=0;arr.forEach(function(s){a+=s[9];b+=s[10]});return[a/arr.length,b/arr.length]}
 function topOf(arr){var c=centroid(arr),t=-90;arr.forEach(function(s){if(s[9]>t)t=s[9]});return[t,c[1]]}
@@ -977,12 +996,13 @@ function dotIcon(n,color,cls,label){
   var d=Math.round(Math.min(64,(cls==="county"?24:18)+Math.sqrt(n)*(cls==="county"?2.6:3.2)));
   var fs=n>=1000?11:(n>=100?12:13);
   return L.divIcon({className:"",iconSize:[d,d],iconAnchor:[d/2,d/2],
-    html:'<div class="dot '+cls+'" style="width:'+d+'px;height:'+d+'px;background:'+color+';font-size:'+fs+'px" role="button" aria-label="'+esc(label)+'">'+fmt(n)+'</div>'});
+    html:'<div class="dot '+cls+'" style="width:'+d+'px;height:'+d+'px;background:'+color+';color:'+inkOn(color)+';font-size:'+fs+'px" aria-hidden="true">'+fmt(n)+'</div>'});
 }
 function chip(latlng,name,fnGather,fnCard){
   var html='<span class="chip'+(fnCard?'':' county')+'">'+(fnCard?'<span class="cn" role="button" title="Open the card for '+esc(name)+'">'+esc(name)+'</span>':'<span>'+esc(name)+'</span>')+'<span class="cg" role="button" title="Gather '+esc(name)+'">gather</span></span>';
-  var m=L.marker(latlng,{icon:L.divIcon({className:"",iconSize:[0,0],html:html}),zIndexOffset:900,keyboard:false,interactive:true});
+  var m=L.marker(latlng,{icon:L.divIcon({className:"",iconSize:[0,0],html:html}),zIndexOffset:900,keyboard:true,title:(fnCard?"Open the card for ":"Gather ")+name,interactive:true});
   m.on("click",function(e){var t=e.originalEvent&&e.originalEvent.target;if(t&&t.classList.contains("cn")&&fnCard)fnCard();else fnGather();});
+  m.on("add",function(){var el=m.getElement();if(!el)return;el.querySelectorAll(".cn,.cg").forEach(function(sp){sp.setAttribute("tabindex","0");sp.addEventListener("keydown",function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();ev.stopPropagation();if(sp.classList.contains("cn")&&fnCard)fnCard();else fnGather();}})})});
   return m;
 }
 
@@ -994,7 +1014,8 @@ function groups(){
 
 function fitPad(){
   var tc=document.getElementById("titlecard"),lg=document.getElementById("legend"),narrow=window.innerWidth<=760;
-  return {paddingTopLeft:L.point(narrow?20:60,tc.offsetTop+tc.offsetHeight+40),paddingBottomRight:narrow?L.point(20,lg.offsetHeight+30):L.point(lg.offsetWidth+40,30)};
+  var H=map.getSize().y,W=map.getSize().x,top=Math.min(tc.offsetTop+tc.offsetHeight+40,H*0.35),bot=Math.min((narrow?lg.offsetHeight:0)+30,H*0.35);
+  return {paddingTopLeft:L.point(Math.min(60,W*0.2),top),paddingBottomRight:narrow?L.point(20,bot):L.point(Math.min(lg.offsetWidth+40,W*0.4),bot)};
 }
 function flyTo(b,maxZoom){var o=fitPad();o.maxZoom=maxZoom;o.duration=0.6;map.flyToBounds(b,o)}
 function fitControls(){
@@ -1011,13 +1032,14 @@ function fitControls(){
 }
 function render(){
   layer.clearLayers();chipLayer.clearLayers();
-  var byC=groups(),nS=0,nD=0,nC=0,enr=0;
+  var byC=groups(),nS=0,nD=0,nC=0,enr=0,nNo=0,seenD={};
   Object.keys(byC).sort().forEach(function(c){
     var dists=byC[c],all=[];Object.keys(dists).forEach(function(k){all=all.concat(dists[k])});
-    nC++;nD+=Object.keys(dists).length;nS+=all.length;all.forEach(function(s){if(s[6]>0)enr+=s[6]});
+    nC++;Object.keys(dists).forEach(function(k){seenD[k]=1});nS+=all.length;all.forEach(function(s){if(s[6]>0)enr+=s[6];if(s[11]===7)nNo++});
     if(!countyMode[c]){
       var dm=dominant(all),cen=centroid(all);
-      var m=L.marker(cen,{icon:dotIcon(all.length,TIERS[dm.tier].color,"county",c+" County, "+all.length+" schools"),title:c+" County: "+fmt(all.length)+" schools in "+Object.keys(dists).length+" districts",riseOnHover:true});
+      var nd=Object.keys(dists).length;
+      var m=L.marker(cen,{icon:dotIcon(all.length,TIERS[dm.tier].color,"county",""),title:c+" County: "+fmt(all.length)+" "+plural(all.length,"school")+" in "+nd+" "+plural(nd,"district"),riseOnHover:true});
       m.on("click",function(){countyMode[c]=1;map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);});
       layer.addLayer(m);
     }else{
@@ -1033,40 +1055,42 @@ function render(){
             layer.addLayer(cm);
           });
         }else{
-          var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",nm+", "+arr.length+" schools"),title:nm+": "+fmt(arr.length)+" schools",riseOnHover:true});
+          var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",""),title:nm+": "+fmt(arr.length)+" "+plural(arr.length,"school"),riseOnHover:true});
           m.on("click",function(){spread[k]=1;map.closePopup();render();flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12);});
           layer.addLayer(m);
         }
       });
     }
   });
-  document.getElementById("stat").innerHTML='Showing <b>'+fmt(nS)+'</b> schools in <b>'+fmt(nD)+'</b> districts across <b>'+fmt(nC)+'</b> counties'+(enr?', <b>'+fmt(enr)+'</b> students.':'.')+' '+D.statLine;
+  nD=Object.keys(seenD).length;
+  document.getElementById("stat").innerHTML='Showing <b>'+fmt(nS)+'</b> schools'+(nNo?' (<b>'+fmt(nS-nNo)+'</b> below 1 Gbps, <b>'+fmt(nNo)+'</b> with no speed data)':'')+' in <b>'+fmt(nD)+'</b> '+plural(nD,"district")+' across <b>'+fmt(nC)+'</b> '+plural(nC,"county","counties")+(enr?', <b>'+fmt(enr)+'</b> students.':'.')+' '+D.statLine;
   updateCounts();fitControls();
 }
 function L_name(k){return (LEA[k]&&LEA[k][0])||("District "+k)}
 var EDGEQ="https://nces.ed.gov/opengis/rest/services/K12_School_Locations/EDGE_ADMINDATA_PUBLICSCH_2425/MapServer/1/query?outFields=*&returnGeometry=false&f=html&where=";
+function gmaps(q){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q)}
 function schoolLink(id){var nc=D.noCCD&&D.noCCD.s.indexOf(id)>=0;return nc?'<a href="'+EDGEQ+encodeURIComponent("NCESSCH='"+id+"'")+'" target="_blank" rel="noopener">NCES 2024-25 record</a> (not yet in the NCES school search)':'<a href="https://nces.ed.gov/ccd/schoolsearch/school_detail.asp?ID='+esc(id)+'" target="_blank" rel="noopener">NCES school record</a>'}
 function districtLink(k){var nc=D.noCCD&&D.noCCD.d.indexOf(k)>=0;return nc?'<a href="'+EDGEQ+encodeURIComponent("LEAID='"+k+"'")+'" target="_blank" rel="noopener">NCES 2024-25 records for this district</a> (not yet in the NCES district search)':'<a href="https://nces.ed.gov/ccd/districtsearch/district_detail.asp?ID2='+esc(k)+'" target="_blank" rel="noopener">NCES district record</a>'}
 
-function tierPill(t){return '<span class="pill" style="background:'+TIERS[t].color+(t>=4&&t<=5?';color:#1d2320':'')+'">'+esc(TIERS[t].label)+'</span>'}
+function tierPill(t){return '<span class="pill" style="background:'+TIERS[t].color+';color:'+inkOn(TIERS[t].color)+'">'+esc(TIERS[t].label)+'</span>'}
 function schoolCard(s){
   var loc=LOCALE[s[8]]||"Not given";
   var en=s[6]>0?fmt(s[6]):"Not reported";
-  return '<div class="pc"><h3>'+esc(s[1])+'</h3><p class="meta">'+esc(L_name(s[2]))+'<br>'+esc(s[3])+', '+esc(s[4])+', CA '+esc(s[5])+' ('+esc(s[7])+' County)</p>'+
-  '<div class="kv"><div><b class="t">'+esc(D.cls[s[12]])+'</b><span>fastest download here</span></div><div><b>'+en+'</b><span>students, 2024-25</span></div></div>'+
+  return '<div class="pc"><h3>'+esc(s[1])+'</h3><p class="meta">'+esc(L_name(s[2]))+'<br>'+esc(s[3])+', '+esc(s[4])+', CA '+esc(s[5])+' ('+esc(s[7])+' County)<br><a href="'+gmaps(s[1]+', '+s[3]+', '+s[4]+', CA '+s[5])+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
+  '<div class="kv"><div><b class="t">'+esc(D.cls[s[12]])+'</b><span>fastest subscribed download here</span></div><div><b>'+en+'</b><span>students, 2024-25</span></div></div>'+
   '<p class="sec"><i>Broadband at this block</i></p>'+
   '<table><tr><td>Speed tier</td><td>'+tierPill(s[11])+'</td></tr>'+
   '<tr><td>How read</td><td>'+esc(METH[s[13]])+'</td></tr></table>'+
   '<p class="sec"><i>School</i></p>'+
-  '<table><tr><td>Locale</td><td>'+esc(loc)+'</td></tr>'+
+  '<table>'+(D.status&&D.status[s[0]]?'<tr><td>Status</td><td>'+esc(STATUS[D.status[s[0]]]||D.status[s[0]])+'</td></tr>':'')+'<tr><td>Locale</td><td>'+esc(loc)+'</td></tr>'+
   '<tr><td>NCES ID</td><td>'+esc(s[0])+'</td></tr></table>'+
   '<p class="src">Sources: '+schoolLink(s[0])+' | <a href="'+D.links.cpuc+'" target="_blank" rel="noopener">CPUC broadband map</a> | <a href="'+D.links.ncesLayer+'" target="_blank" rel="noopener">NCES EDGE 2024-25 layer</a></p></div>';
 }
 function districtCard(k,arr){
-  var dm=dominant(arr),c=dm.counts,max=Math.max.apply(null,c),enr=0;arr.forEach(function(s){if(s[6]>0)enr+=s[6]});
+  var dm=dominant(arr),c=dm.counts,max=Math.max.apply(null,c),enr=0,nNo=0;arr.forEach(function(s){if(s[6]>0)enr+=s[6];if(s[11]===7)nNo++});
   var rows="";for(var i=0;i<NT;i++){if(!c[i])continue;rows+='<span>'+esc(TIERS[i].label)+'</span><span class="bar" style="width:'+Math.max(6,Math.round(c[i]/max*100))+'%;background:'+TIERS[i].color+'"></span><span>'+c[i]+'</span>'}
-  return '<div class="pc"><h3>'+esc(L_name(k))+'</h3><p class="meta">'+esc(arr[0][7])+' County. NCES district ID '+esc(k)+'</p>'+
-  '<div class="kv"><div><b>'+fmt(arr.length)+'</b><span>schools below gigabit</span></div><div><b>'+(enr?fmt(enr):'n/a')+'</b><span>students, 2024-25</span></div></div>'+
+  return '<div class="pc"><h3>'+esc(L_name(k))+'</h3><p class="meta">'+esc(arr[0][7])+' County. NCES district ID '+esc(k)+'<br><a href="'+gmaps(L_name(k)+', '+arr[0][7]+' County, California')+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
+  '<div class="kv"><div><b>'+fmt(arr.length-nNo)+'</b><span>'+plural(arr.length-nNo,"school")+' below gigabit</span></div>'+(nNo?'<div><b>'+fmt(nNo)+'</b><span>no speed data</span></div>':'')+'<div><b>'+(enr?fmt(enr):'Not reported')+'</b><span>students, 2024-25</span></div></div>'+
   '<p class="sec"><i>Schools by fastest download</i></p><div class="bars">'+rows+'</div>'+
   '<p class="src">Tap a school dot for its card, or the district name above the dots for this one. '+districtLink(k)+'</p></div>';
 }
@@ -1093,32 +1117,35 @@ function setMode(m){
 function search(q){
   var ul=document.getElementById("hits");ul.innerHTML="";q=q.trim().toLowerCase();if(q.length<2)return;
   var out=[],seen={};
-  Object.keys(LEA).forEach(function(k){if(L_name(k).toLowerCase().indexOf(q)>=0){out.push({t:"d",k:k,n:L_name(k),c:LEA[k][1]})}});
+  var visD={},visC={};S.forEach(function(s){if(visible(s)){visD[s[2]]=1;visC[county(s)]=1}});
+  Object.keys(LEA).forEach(function(k){if(visD[k]&&L_name(k).toLowerCase().indexOf(q)>=0){out.push({t:"d",k:k,n:L_name(k),c:LEA[k][1]})}});
   S.forEach(function(s){if(s[1].toLowerCase().indexOf(q)>=0)out.push({t:"s",s:s,n:s[1],c:L_name(s[2])})});
-  var cs={};S.forEach(function(s){cs[county(s)]=1});Object.keys(cs).forEach(function(c){if(c.toLowerCase().indexOf(q)>=0)out.unshift({t:"c",c:c,n:c})});
+  Object.keys(visC).forEach(function(c){if(c.toLowerCase().indexOf(q)>=0)out.unshift({t:"c",c:c,n:c})});
   out.slice(0,30).forEach(function(h){
     var li=document.createElement("li"),b=document.createElement("button");
     b.innerHTML=esc(h.n)+' <small>'+(h.t==="c"?"county":(h.t==="d"?"district, "+esc(h.c):"school, "+esc(h.c)))+'</small>';
     b.onclick=function(){go(h)};li.appendChild(b);ul.appendChild(li);
   });
-  if(!out.length)ul.innerHTML='<li class="note">No match among the schools shown.</li>';
+  if(!out.length)ul.innerHTML='<li class="note">No matching county, district or school among those shown.</li>';
 }
-function afterMove(fn){var done=false;map.once("moveend",function(){if(!done){done=true;fn()}});setTimeout(function(){if(!done){done=true;fn()}},1500)}
+function afterMove(fly,fn){var done=false;fly();map.once("moveend",function(){if(!done){done=true;fn()}});setTimeout(function(){if(!done){done=true;fn()}},2500)}
 function go(h){
-  if(h.t==="c"){countyMode[h.c]=1;render();var a=S.filter(function(s){return county(s)===h.c&&visible(s)});if(a.length)flyTo(L.latLngBounds(a.map(function(s){return[s[9],s[10]]})).pad(0.15),10);return}
-  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;countyMode[county(arr[0])]=1;spread[h.k]=1;render();afterMove(function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12);return}
+  if(h.t==="c"){map.closePopup();countyMode[h.c]=1;render();var a=S.filter(function(s){return county(s)===h.c&&visible(s)});if(a.length)flyTo(L.latLngBounds(a.map(function(s){return[s[9],s[10]]})).pad(0.15),10);return}
+  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;countyMode[county(arr[0])]=1;spread[h.k]=1;render();afterMove(function(){flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12)},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});return}
   var s=h.s;if(!visible(s)){TIERS[s[11]].on=true;document.getElementById("tier"+s[11]).checked=true;paintOverlay()}
-  countyMode[county(s)]=1;spread[s[2]]=1;render();afterMove(function(){L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([s[9],s[10]]).setContent(schoolCard(s)).openOn(map)});map.flyTo([s[9],s[10]],12);
+  countyMode[county(s)]=1;spread[s[2]]=1;render();afterMove(function(){map.flyTo([s[9],s[10]],12,{duration:0.6})},function(){L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([s[9],s[10]]).setContent(schoolCard(s)).openOn(map)});
 }
 
 // ---- tap cards for shaded speed areas ----
 var AR=null,arIds=null,hl=null;
 function loadAreas(){
-  fetch("areas.json").then(function(r){return r.json()}).then(function(a){
+  function areasFailed(){["tapA","tapB"].forEach(function(id){var b=document.getElementById(id);b.disabled=true;b.title="Area data did not load; reload to try again"});var st=document.getElementById("stat");if(st&&st.textContent.indexOf("Coverage areas did not load")<0)st.insertAdjacentHTML("beforeend"," Coverage areas did not load; reload to try again.")}
+  fetch("areas.json").then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(a){
     AR=a;var img=new Image();
     img.onload=function(){var c=document.createElement("canvas");c.width=img.width;c.height=img.height;var cx=c.getContext("2d");cx.drawImage(img,0,0);arIds=cx.getImageData(0,0,img.width,img.height).data};
+    img.onerror=areasFailed;
     img.src="areas.png";
-  }).catch(function(){});
+  }).catch(areasFailed);
   map.on("click",onAreaClick);
   map.on("popupclose",clearHL);
   map.on("popupopen",function(){if(window.innerWidth<=760)map.getContainer().classList.add("card-open")});
@@ -1176,7 +1203,7 @@ function areaCard(id,a,rc,latlng){
     '<tr><td>Area size</td><td>'+(size<10?size.toFixed(1):fmt(Math.round(size)))+' sq km</td></tr>';
   if(t===6&&a[4])rows+='<tr><td>Gigabit mix</td><td>2 Gbps or more '+a[4][0]+'%, 1 to 1.99 Gbps '+a[4][1]+'%'+(a[4][2]?', placeholder value '+a[4][2]+'%':'')+'</td></tr>';
   rows+=cn.length?'<tr><td>County</td><td>'+esc(cn.slice(0,3).join(", "))+(cn.length>3?" and "+(cn.length-3)+" more":"")+'</td></tr>':'';
-  rows+='<tr><td>Students</td><td>'+(sch.length?(enr?fmt(enr)+' enrolled (2024-25)':'Not reported'):'None')+(t===6&&sch.length?', at schools mapped along its slower edges':'')+'</td></tr>';
+  rows+='<tr><td>Students</td><td>'+(sch.length?(enr?fmt(enr)+' enrolled (2024-25)':'Not reported'):'None')+(t===6&&sch.length?', at schools mapped inside it (on its slower edges or in blocks with no speed data)':'')+'</td></tr>';
   if(near&&t!==6)rows+='<tr><td>Nearest school</td><td>'+near+'</td></tr>';
   rows+='<tr><td>Tapped point</td><td>'+latlng.lat.toFixed(4)+', '+latlng.lng.toFixed(4)+'</td></tr>';
   var m=mix5km(rc,latlng),bars="",max=1;m.c.forEach(function(v){if(v>max)max=v});if(m.none>max)max=m.none;
@@ -1215,10 +1242,14 @@ function wire(){
   document.getElementById("districtsAll").onclick=function(){setMode(1)};
   document.getElementById("spreadAll").onclick=function(){setMode(2)};
   var ab=document.getElementById("about");
-  document.getElementById("openAbout").onclick=function(){ab.hidden=false;document.getElementById("closeAbout").focus()};
-  document.getElementById("closeAbout").onclick=function(){ab.hidden=true};
-  ab.addEventListener("click",function(e){if(e.target===ab)ab.hidden=true});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape")ab.hidden=true});
+  var opener=null;
+  function openAbout(){opener=document.activeElement;ab.hidden=false;var mp=document.getElementById("map");if(mp)mp.setAttribute("inert","");document.getElementById("closeAbout").focus()}
+  function closeAbout(){ab.hidden=true;var mp=document.getElementById("map");if(mp)mp.removeAttribute("inert");if(opener&&opener.focus)opener.focus()}
+  document.getElementById("openAbout").onclick=openAbout;
+  document.getElementById("closeAbout").onclick=closeAbout;
+  var aw=document.getElementById("auditWhat");if(aw)aw.onclick=function(e){e.preventDefault();openAbout();var t=document.getElementById("audit");if(t)t.scrollIntoView({block:"start"});};
+  ab.addEventListener("click",function(e){if(e.target===ab)closeAbout()});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!ab.hidden)closeAbout()});
   var lg=document.getElementById("legend"),lt=document.getElementById("legToggle");
   lt.onclick=function(){var min=lg.classList.toggle("min");lt.textContent=min?"Show":"Hide";lt.setAttribute("aria-expanded",String(!min));fitControls();};
   window.addEventListener("resize",fitControls);
