@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
-"""Bump the deploy stamp in index.html so browsers never pair a cached index.html with stale data files.
-Run before committing a change to data.json, areas.json, california.json or the images:  python3 tools/stamp.py"""
-import re, datetime, pathlib
-p = pathlib.Path(__file__).resolve().parent.parent / "index.html"
+"""Rewrite the per-file version stamps in index.html (the VER map) from each data and image file's content hash,
+so a cached index.html never pairs with a stale file and a deploy only re-downloads what changed.
+Run before committing:  python3 tools/stamp.py"""
+import hashlib, re, pathlib, json
+root = pathlib.Path(__file__).resolve().parent.parent
+p = root / "index.html"
 s = p.read_text()
-new = datetime.datetime.now().strftime("%Y%m%d-%H%M")
-s2, n = re.subn(r'var V="\?v=[^"]*";', 'var V="?v=' + new + '";', s, count=1)
-assert n == 1, "stamp not found"
+m = re.search(r'var VER=(\{[^}]*\});', s)
+assert m, "VER map not found"
+files = list(json.loads(m.group(1)).keys())
+ver = {}
+for f in files:
+    fp = root / f
+    ver[f] = hashlib.sha1(fp.read_bytes()).hexdigest()[:8] if fp.exists() else "0"
+s2 = s[:m.start(1)] + json.dumps(ver, separators=(",", ":")) + s[m.end(1):]
 p.write_text(s2)
-print("stamped", new)
+print("stamped", ver)

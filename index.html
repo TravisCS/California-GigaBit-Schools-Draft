@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23d4502a'/%3E%3Ccircle cx='8' cy='8' r='3' fill='%23fff'/%3E%3C/svg%3E"><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://basemap.nationalmap.gov"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}html,body{overscroll-behavior:none}.leaflet-marker-icon:focus-visible{outline:3px solid #fff;outline-offset:1px;box-shadow:0 0 0 6px rgba(212,80,42,.95);border-radius:50%}.leaflet-popup-content:focus{outline:none}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>California Public Schools Without Gigabit Broadband</title></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23d4502a'/%3E%3Ccircle cx='8' cy='8' r='3' fill='%23fff'/%3E%3C/svg%3E"><meta name="referrer" content="strict-origin-when-cross-origin"><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://basemap.nationalmap.gov"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}html,body{overscroll-behavior:none}.sdot{position:relative}@media (pointer:coarse){.sdot::after{content:"";position:absolute;inset:-9px}.chip .cn,.chip .cg{padding-top:7px;padding-bottom:7px}}.leaflet-marker-icon:active .dot,.leaflet-marker-icon:active .sdot{filter:brightness(1.25)}.leaflet-marker-icon:focus-visible{outline:3px solid #fff;outline-offset:1px;box-shadow:0 0 0 6px rgba(212,80,42,.95);border-radius:50%}.leaflet-popup-content:focus{outline:none}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>California Public Schools Without Gigabit Broadband</title></head><body>
 <style>
 /* required styles */
 
@@ -766,7 +766,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 @media (max-width:760px){.leaflet-popup-content{font-size:13.5px;margin:10px 12px;max-height:55vh;max-height:var(--cardmax,55vh)}.pc h3{font-size:1rem}.pc .kv b{font-size:1.1rem}}
 .hl{pointer-events:none;image-rendering:pixelated}
 .pc .areabtn{margin:8px 0 0}
-#credit{pointer-events:none}#credit a{pointer-events:auto}@media (max-height:650px){#credit{font-size:10px;max-width:46vw}}@media (max-height:520px){#credit{display:none}}#credit{position:absolute;z-index:700;left:calc(8px + env(safe-area-inset-left,0px));bottom:calc(54px + env(safe-area-inset-bottom,0px));font-size:11.5px;padding:3px 7px;max-width:60vw}
+#credit{pointer-events:none}#credit a{pointer-events:auto}@media (max-height:650px){#credit{font-size:10px;max-width:46vw}}@media (max-height:520px){#credit{display:none}}#credit{position:absolute;z-index:600;left:calc(8px + env(safe-area-inset-left,0px));bottom:calc(54px + env(safe-area-inset-bottom,0px));font-size:11.5px;padding:3px 7px;max-width:60vw}
 #north{position:absolute;z-index:700;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(90px + env(safe-area-inset-bottom,0px));width:28px;text-align:center;font-size:12px;font-weight:700;padding:3px 0}
 .leaflet-control-scale{margin-bottom:calc(6px + env(safe-area-inset-bottom,0px))!important}
 .leaflet-control-home a{font-size:20px;line-height:30px}
@@ -803,7 +803,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <div id="map" role="region" aria-label="Map of California schools by broadband speed"></div>
 
 <div id="titlecard" class="card">
-  <div class="head"><h1>California Public Schools Without Gigabit Broadband</h1><button class="btn" id="tcMin" aria-expanded="true" title="Hide the controls">&#8211;</button></div>
+  <div class="head"><h1>California Public Schools Without Gigabit Broadband</h1><button class="btn" id="tcMin" aria-expanded="true" title="Hide the controls" aria-label="Hide the controls">&#8211;</button></div>
   <div class="rows">
   <div class="body" hidden>
   <p class="sub">Public K-12 schools in census blocks where no one subscribes to a 1 Gbps fixed download plan, by district, with the fastest subscribed speed at each school's block.</p>
@@ -924,12 +924,15 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
   </div>
 </div>
 
+<script>if(window.matchMedia&&(matchMedia("(max-width:760px)").matches||innerHeight<520)){var _lg=document.getElementById("legend");if(_lg)_lg.classList.add("min")}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous" onerror="document.getElementById('loading').textContent='The map library did not load. Check your connection and reload.'"></script>
 <script>
 (function(){
 "use strict";
-var V="?v=20261028-1718";// deploy stamp: tools/stamp.py bumps it so cached copies of index.html and its data never mix
+var VER={"data.json":"322fa847","areas.json":"fc8a421e","california.json":"f9ebf2bf","coverage.png":"283041bb","areas.png":"4e71004c","sat.jpg":"6e2a30b3","str.jpg":"f9f9ab81"};// per-file content stamps: tools/stamp.py rewrites them so a cached index.html never pairs with stale data, and a deploy only re-downloads what changed
+function vq(f){return f+"?v="+(VER[f]||"0")}
 var REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+var HOVER=!(window.matchMedia&&window.matchMedia("(hover:none)").matches);
 if(typeof L==="undefined"){document.getElementById("loading").textContent="The map library did not load. Check your connection and reload.";return;}
 var TIERS=[
  {label:"Under 10 Mbps",color:"#5e0f2f",on:true},
@@ -945,7 +948,7 @@ var NT=TIERS.length;
 var LOCALE={"11":"City, large","12":"City, midsize","13":"City, small","21":"Suburb, large","22":"Suburb, midsize","23":"Suburb, small","31":"Town, fringe","32":"Town, distant","33":"Town, remote","41":"Rural, fringe","42":"Rural, distant","43":"Rural, remote"};
 var STATUS={"Future":"Future school, not yet open (NCES 2024-25 status)","New":"New in 2024-25 (NCES status)","Changed Boundary/Agency":"Changed boundary or agency in 2024-25 (NCES status)"};
 var METH=["Read at the school's own census block","Block at the school had no color; nearest blocks within 300 m used","No block with speed data within 300 m"];
-var lastSpread=0,lastSig="",pendingRender=false;
+var lastSpread=0,lastSig="",pendingRender=false,collapseLegend=null;
 var D,S=[],LEA={},map,overlay,ovCanvas,ovBase,base={},tiles={},layer,chipLayer,countyMode={},spread={},tapMode="S";
 var fmt=function(n){return n.toLocaleString("en-US")};
 function plural(n,one,many){return n===1?one:(many||one+"s")}
@@ -995,11 +998,11 @@ function init(){
   tiles.sat=L.tileLayer(USGS+"USGSImageryTopo/MapServer/tile/{z}/{y}/{x}",tileOpts);
   tiles.str=L.tileLayer(USGS+"USGSTopo/MapServer/tile/{z}/{y}/{x}",tileOpts);
   // the statewide images that ship with the page sit under the tiles, so the map still reads when tiles cannot load
-  base.sat=L.imageOverlay(D.img.sat+V,b.base,{interactive:false,className:"bm",pane:"tilePane",zIndex:-1});
-  base.str=L.imageOverlay(D.img.str+V,b.base,{interactive:false,className:"bm",pane:"tilePane",zIndex:-1});
+  base.sat=L.imageOverlay(vq(D.img.sat),b.base,{interactive:false,className:"bm",pane:"tilePane",zIndex:-1});
+  base.str=L.imageOverlay(vq(D.img.str),b.base,{interactive:false,className:"bm",pane:"tilePane",zIndex:-1});
   base.sat.addTo(map);tiles.sat.addTo(map);
   map.createPane("outline");map.getPane("outline").style.zIndex=450;map.getPane("outline").style.pointerEvents="none";
-  fetch("california.json"+V).then(function(r){return r.json()}).then(function(gj){
+  fetch(vq("california.json")).then(function(r){return r.json()}).then(function(gj){
     L.geoJSON(gj,{pane:"outline",interactive:false,style:{color:"#000",weight:5,opacity:.35,fill:false}}).addTo(map);
     L.geoJSON(gj,{pane:"outline",interactive:false,style:{color:"#fff",weight:2,opacity:.9,fill:false}}).addTo(map);
   }).catch(function(){});
@@ -1017,7 +1020,7 @@ function init(){
   function ovFail(){var st=document.getElementById("stat");st.insertAdjacentHTML("beforeend"," Coverage shading did not load; reload to try again.");flash("Coverage shading did not load; reload to try again.")}
   ovCanvas=document.createElement("canvas");
   if(OFFSCREEN){
-    fetch(D.img.ov+V).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(blob){
+    fetch(vq(D.img.ov)).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(blob){
       var off=ovCanvas.transferControlToOffscreen();
       ovWorker=new Worker(URL.createObjectURL(new Blob([OV_WORKER],{type:"text/javascript"})));
       ovWorker.onmessage=function(e){
@@ -1039,7 +1042,7 @@ function init(){
       overlay.addTo(map);paintOverlay();
     };
     img.onerror=ovFail;
-    img.src=D.img.ov+V;
+    img.src=vq(D.img.ov);
   }
   layer=L.layerGroup().addTo(map);
   chipLayer=L.layerGroup().addTo(map);
@@ -1117,6 +1120,7 @@ function fitControls(){
   if(!tl||!bl)return;
   tl.style.top=narrow?(tc.offsetTop+tc.offsetHeight+8)+"px":"";
   bl.style.bottom=narrow?(lg.offsetHeight+10)+"px":"";
+  var br=document.querySelector(".leaflet-bottom.leaflet-right");if(br)br.style.bottom=narrow?(lg.offsetHeight+2)+"px":"";
   if(nb)nb.style.top=narrow?(tc.offsetTop+tc.offsetHeight+90)+"px":"";
   // cards auto-pan into the space the title card and legend leave free
   var po=L.Popup.prototype.options;
@@ -1150,7 +1154,7 @@ function render(){
       var dm=dominant(all),cen=centroid(all);
       var nd=Object.keys(dists).length;
       var m=L.marker(cen,{icon:dotIcon(all.length,TIERS[dm.tier].color,"county","",cshift[c]),riseOnHover:true});label(m,c+" County: "+fmt(all.length)+" "+plural(all.length,"school")+" in "+nd+" "+plural(nd,"district"));
-      m.bindTooltip('<b>'+esc(c)+' County</b><br>'+fmt(all.length)+' '+plural(all.length,"school")+' in '+nd+' '+plural(nd,"district")+'<br><span class="tt-hint">'+(nd===1||all.length<=4?(all.length===1?'Tap to open the school':'Tap to show its schools'):'Tap to show its districts')+'</span>',TT);
+      if(HOVER)m.bindTooltip('<b>'+esc(c)+' County</b><br>'+fmt(all.length)+' '+plural(all.length,"school")+' in '+nd+' '+plural(nd,"district")+'<br><span class="tt-hint">'+(nd===1||all.length<=4?(all.length===1?'Tap to open the school':'Tap to show its schools'):'Tap to show its districts')+'</span>',TT);
       m.on("click",function(){
         if(Date.now()-lastSpread<450)return;lastSpread=Date.now();countyMode[c]=1;map.closePopup();
         var small=nd===1||all.length<=4;
@@ -1171,7 +1175,7 @@ function render(){
           arr.forEach(function(s){dots.push({s:s,k:k,nm:nm,c:c})});
         }else{
           var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",""),riseOnHover:true});label(m,nm+": "+fmt(arr.length)+" "+plural(arr.length,"school")+", "+c+" County");
-          m.bindTooltip('<b>'+esc(nm)+'</b><br>'+fmt(arr.length)+' '+plural(arr.length,"school")+', '+esc(c)+' County<br><span class="tt-hint">'+(arr.length===1?'Tap to open the school':'Tap to show its schools')+'</span>',TT);
+          if(HOVER)m.bindTooltip('<b>'+esc(nm)+'</b><br>'+fmt(arr.length)+' '+plural(arr.length,"school")+', '+esc(c)+' County<br><span class="tt-hint">'+(arr.length===1?'Tap to open the school':'Tap to show its schools')+'</span>',TT);
           m.on("click",function(){
             if(Date.now()-lastSpread<450)return;lastSpread=Date.now();spread[k]=1;map.closePopup();render();
             var b=L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.15);
@@ -1195,7 +1199,7 @@ function render(){
       var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"schm",iconSize:[16,16],iconAnchor:[8-dx,8-dy],popupAnchor:[dx,dy-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,riseOnHover:true});
       label(cm,s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)","")+(n>1?" (shares a site with "+(n-1)+" other "+plural(n-1,"school")+")":""));
       cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
-      cm.bindTooltip('<b>'+esc(s[1])+'</b><br>'+esc(TIERS[s[11]].label.replace(" (area only)",""))+(n>1?'<br>Shares a site with '+(n-1)+' other '+plural(n-1,"school"):'')+'<br><span class="tt-hint">Tap for its card</span>',TT);
+      if(HOVER)cm.bindTooltip('<b>'+esc(s[1])+'</b><br>'+esc(TIERS[s[11]].label.replace(" (area only)",""))+(n>1?'<br>Shares a site with '+(n-1)+' other '+plural(n-1,"school"):'')+'<br><span class="tt-hint">Tap for its card</span>',TT);
       layer.addLayer(cm);
     });
   });
@@ -1273,6 +1277,7 @@ function search(q){
 }
 function afterMove(fly,fn){var done=false;fly();map.once("moveend",function(){if(!done){done=true;fn()}});setTimeout(function(){if(!done){done=true;fn()}},2500)}
 function go(h){
+  if(collapseLegend)collapseLegend();
   if(h.t==="c"){map.closePopup();countyMode[h.c]=1;render();var a=S.filter(function(s){return county(s)===h.c&&visible(s)});if(a.length)flyTo(L.latLngBounds(a.map(function(s){return[s[9],s[10]]})).pad(0.15),10);return}
   if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;if(arr.length===1){go({t:"s",s:arr[0]});return}countyMode[county(arr[0])]=1;spread[h.k]=1;render();afterMove(function(){flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12)},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});return}
   var s=h.s;if(!visible(s)){TIERS[s[11]].on=true;document.getElementById("tier"+s[11]).checked=true;paintOverlay()}
@@ -1288,9 +1293,9 @@ function loadAreas(){
   function areasFailed(){["tapA","tapB"].forEach(function(id){var b=document.getElementById(id);b.disabled=true;b.title="Area data did not load; reload to try again"});var st=document.getElementById("stat");if(st&&st.textContent.indexOf("Coverage areas did not load")<0)st.insertAdjacentHTML("beforeend"," Coverage areas did not load; reload to try again.");flash("The shaded-area data did not load; reload to try again.")}
   ensureAreas=function(){
     if(areasP)return areasP;
-    areasP=fetch("areas.json"+V).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(a){
+    areasP=fetch(vq("areas.json")).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(a){
       var small=a.A.length<65535;
-      if(OFFSCREEN)return fetch("areas.png"+V).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(blob){
+      if(OFFSCREEN)return fetch(vq("areas.png")).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(blob){
         return new Promise(function(res,rej){
           var wk=new Worker(URL.createObjectURL(new Blob([AR_WORKER],{type:"text/javascript"})));
           wk.onmessage=function(e){wk.terminate();if(e.data.error){rej(new Error(e.data.error));return}AR=a;arIds=small?new Uint16Array(e.data.ids):new Uint32Array(e.data.ids);res()};
@@ -1307,7 +1312,7 @@ function loadAreas(){
           AR=a;arIds=ids;res();
         };
         img.onerror=function(){rej(new Error("areas.png"))};
-        img.src="areas.png"+V;
+        img.src=vq("areas.png");
       });
     });
     areasP.catch(function(){areasFailed();areasP=null});
@@ -1419,8 +1424,10 @@ function wire(){
   hitsEl.addEventListener("keydown",function(e){var hs=[].slice.call(hitsEl.querySelectorAll("li button")),i=hs.indexOf(document.activeElement);if(i<0)return;if(e.key==="ArrowDown"){e.preventDefault();(hs[i+1]||hs[0]).focus()}else if(e.key==="ArrowUp"){e.preventDefault();if(i===0)si.focus();else hs[i-1].focus()}else if(e.key==="Escape"){e.stopPropagation();si.focus()}});
   var sat=document.getElementById("bmSat"),str=document.getElementById("bmStr");
   sat.onclick=function(){map.getContainer().style.background="#102633";map.removeLayer(base.str);map.removeLayer(tiles.str);base.sat.addTo(map);tiles.sat.addTo(map);sat.setAttribute("aria-pressed","true");str.setAttribute("aria-pressed","false")};
-  str.onclick=function(){map.getContainer().style.background="#bde5ff";map.removeLayer(base.sat);map.removeLayer(tiles.sat);base.str.addTo(map);tiles.str.addTo(map);str.setAttribute("aria-pressed","true");sat.setAttribute("aria-pressed","false")};
+  str.onclick=function(){map.getContainer().style.background="#bde5ff";map.removeLayer(base.sat);map.removeLayer(tiles.sat);base.str.addTo(map);tiles.str.addTo(map);tiles.str.setOpacity(1);str.setAttribute("aria-pressed","true");sat.setAttribute("aria-pressed","false")};
   document.getElementById("showArea").onchange=paintOverlay;
+  // warm the Street tiles for the current view when the mouse reaches the button, so the switch is instant
+  if(HOVER)str.addEventListener("mouseenter",function(){var cn=navigator.connection;if(cn&&cn.saveData)return;if(map.hasLayer(tiles.str)||map.hasLayer(base.str))return;tiles.str.setOpacity(0);tiles.str.addTo(map);setTimeout(function(){if(tiles.str.options.opacity===0&&map.hasLayer(tiles.str))map.removeLayer(tiles.str)},8000)});
   var tb={S:document.getElementById("tapS"),A:document.getElementById("tapA"),B:document.getElementById("tapB")};
   function setTap(m){tapMode=m;if(m!=="S"&&ensureAreas)ensureAreas().catch(function(){});Object.keys(tb).forEach(function(k){tb[k].setAttribute("aria-pressed",String(k===m))});map.getContainer().classList.toggle("areas-only",m==="A");map.closePopup();}
   tb.S.onclick=function(){setTap("S")};tb.A.onclick=function(){setTap("A")};tb.B.onclick=function(){setTap("B")};
@@ -1437,9 +1444,10 @@ function wire(){
   ab.addEventListener("click",function(e){if(e.target===ab)closeAbout()});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!ab.hidden)closeAbout()});
   var tcEl=document.getElementById("titlecard"),tm=document.getElementById("tcMin");
-  tm.onclick=function(){var wide=window.innerWidth>760,w=tcEl.offsetWidth;var min=tcEl.classList.toggle("min");tcEl.style.width=(min&&wide)?w+"px":"";tm.innerHTML=min?"+":"&#8211;";tm.title=min?"Show the controls":"Hide the controls";tm.setAttribute("aria-expanded",String(!min));fitControls();};
+  tm.onclick=function(){var wide=window.innerWidth>760,w=tcEl.offsetWidth;var min=tcEl.classList.toggle("min");tcEl.style.width=(min&&wide)?w+"px":"";tm.innerHTML=min?"+":"&#8211;";tm.title=min?"Show the controls":"Hide the controls";tm.setAttribute("aria-label",tm.title);tm.setAttribute("aria-expanded",String(!min));fitControls();};
   if(window.innerHeight<520&&!tcEl.classList.contains("min"))tm.onclick();// short windows (phone landscape, small laptops) start with the controls folded
   var lg=document.getElementById("legend"),lt=document.getElementById("legToggle");
+  collapseLegend=function(){if(window.innerWidth<=760&&!lg.classList.contains("min"))lt.onclick()};
   lt.onclick=function(){var min=lg.classList.toggle("min");lt.textContent=min?"Show":"Hide";lt.setAttribute("aria-expanded",String(!min));fitControls();};
   var rsT=null,rsW=window.innerWidth,rsH=window.innerHeight;
   window.addEventListener("resize",function(){fitControls();clearTimeout(rsT);rsT=setTimeout(function(){fitControls();var W=window.innerWidth,H=window.innerHeight,big=Math.abs(W-rsW)>40||Math.abs(H-rsH)>150;rsW=W;rsH=H;
@@ -1450,7 +1458,7 @@ function wire(){
   var cp=document.getElementById("copyApa");if(cp)cp.onclick=function(){var t=document.getElementById("apa").textContent;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){cp.textContent="Copied"},function(){selectText()});else selectText();function selectText(){var r=document.createRange();r.selectNodeContents(document.getElementById("apa"));var s=window.getSelection();s.removeAllRanges();s.addRange(r)}};
 }
 
-fetch("data.json"+V).then(function(r){return r.json()}).then(function(d){
+fetch(vq("data.json")).then(function(r){return r.json()}).then(function(d){
   D=d;S=d.S;LEA=d.L;TIER_RGB=TIERS.map(function(t){return hexrgb(t.color)});
   wire();init();
 }).catch(function(e){document.getElementById("loading").textContent="The map data did not load. Reload the page to try again."});
