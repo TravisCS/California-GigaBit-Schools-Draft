@@ -45,6 +45,7 @@
       "@media (hover:hover){.sum-list button:hover{background:var(--chip)}}" +
       ".sum-list small{color:var(--muted);display:block;font-size:12.5px}" +
       ".sum-list b{white-space:nowrap}" +
+      ".sum-find{margin:4px 0 0;padding-left:18px}.sum-find li{margin:0 0 7px}" +
       ".sum-src{margin-top:16px;padding-top:8px;border-top:1px solid var(--rule);color:var(--muted);font-size:12.5px}" +
       "@media (max-width:560px){.sum-card{padding:14px 14px}.sum-cols{grid-template-columns:1fr}" +
       ".sum-row{grid-template-columns:14px minmax(0,1fr)}.sum-row .sum-barwrap,.sum-row .sum-nums{grid-column:2}.sum-row .sum-nums{justify-content:flex-start;text-align:left}.sum-row.sum-head{display:none}}";
@@ -96,6 +97,32 @@
       return { items: items, plist: plist, tot: tot, techs: techs };
     }
 
+    // "What the plan shows": four plain findings, all computed from the project data
+    function pct(a, b) { return b ? Math.round(a / b * 100) + "%" : "0%"; }
+    function findings(c) {
+      var t = c.techs, T = c.tot, out = [];
+      var per = function (o) { return o.n ? dollars(o.usd / o.n) : "n/a"; };
+      if (t.fiber.n) out.push("<b>Fiber takes most of the money.</b> Fiber projects get " + pct(t.fiber.usd, T.usd) + " of BEAD dollars but reach " + pct(t.fiber.n, T.n) +
+        " of locations, at about " + per(t.fiber) + " per location, against " + per(t.wire) + " for fixed wireless and " + per(t.sat) + " for satellite.");
+      if (t.sat.n) out.push("<b>Satellite stretches furthest.</b> " + fmt(t.sat.k) + " satellite " + plural(t.sat.k, "project", "projects") + " cover " + pct(t.sat.n, T.n) +
+        " of all locations (" + fmt(t.sat.n) + ") for " + pct(t.sat.usd, T.usd) + " of the money, mostly in remote areas where wires would cost the most.");
+      var byUsd = c.plist.slice().sort(function (a, b) { return b.usd - a.usd; });
+      if (byUsd.length > 4) {
+        var two = byUsd[0].usd + byUsd[1].usd, five = byUsd.slice(0, 5).reduce(function (a, o) { return a + o.usd; }, 0);
+        out.push("<b>A few providers get most of it.</b> " + esc(byUsd[0].who) + " and " + esc(byUsd[1].who) + " receive " + pct(two, T.usd) + " of the money; the top five receive " +
+          pct(five, T.usd) + ", and the other " + fmt(byUsd.length - 5) + " providers share the rest.");
+      }
+      var cs = c.items.filter(function (it) { return it.n > 0 && it.usd > 0; }).map(function (it) { return it.usd / it.n; }).sort(function (a, b) { return a - b; });
+      if (cs.length) {
+        var m = cs.length % 2 ? cs[(cs.length - 1) / 2] : (cs[cs.length / 2 - 1] + cs[cs.length / 2]) / 2;
+        out.push("<b>Costs vary widely.</b> BEAD support per location runs from " + dollars(cs[0]) + " to " + dollars(cs[cs.length - 1]) + " across projects, with a middle (median) project at about " +
+          dollars(m) + ". The costliest are small, remote fiber and wireless builds.");
+      }
+      if (!out.length) return "";
+      return '<h3 id="sumFind" style="margin-top:10px">What the plan shows</h3><ul class="sum-find">' + out.map(function (x) { return "<li>" + x + "</li>"; }).join("") +
+        '</ul><p class="sum-note">Dollars are BEAD support only (not the providers\' own match). Computed by this map from the CPUC project data.</p>';
+    }
+
     function render() {
       var c = compute(), items = c.items;
       var h = '<button class="btn sum-x" id="sumClose" type="button">Close</button>';
@@ -105,6 +132,7 @@
         sheet.innerHTML = '<div class="card sum-card" tabindex="-1" role="document">' + h + "</div>";
         return;
       }
+      h += findings(c);
       h += '<p class="sum-total">' + esc(billions(c.tot.usd)) + " to " + fmt(c.plist.length) + " providers for " +
         fmt(items.length) + " projects and " + fmt(c.tot.n) + " homes and businesses.</p>";
 
@@ -201,6 +229,14 @@
       Promise.resolve(B.loadProjects()).then(function () { btn.disabled = false; open(); },
         function () { btn.disabled = false; B.flash("Could not load the projects."); });
     };
+    var fl = document.getElementById("openFindings");
+    if (fl) {
+      var fw = document.getElementById("findWrap");
+      if (fw) fw.hidden = false;
+      fl.onclick = function () {
+        Promise.resolve(B.loadProjects()).then(function () { open(); opener = fl; }, function () { B.flash("Could not load the projects."); });
+      };
+    }
     sheet.addEventListener("click", function (e) { if (e.target === sheet) close(); });
     document.addEventListener("keydown", function (e) {
       if (sheet.hidden) return;
