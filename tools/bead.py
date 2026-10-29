@@ -5,14 +5,18 @@ Inputs (from the CPUC, Resolution T-17920 appendices, the version ratified Septe
   fp_cai.csv                 community anchor institutions the funded projects plan to connect
   fp_deployment_projects.csv the funded projects (provider, BEAD support, technology, end date)
   fp_subgrantees.csv         the providers
-Run:  python3 tools/bead.py   (then python3 tools/stamp.py)
+Run:  python3 tools/bead.py [areas.json]   (then python3 tools/stamp.py)
+
+areas.json is optional: the funded project areas from the CPUC's public BEAD map service, downloaded with
+  curl -o areas.json "https://services2.arcgis.com/VofPZYDe2pLxSP5G/arcgis/rest/services/BEAD_NTIA_Approved/FeatureServer/2/query?where=1%3D1&outFields=project_id,awardee,technology&returnGeometry=true&outSR=4326&maxAllowableOffset=0.002&geometryPrecision=4&f=geojson"
+With it, every school also gets the project areas it sits inside (or within 1 km of), stored as "beadArea".
 
 Each mapped school gets one of two levels, or nothing:
   1 "listed"    - the school itself is on the anchor list: a listed school within 1 km has the same distinctive name words,
                   the same kind of school (elementary, middle, high) and is not a preschool, district office or program
   2 "same site" - not named, but a listed anchor of any kind sits within 150 m, so the funded line reaches its site
 """
-import csv, json, math, pathlib, re
+import csv, json, math, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "sources" / "bead"
@@ -53,6 +57,58 @@ def provider(name):
     for a, b in ((" Llc", " LLC"), (", Llc", ", LLC"), ("At&T", "AT&T"), ("Wi-Fiber", "Wi-Fiber")):
         s = s.replace(a, b)
     return s
+
+
+def in_ring(x, y, r):
+    hit = False
+    for i in range(len(r) - 1):
+        (x1, y1), (x2, y2) = r[i], r[i + 1]
+        if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+            hit = not hit
+    return hit
+
+
+def in_poly(x, y, poly):
+    return in_ring(x, y, poly[0]) and not any(in_ring(x, y, h) for h in poly[1:])
+
+
+def area_hits(schools, path):
+    """For each school: the project areas it is inside (2) or within about 1 km of (1)."""
+    gj = json.loads(pathlib.Path(path).read_text())
+    areas = []
+    for f in gj["features"]:
+        g = f["geometry"]
+        if not g:
+            continue
+        polys = [g["coordinates"]] if g["type"] == "Polygon" else g["coordinates"]
+        boxes = []
+        for pl in polys:
+            xs = [q[0] for q in pl[0]]; ys = [q[1] for q in pl[0]]
+            boxes.append((min(xs), min(ys), max(xs), max(ys), pl))
+        pr = f["properties"]
+        areas.append((pr["project_id"], pr["awardee"], pr["technology"], boxes))
+    out = {}
+    for s in schools:
+        lat, lng = s[9], s[10]
+        dy, dx = 1000 / 111_320, 1000 / (111_320 * math.cos(math.radians(lat)))
+        ring = [(lng, lat)] + [(lng + dx * math.cos(a), lat + dy * math.sin(a)) for a in [i * math.pi / 6 for i in range(12)]]
+        hits = []
+        for pid, who, tech, boxes in areas:
+            best = 0
+            for x0, y0, x1, y1, pl in boxes:
+                if x1 < lng - dx or x0 > lng + dx or y1 < lat - dy or y0 > lat + dy:
+                    continue
+                for k, (x, y) in enumerate(ring):
+                    if x0 <= x <= x1 and y0 <= y <= y1 and in_poly(x, y, pl):
+                        best = max(best, 2 if k == 0 else 1)
+                        break
+                if best == 2:
+                    break
+            if best:
+                hits.append([best, who, tech, pid])
+        if hits:
+            out[s[0]] = sorted(hits, key=lambda h: -h[0])
+    return out
 
 
 def metres(a, b, c, d):
@@ -99,6 +155,12 @@ def main():
                     int(float(r["upload_speed_anticipated"] or 0)), round(float(p.get("bead_support") or 0)),
                     (p.get("estimated_performance_end") or "")[:4], int(round(dist))]
     D["bead"] = out
+    if len(sys.argv) > 1:
+        D["beadArea"] = area_hits(D["S"], sys.argv[1])
+        left = [s for s in D["S"] if s[0] not in out]
+        ins = sum(1 for s in left if any(h[0] == 2 for h in D["beadArea"].get(s[0], [])))
+        near = sum(1 for s in left if s[0] in D["beadArea"]) - ins
+        print("left-out schools inside a funded area", ins, "within 1 km", near, "neither", len(left) - ins - near)
     D["beadMeta"] = {"source": "CPUC Resolution T-17920, Appendix B (ratified September 17, 2026)",
                      "anchors": len(cai), "anchorSchools": sum(1 for r in cai if r["type"] == "S"), "projects": len(proj)}
     data_p.write_text(json.dumps(D, separators=(",", ":")))

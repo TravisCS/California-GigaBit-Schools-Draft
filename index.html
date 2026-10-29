@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23d4502a'/%3E%3Ccircle cx='8' cy='8' r='3' fill='%23fff'/%3E%3C/svg%3E"><meta name="referrer" content="strict-origin-when-cross-origin"><link rel="preload" href="data.json?v=12b8f9f4" as="fetch" crossorigin><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://basemap.nationalmap.gov"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}html,body{overscroll-behavior:none}@media (forced-colors:active){.dot,.sdot,.tier .sw,.pc .pill,.pc .bar,.bars .bar{forced-color-adjust:none}.seg button[aria-pressed="true"]{outline:3px solid CanvasText;outline-offset:-3px}}#legend,#hits,.leaflet-popup-content,#about{scrollbar-width:thin}@media print{.dot,.sdot,.tier .sw,.pc .pill,.pc .bar,.bars .bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}}#map.areas.leaflet-grab{cursor:crosshair}.pc .btn{background:#efece2;border-color:#d9d4c4;color:#1d1c19}#titlecard{box-sizing:border-box}.sdot{position:relative}@media (pointer:coarse){.sdot::after{content:"";position:absolute;inset:-9px}.chip .cn,.chip .cg{padding-top:7px;padding-bottom:7px}}.leaflet-marker-icon:active .dot,.leaflet-marker-icon:active .sdot{filter:brightness(1.25)}.leaflet-marker-icon:focus-visible{outline:3px solid #fff;outline-offset:1px;box-shadow:0 0 0 6px rgba(212,80,42,.95);border-radius:50%}.leaflet-popup-content:focus{outline:none}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>California Public Schools Without Gigabit Broadband</title></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23d4502a'/%3E%3Ccircle cx='8' cy='8' r='3' fill='%23fff'/%3E%3C/svg%3E"><meta name="referrer" content="strict-origin-when-cross-origin"><link rel="preload" href="data.json?v=8abd7044" as="fetch" crossorigin><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://basemap.nationalmap.gov"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}html,body{overscroll-behavior:none}@media (forced-colors:active){.dot,.sdot,.tier .sw,.pc .pill,.pc .bar,.bars .bar{forced-color-adjust:none}.seg button[aria-pressed="true"]{outline:3px solid CanvasText;outline-offset:-3px}}#legend,#hits,.leaflet-popup-content,#about{scrollbar-width:thin}@media print{.dot,.sdot,.tier .sw,.pc .pill,.pc .bar,.bars .bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}}#map.areas.leaflet-grab{cursor:crosshair}.pc .btn{background:#efece2;border-color:#d9d4c4;color:#1d1c19}#titlecard{box-sizing:border-box}.sdot{position:relative}@media (pointer:coarse){.sdot::after{content:"";position:absolute;inset:-9px}.chip .cn,.chip .cg{padding-top:7px;padding-bottom:7px}}.leaflet-marker-icon:active .dot,.leaflet-marker-icon:active .sdot{filter:brightness(1.25)}.leaflet-marker-icon:focus-visible{outline:3px solid #fff;outline-offset:1px;box-shadow:0 0 0 6px rgba(212,80,42,.95);border-radius:50%}.leaflet-popup-content:focus{outline:none}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>California Public Schools Without Gigabit Broadband</title></head><body>
 <style>
 /* required styles */
 
@@ -721,6 +721,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 #hits li button{all:unset;cursor:pointer;display:block;padding:3px 4px;font-size:14px;border-radius:4px}
 #hits li button:focus-visible{background:var(--chip);outline:2px solid var(--accent);outline-offset:-1px}@media (hover:hover){#hits li button:hover{background:var(--chip)}}
 #hits small{color:var(--muted)}
+#slowList{list-style:none;margin:2px 0 0;padding:0;max-height:180px;overflow:auto}#slowList li button{all:unset;cursor:pointer;display:block;padding:2px 4px;font-size:13.5px;border-radius:4px}#slowList li button:focus-visible{background:var(--chip);outline:2px solid var(--accent);outline-offset:-1px}@media (hover:hover){#slowList li button:hover{background:var(--chip)}}#slowList small{color:var(--muted)}
+.seg button span{font-variant-numeric:tabular-nums;opacity:.85}
 .dot{display:flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-weight:700;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45);font-family:var(--serif);font-variant-numeric:tabular-nums;cursor:pointer;box-sizing:border-box}
 .clab{display:flex;align-items:center;justify-content:center;height:20px;box-sizing:border-box;border-radius:10px;background:#fff;color:#1d2320;border:1px solid rgba(0,0,0,.25);box-shadow:0 1px 3px rgba(0,0,0,.45);font-family:var(--serif);font-weight:700;font-size:12.5px;font-variant-numeric:tabular-nums;cursor:pointer;position:relative}
 .sdot.bead{box-shadow:0 0 0 2.5px #0b8fd6,0 1px 4px rgba(0,0,0,.6)}
@@ -841,7 +843,14 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
     </details>
     <details open>
       <summary>BEAD plan</summary>
-      <label class="tier" style="grid-template-columns:18px 16px 1fr auto"><input type="checkbox" id="beadOnly"><span class="sdot bead" style="width:14px;height:14px;cursor:default;background:#f2b93b"></span><span>Only schools the BEAD plan connects</span><span class="n" id="beadN"></span></label>
+      <label class="tier" style="grid-template-columns:18px 16px 1fr auto"><input type="checkbox" id="beadIn" checked><span class="sdot bead" style="width:14px;height:14px;cursor:default;background:#f2b93b"></span><span>Schools in the BEAD plan</span><span class="n" id="beadN"></span></label>
+      <label class="tier" style="grid-template-columns:18px 16px 1fr auto"><input type="checkbox" id="beadOutBox" checked><span class="sdot" style="width:14px;height:14px;cursor:default;background:#f2b93b"></span><span>Schools not in the BEAD plan</span><span class="n" id="beadOut"></span></label>
+      <details id="leftOut" style="border-top:0;margin-top:2px;padding-top:0">
+        <summary style="font-weight:400;font-size:13.5px">About the schools not in the plan</summary>
+        <p class="note" id="leftOutNote"></p>
+        <p class="note" style="margin-top:4px"><b>Slowest schools not in the plan</b> (under 25 Mbps at their block)</p>
+        <ul id="slowList"></ul>
+      </details>
       <p class="note">A blue ring marks a school that California's BEAD plan (ratified September 17, 2026) names as an anchor institution for a funded project, or that shares a site with one. The grant goes to the internet provider that builds the line, not to the school.</p>
     </details>
     <details open>
@@ -897,7 +906,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>Area cards.</b> Tapping a shaded area outlines one connected patch of 400 m cells that share the same fastest download (8,824 patches statewide) and shows its size, the counties of the schools inside it, and the share of land within 5 km of the tapped point in each tier. Sizes are true ground area, corrected for the Web Mercator stretch. For gigabit patches it also shows the split between 2 Gbps or more, 1 to 1.99 Gbps and placeholder values. A school is listed in a patch when its 400 m cell (or a touching cell) falls in that patch, so a school can appear in a patch of a different color than its own tier (note 7).</li>
 <li><b>Getting around.</b> Tap a county (its shape or its number) to zoom in to its schools; a county with one school opens that school's card at once. Tapping "gather" on an open county's name label closes it and zooms back out to its third of the state (north, central or south). The target button under the zoom control shows the whole state. Every card has a Close button. School cards have a button that shows the whole district with its own card, and district cards have one that zooms out to the county. Escape closes any card. Keyboard: Tab moves through the controls and then every dot (the dot's label appears as it gets focus), Enter or Space opens it, and the arrow keys pan the map.</li>
 <li><b>Grouping.</b> Schools are grouped by county. Districts are NCES local education agencies, so a single-school charter counts as its own district. Each school sits under its own county, so a district that crosses a county line, such as Coachella Valley Unified (Riverside and Imperial) or Stony Creek Joint Unified (Glenn and Colusa), shows up under each county it reaches; its card covers the whole district. A county's number is the count of schools shown, and its shading is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
-<li><b>BEAD plan.</b> California's plan for the federal Broadband Equity, Access, and Deployment program, approved by NTIA on July 17, 2026 and ratified by the CPUC in Resolution T-17920 on September 17, 2026, lists 1,249 community anchor institutions (548 of them schools) that its funded projects will connect. Each mapped school was compared with that list: a school is "named" when a listed school within 1 km has the same distinctive name words and is the same kind of school (60 schools), and "shares a site" when it is not named but a listed anchor of any kind is within 150 m (19 schools). Cards show the project's provider, technology, planned speeds, deadline and total BEAD support. BEAD grants go to the providers that build the lines, not to schools, and the plan's award terms were still being settled when this map was made.</li>
+<li><b>BEAD plan.</b> California's plan for the federal Broadband Equity, Access, and Deployment program, approved by NTIA on July 17, 2026 and ratified by the CPUC in Resolution T-17920 on September 17, 2026, lists 1,249 community anchor institutions (548 of them schools) that its funded projects will connect. Each mapped school was compared with that list: a school is "named" when a listed school within 1 km has the same distinctive name words and is the same kind of school (60 schools), and "shares a site" when it is not named but a listed anchor of any kind is within 150 m (19 schools). Cards show the project's provider, technology, planned speeds, deadline and total BEAD support. BEAD grants go to the providers that build the lines, not to schools, and the plan's award terms were still being settled when this map was made. The legend's "Schools not in the BEAD plan" box covers the other 774 schools, including 43 of the 46 in blocks under 25 Mbps and 170 of the 179 under 100 Mbps. Each school was also checked against the 83 funded project areas in the CPUC's public BEAD map service (a school counts when the area covers its point or a point 1 km away). Of the 774 not in the plan, 147 have a funded fiber project within 1 km, 207 only fixed wireless, 251 only satellite (SpaceX or Amazon Kuiper), and 169 none. A project area covers the homes and businesses the project will connect, not every building inside it, so being inside one does not mean the school will be connected.</li>
 <li><b>Limitations.</b> Census blocks can be large in rural areas, and a school near a block edge may take its neighbor's speed. Reported speeds are advertised plan speeds, not measured speeds. A school's own connection (often a dedicated circuit through E-Rate or the CENIC K12 High Speed Network) can be much faster than what homes in the same block can buy, so this map shows neighborhood access, not the school's circuit. Enrollment of 0 or below means NCES did not report it.</li>
 <li><b>Basemaps and outline.</b> USGS The National Map tile services, USGS Imagery Topo (satellite imagery with roads, boundaries and labels) and USGS Topo, loaded live and public domain as U.S. government works. A single statewide image of each ships with the page underneath the tiles, so the map still reads if the tiles cannot load. The California outline is the generalized state boundary, and the county shapes are the county boundaries simplified to about 400 m, both from the U.S. Census Bureau's TIGERweb service.</li>
 <li><b>Tools and AI use.</b> Built with Leaflet 1.9.4 and Python (NumPy, SciPy, Pillow). Code and layout generated with Claude (Anthropic), which also gathered and processed the data from the sources listed below. Data, placement and accuracy have not yet been reviewed by Travis Cody Smith.</li>
@@ -926,6 +935,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <p class="hang">U.S. Geological Survey. (2026). <i>USGS imagery topo</i> [Basemap service]. The National Map. <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer" target="_blank" rel="noopener">https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer</a></p>
 <p class="hang">U.S. Geological Survey. (2026). <i>USGS topo</i> [Basemap service]. The National Map. <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer" target="_blank" rel="noopener">https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer</a></p>
 <p class="hang">California Public Utilities Commission. (2026, September 17). <i>Resolution T-17920: California BEAD final proposal, Appendix B data files</i> [Data set]. <a href="https://www.cpuc.ca.gov/BEADfinalproposal" target="_blank" rel="noopener">https://www.cpuc.ca.gov/BEADfinalproposal</a></p>
+<p class="hang">California Public Utilities Commission. (2026). <i>BEAD final proposal: Projects</i> [Map service layer, NTIA-approved July 2026]. <a href="https://services2.arcgis.com/VofPZYDe2pLxSP5G/arcgis/rest/services/BEAD_NTIA_Approved/FeatureServer/2" target="_blank" rel="noopener">https://services2.arcgis.com/VofPZYDe2pLxSP5G/arcgis/rest/services/BEAD_NTIA_Approved/FeatureServer/2</a></p>
 <p class="hang">Federal Communications Commission. (n.d.). <i>National broadband map</i> [Data set; availability as of December 31, 2025]. Retrieved October 28, 2026, from <a href="https://broadbandmap.fcc.gov/" target="_blank" rel="noopener">https://broadbandmap.fcc.gov/</a> (consulted, not used for the map)</p>
 <p class="hang">Agafonkin, V. (2023). <i>Leaflet</i> (Version 1.9.4) [Computer software]. <a href="https://leafletjs.com/" target="_blank" rel="noopener">https://leafletjs.com/</a></p>
 
@@ -942,7 +952,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <script>
 (function(){
 "use strict";
-var VER={"data.json":"12b8f9f4","counties.json":"2c2d8494","areas.json":"fc8a421e","california.json":"f9ebf2bf","coverage.png":"283041bb","areas.png":"4e71004c","sat.jpg":"6e2a30b3","str.jpg":"f9f9ab81"};// per-file content stamps: tools/stamp.py rewrites them so a cached index.html never pairs with stale data, and a deploy only re-downloads what changed
+var VER={"data.json":"8abd7044","counties.json":"2c2d8494","areas.json":"fc8a421e","california.json":"f9ebf2bf","coverage.png":"283041bb","areas.png":"4e71004c","sat.jpg":"6e2a30b3","str.jpg":"f9f9ab81"};// per-file content stamps: tools/stamp.py rewrites them so a cached index.html never pairs with stale data, and a deploy only re-downloads what changed
 function vq(f){return f+"?v="+(VER[f]||"0")}
 var REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 var HOVER=!(window.matchMedia&&window.matchMedia("(hover:none)").matches);
@@ -1127,9 +1137,9 @@ function paintOverlay(){
   ovCanvas.getContext("2d").putImageData(ovOut,0,0);
 }
 
-var beadOnly=false;
+var beadIn=true,beadOut=true;// which schools to show: in the BEAD plan, not in it
 function bead(s){return D.bead&&D.bead[s[0]]}
-function visible(s){return TIERS[s[11]].on&&(!beadOnly||!!bead(s))}
+function visible(s){return TIERS[s[11]].on&&(bead(s)?beadIn:beadOut)}
 function county(s){return s[7]||(LEA[s[2]]&&LEA[s[2]][1])||"Unknown county"}
 function dCounties(k){var n={};S.forEach(function(s){if(s[2]===k&&s[7])n[s[7]]=(n[s[7]]||0)+1});return Object.keys(n).sort(function(a,b){return n[b]-n[a]||(a<b?-1:1)})}
 function countyList(cs){return cs.length<2?(cs[0]||"Unknown")+" County":cs.slice(0,-1).join(", ")+" and "+cs[cs.length-1]+" counties"}
@@ -1296,10 +1306,30 @@ function schoolLink(id){var nc=D.noCCD&&D.noCCD.s.indexOf(id)>=0;return nc?'<a h
 function districtLink(k){var nc=D.noCCD&&D.noCCD.d.indexOf(k)>=0;return nc?'<a href="'+EDGEQ+encodeURIComponent("LEAID='"+k+"'")+'" target="_blank" rel="noopener">NCES 2024-25 records for this district</a> (not yet in the NCES district search)':'<a href="https://nces.ed.gov/ccd/districtsearch/district_detail.asp?ID2='+esc(k)+'" target="_blank" rel="noopener">NCES district record</a>'}
 
 
+function areas(s){return (D.beadArea&&D.beadArea[s[0]])||[]}
+function nearTech(s){var h=areas(s);if(h.some(function(x){return x[2]==="Fiber"||x[2]==="Hybrid"}))return "fiber";if(h.some(function(x){return /Wireless$/.test(x[2])}))return "wireless";if(h.some(function(x){return x[2]==="Satellite"}))return "satellite";return "none"}
+var NEAR={fiber:"fiber project nearby",wireless:"only fixed wireless nearby",satellite:"only satellite nearby",none:"no funded project nearby"};
+function buildLeftOut(){
+  if(!D.bead)return;
+  var out=S.filter(function(s){return !bead(s)}),enr=0,u25=0,u100=0,a25=0,a100=0;
+  out.forEach(function(s){if(s[6]>0)enr+=s[6];if(s[11]<=1)u25++;if(s[11]<=3)u100++});
+  S.forEach(function(s){if(s[11]<=1)a25++;if(s[11]<=3)a100++});
+  var nt={fiber:0,wireless:0,satellite:0,none:0};out.forEach(function(s){nt[nearTech(s)]++});
+  document.getElementById("leftOutNote").textContent=fmt(out.length)+" of the "+fmt(S.length)+" mapped schools ("+fmt(enr)+" students) are not on the BEAD plan's anchor list and share no site with a listed anchor. That includes "+u25+" of the "+a25+" schools in blocks under 25 Mbps and "+u100+" of the "+a100+" under 100 Mbps (download only)."+(D.beadArea?" Around them, within 1 km: "+nt.fiber+" have a funded fiber project, "+nt.wireless+" only fixed wireless, "+nt.satellite+" only satellite, and "+nt.none+" no funded project at all. A project area covers the homes and businesses it will connect, not every building inside it.":"");
+  var slow=out.filter(function(s){return s[11]<=1}).sort(function(a,b){return a[11]-b[11]||(b[6]||0)-(a[6]||0)});
+  var ul=document.getElementById("slowList");ul.innerHTML="";
+  slow.forEach(function(s){var li=document.createElement("li"),b=document.createElement("button");b.innerHTML=esc(s[1])+' <small>'+esc(s[7])+' County, '+esc(TIERS[s[11]].label)+(s[6]>0?', '+fmt(s[6])+' students':'')+(D.beadArea?'; '+NEAR[nearTech(s)]:'')+'</small>';b.onclick=function(){if(!beadOut){beadOut=true;document.getElementById("beadOutBox").checked=true}go({t:"s",s:s})};li.appendChild(b);ul.appendChild(li)});
+}
+function aroundSec(s){
+  if(!D.beadArea)return "";
+  var h=areas(s),seen={},rows="";
+  h.forEach(function(x){var k=x[1]+"|"+x[2];if(seen[k])return;seen[k]=1;rows+='<tr><td>'+(x[0]===2?'Inside':'Within 1 km')+'</td><td>'+esc(x[1])+', '+esc(x[2].toLowerCase())+'</td></tr>'});
+  return rows?'<table><tr><td colspan="2" style="color:#5f5b50;white-space:normal">Funded BEAD project areas around it (they connect homes and businesses, not the school):</td></tr>'+rows+'</table>':'<p class="note" style="margin-top:2px">No funded BEAD project area within 1 km.</p>';
+}
 function money(n){return n>=1e6?"$"+(n/1e6).toFixed(n>=1e8?0:1)+" million":"$"+fmt(n)}
 function beadSec(s){
   var b=bead(s);
-  if(!b)return '<p class="sec"><i>BEAD plan</i></p><p class="note" style="margin-top:0">Not on the anchor list of California\u2019s BEAD plan, and no listed anchor within 150 m.</p>';
+  if(!b)return '<p class="sec"><i>BEAD plan</i></p><p class="note" style="margin-top:0"><b>Not in the plan:</b> not on the anchor list of California\u2019s BEAD plan, and no listed anchor within 150 m.'+(s[11]<=1?' Its block is under 25 Mbps, below BEAD\u2019s \u201cunserved\u201d line (download only).':(s[11]<=3?' Its block is under 100 Mbps, below BEAD\u2019s \u201cunderserved\u201d line (download only).':''))+'</p>'+aroundSec(s);
   return '<p class="sec"><i>BEAD plan</i></p><table>'+
     '<tr><td>Status</td><td>'+(b[0]===1?'Named as an anchor institution to connect':'Shares a site with a listed anchor: '+esc(b[1])+' ('+b[9]+' m)')+'</td></tr>'+
     '<tr><td>Provider</td><td>'+esc(b[3])+'</td></tr>'+
@@ -1346,7 +1376,7 @@ function buildLegend(){
     box.appendChild(lab);
   });
 }
-function updateCounts(){var bn=document.getElementById("beadN");if(bn&&D.bead){var nb=0;S.forEach(function(s){if(bead(s)&&TIERS[s[11]].on)nb++});bn.textContent=fmt(nb)}var c=TIERS.map(function(){return 0});S.forEach(function(s){c[s[11]]++});c[6]=D.gigCount||0;c.forEach(function(n,i){var e=document.getElementById("tn"+i);if(e)e.textContent=fmt(n)})}
+function updateCounts(){var bn=document.getElementById("beadN"),bo=document.getElementById("beadOut");if(bn&&D.bead){var nb=0,no=0;S.forEach(function(s){if(!TIERS[s[11]].on)return;if(bead(s))nb++;else no++});bn.textContent=fmt(nb);bo.textContent=fmt(no)}var c=TIERS.map(function(){return 0});S.forEach(function(s){c[s[11]]++});c[6]=D.gigCount||0;c.forEach(function(n,i){var e=document.getElementById("tn"+i);if(e)e.textContent=fmt(n)})}
 
 function setMode(m){
   var cs={};S.forEach(function(s){cs[county(s)]=1});
@@ -1534,7 +1564,9 @@ function wire(){
   function setTap(m){tapMode=m;if(m!=="S"&&ensureAreas)ensureAreas().catch(function(){});Object.keys(tb).forEach(function(k){tb[k].setAttribute("aria-pressed",String(k===m))});map.getContainer().classList.toggle("areas-only",m==="A");map.getContainer().classList.toggle("areas",m!=="S");map.closePopup();}
   tb.S.onclick=function(){setTap("S")};tb.A.onclick=function(){setTap("A")};tb.B.onclick=function(){setTap("B")};
   document.getElementById("gatherAll").onclick=function(){setMode(0)};
-  document.getElementById("beadOnly").onchange=function(e){beadOnly=e.target.checked;map.closePopup();render()};
+  document.getElementById("beadIn").onchange=function(e){beadIn=e.target.checked;map.closePopup();render()};
+  document.getElementById("beadOutBox").onchange=function(e){beadOut=e.target.checked;map.closePopup();render()};
+  buildLeftOut();
   document.getElementById("showChips").onchange=function(e){showChips=e.target.checked;render()};
   document.getElementById("spreadAll").onclick=function(){setMode(1)};
   var ab=document.getElementById("about");
