@@ -733,7 +733,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .leaflet-tooltip.tt b{font-size:14px}
 .tt-hint{color:#5f5b50;font-size:12px}
 .leaflet-tooltip-top.tt:before{border-top-color:#fff}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#1d1c19;box-shadow:0 3px 14px rgba(0,0,0,.35)}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#1d1c19;box-shadow:0 3px 14px rgba(0,0,0,.35)}.leaflet-popup.side .leaflet-popup-tip-container{display:none}.leaflet-popup.side .leaflet-popup-content-wrapper{position:relative}.leaflet-popup.side .leaflet-popup-content-wrapper::after{content:"";position:absolute;right:-11px;top:50%;margin-top:-11px;border:11px solid transparent;border-right:0;border-left-color:#fff;filter:drop-shadow(2px 0 2px rgba(0,0,0,.25))}
 .leaflet-popup-content-wrapper{border-radius:6px}
 .leaflet-popup-content{margin:12px 14px;font-family:var(--serif);font-size:15px;line-height:1.4;min-width:240px;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);max-height:var(--cardmax,calc(100dvh - 150px));overflow:auto;overscroll-behavior:contain}
 .leaflet-container a.leaflet-popup-close-button{color:#5f5b50}
@@ -969,6 +969,18 @@ var CanvasOverlay=L.ImageOverlay.extend({
   }
 });
 
+// School cards open beside their dot (card on the left, dot visible to the right, pointer between) so the dot and the card can be read together.
+var origPopupPos=L.Popup.prototype._updatePosition;
+L.Popup.prototype._updatePosition=function(){
+  if(this.options.side&&this._map&&this._container&&window.innerWidth>760){
+    L.DomUtil.addClass(this._container,"side");
+    var w=this._containerWidth||this._container.offsetWidth,h=this._container.offsetHeight,a=this._getAnchor();
+    var ia=this._source&&this._source.options.icon&&this._source.options.icon.options.iconAnchor,dx=ia?8-ia[0]:0,dy=ia?8-ia[1]:0;
+    var mb=parseFloat(getComputedStyle(this._container).marginBottom)||0;// Leaflet gives the popup a bottom margin that sits below the positioned edge
+    this.options.offset=L.point(-(w/2+24)-a.x+dx,Math.round(h/2+mb)-a.y+dy);
+  }
+  return origPopupPos.call(this);
+};
 function init(){
   map=L.map("map",{preferCanvas:true,zoomControl:true,minZoom:5,maxZoom:13,zoomSnap:0.5,attributionControl:true,worldCopyJump:false});
   map.attributionControl.setPrefix(false);
@@ -1200,7 +1212,7 @@ function render(){
         if(small)Object.keys(dists).forEach(function(k){spread[k]=1});
         render();
         var b=L.latLngBounds(all.map(function(s){return[s[9],s[10]]}));
-        if(small&&all.length===1){var s1=all[0];afterMove(function(){flyTo(b.pad(0.3),11)},function(){L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([s1[9],s1[10]]).setContent(schoolCard(s1)).openOn(map)})}
+        if(small&&all.length===1){var s1=all[0];afterMove(function(){flyTo(b.pad(0.3),11)},function(){L.popup({maxWidth:320,offset:[0,-8],side:true}).setLatLng([s1[9],s1[10]]).setContent(schoolCard(s1)).openOn(map)})}
         else flyTo(b.pad(small?0.3:0.15),small?11:10);
       });
       layer.addLayer(m);
@@ -1218,7 +1230,7 @@ function render(){
           m.on("click",function(){
             if(Date.now()-lastSpread<450)return;lastSpread=Date.now();spread[k]=1;map.closePopup();render();
             var b=L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.15);
-            if(arr.length===1){var s1=arr[0];afterMove(function(){flyTo(b,11)},function(){L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([s1[9],s1[10]]).setContent(schoolCard(s1)).openOn(map)})}
+            if(arr.length===1){var s1=arr[0];afterMove(function(){flyTo(b,11)},function(){L.popup({maxWidth:320,offset:[0,-8],side:true}).setLatLng([s1[9],s1[10]]).setContent(schoolCard(s1)).openOn(map)})}
             else flyTo(b,13);
           });
           layer.addLayer(m);
@@ -1232,7 +1244,7 @@ function render(){
     var s=d.s,n=d.n,dx=d.dx,dy=d.dy;
     var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"schm",iconSize:[16,16],iconAnchor:[8-dx,8-dy],popupAnchor:[dx,dy-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,riseOnHover:true});
     label(cm,s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)","")+(n>1?" (shares a site with "+(n-1)+" other "+plural(n-1,"school")+")":""));
-    cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
+    cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320,side:true});
     if(HOVER)cm.bindTooltip('<b>'+esc(s[1])+'</b><br>'+esc(TIERS[s[11]].label.replace(" (area only)",""))+(n>1?'<br>Shares a site with '+(n-1)+' other '+plural(n-1,"school"):'')+'<br><span class="tt-hint">'+TAPV+' for its card</span>',TT);
     layer.addLayer(cm);
   });
@@ -1316,7 +1328,7 @@ function go(h){
   if(h.t==="c"){map.closePopup();countyMode[h.c]=1;render();var a=S.filter(function(s){return county(s)===h.c&&visible(s)});if(a.length)flyTo(L.latLngBounds(a.map(function(s){return[s[9],s[10]]})).pad(0.15),10);return}
   if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;if(arr.length===1){go({t:"s",s:arr[0]});return}countyMode[county(arr[0])]=1;spread[h.k]=1;render();afterMove(function(){flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12)},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});return}
   var s=h.s;if(!visible(s)){TIERS[s[11]].on=true;document.getElementById("tier"+s[11]).checked=true;paintOverlay()}
-  countyMode[county(s)]=1;spread[s[2]]=1;render();afterMove(function(){map.flyTo([s[9],s[10]],12,{duration:0.6})},function(){L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([s[9],s[10]]).setContent(schoolCard(s)).openOn(map)});
+  countyMode[county(s)]=1;spread[s[2]]=1;render();afterMove(function(){map.flyTo([s[9],s[10]],12,{duration:0.6})},function(){L.popup({maxWidth:320,offset:[0,-8],side:true}).setLatLng([s[9],s[10]]).setContent(schoolCard(s)).openOn(map)});
 }
 
 // ---- tap cards for shaded speed areas ----
@@ -1457,7 +1469,7 @@ function areaCard(id,a,rc,latlng){
 }
 
 function wire(){
-  if(!COARSE){["#titlecard .lbl","#legend .note","#about"].forEach(function(sel){var root=document.querySelector(sel);if(!root)return;var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),t;while((t=w.nextNode()))if(/\btap\b/i.test(t.nodeValue))t.nodeValue=t.nodeValue.replace(/\bTap\b/g,"Click").replace(/\btap\b/g,"click")})}
+  if(!COARSE){["#titlecard .lbl","#legend","#about"].forEach(function(sel){var root=document.querySelector(sel);if(!root)return;var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),t;while((t=w.nextNode()))if(/\btap\b/i.test(t.nodeValue))t.nodeValue=t.nodeValue.replace(/\bTap\b/g,"Click").replace(/\btap\b/g,"click")})}
   var si=document.getElementById("search"),hitsEl=document.getElementById("hits");
   si.addEventListener("keydown",function(e){var hs=hitsEl.querySelectorAll("li button");if(e.key==="ArrowDown"&&hs.length){e.preventDefault();hs[0].focus()}else if(e.key==="Enter"&&hs.length){e.preventDefault();hs[0].click()}else if(e.key==="Escape"&&si.value){e.stopPropagation();si.value="";search("")}});
   hitsEl.addEventListener("keydown",function(e){var hs=[].slice.call(hitsEl.querySelectorAll("li button")),i=hs.indexOf(document.activeElement);if(i<0)return;if(e.key==="ArrowDown"){e.preventDefault();(hs[i+1]||hs[0]).focus()}else if(e.key==="ArrowUp"){e.preventDefault();if(i===0)si.focus();else hs[i-1].focus()}else if(e.key==="Escape"){e.stopPropagation();si.focus()}});
