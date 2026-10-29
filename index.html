@@ -1020,32 +1020,38 @@ function init(){
   // With OffscreenCanvas the 10-million-pixel work (decode, tier lookup, each recolor) runs in a worker that owns the
   // canvas, so the page never blocks; older browsers fall back to doing it on the main thread.
   function ovFail(){var st=document.getElementById("stat");st.insertAdjacentHTML("beforeend"," Coverage shading did not load; reload to try again.");flash("Coverage shading did not load; reload to try again.")}
-  ovCanvas=document.createElement("canvas");
-  if(OFFSCREEN){
-    fetch(vq(D.img.ov)).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(blob){
-      var off=ovCanvas.transferControlToOffscreen();
-      ovWorker=new Worker(URL.createObjectURL(new Blob([OV_WORKER],{type:"text/javascript"})));
-      ovWorker.onmessage=function(e){
-        if(e.data.type==="ready"){ovReady=true;overlay=new CanvasOverlay("",b.overlay,{canvas:ovCanvas,opacity:0.62,interactive:false});overlay.addTo(map);if(ovPending){ovWorker.postMessage({type:"paint",cols:ovPending});ovPending=null}}
-        else if(e.data.type==="error"){ovWorker=null;ovFail()}
-      };
-      ovWorker.onerror=function(){ovWorker=null;ovFail()};
-      ovWorker.postMessage({type:"init",canvas:off,blob:blob,cols:TIERS.map(function(t){return rgbU32(t.color)}),paint:paintCols()},[off]);
-    }).catch(ovFail);
-  }else{
+  function ovMain(src){
+    // main-thread path: decode once, keep a one-byte tier index per pixel, recolor into one reused buffer
+    ovCanvas=document.createElement("canvas");
     var img=new Image();
     img.onload=function(){
       var w=img.width,h=img.height;ovCanvas.width=w;ovCanvas.height=h;
       var cx=ovCanvas.getContext("2d",{willReadFrequently:true});cx.drawImage(img,0,0);
-      var src=new Uint32Array(cx.getImageData(0,0,w,h).data.buffer),n=w*h,idx=new Uint8Array(n),cols=TIERS.map(function(t){return rgbU32(t.color)}),last=0,lastT=255;
-      for(var i=0;i<n;i++){var v=src[i];if(v===last){idx[i]=lastT;continue}var t=255;if((v>>>24)>=128){for(var k=0;k<NT;k++)if(cols[k]===v){t=k;break}}last=v;lastT=t;idx[i]=t}
-      ovIdx=idx;ovOut=cx.createImageData(w,h);ovU32=new Uint32Array(ovOut.data.buffer);src=null;img.onload=null;img=null;
+      var src2=new Uint32Array(cx.getImageData(0,0,w,h).data.buffer),n=w*h,idx=new Uint8Array(n),cols=TIERS.map(function(t){return rgbU32(t.color)}),last=0,lastT=255;
+      for(var i=0;i<n;i++){var v=src2[i];if(v===last){idx[i]=lastT;continue}var t=255;if((v>>>24)>=128){for(var k=0;k<NT;k++)if(cols[k]===v){t=k;break}}last=v;lastT=t;idx[i]=t}
+      ovIdx=idx;ovOut=cx.createImageData(w,h);ovU32=new Uint32Array(ovOut.data.buffer);src2=null;img.onload=null;if(typeof src!=="string"&&img.src.indexOf("blob:")===0)URL.revokeObjectURL(img.src);img=null;
       overlay=new CanvasOverlay("",b.overlay,{canvas:ovCanvas,opacity:0.62,interactive:false});
       overlay.addTo(map);paintOverlay();
     };
     img.onerror=ovFail;
-    img.src=vq(D.img.ov);
+    img.src=typeof src==="string"?src:URL.createObjectURL(src);
   }
+  if(OFFSCREEN){
+    fetch(vq(D.img.ov)).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(blob){
+      var wk=null;
+      try{
+        wk=new Worker(URL.createObjectURL(new Blob([OV_WORKER],{type:"text/javascript"})));
+        ovCanvas=document.createElement("canvas");var off=ovCanvas.transferControlToOffscreen();
+        wk.onmessage=function(e){
+          if(e.data.type==="ready"){ovReady=true;overlay=new CanvasOverlay("",b.overlay,{canvas:ovCanvas,opacity:0.62,interactive:false});overlay.addTo(map);if(ovPending){ovWorker.postMessage({type:"paint",cols:ovPending});ovPending=null}}
+          else if(e.data.type==="error"){ovWorker=null;wk.terminate();ovMain(blob)}
+        };
+        wk.onerror=function(){if(ovReady)return;ovWorker=null;wk.terminate();ovMain(blob)};
+        ovWorker=wk;
+        wk.postMessage({type:"init",canvas:off,blob:blob,cols:TIERS.map(function(t){return rgbU32(t.color)}),paint:paintCols()},[off]);
+      }catch(err){ovWorker=null;if(wk)try{wk.terminate()}catch(e2){}ovMain(blob)}
+    }).catch(ovFail);
+  }else ovMain(vq(D.img.ov));
   layer=L.layerGroup().addTo(map);
   chipLayer=L.layerGroup().addTo(map);
   buildLegend();
@@ -1324,25 +1330,27 @@ function loadAreas(){
     if(areasP)return areasP;
     areasP=fetch(vq("areas.json")).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(a){
       var small=a.A.length<65535;
-      if(OFFSCREEN)return fetch(vq("areas.png")).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(blob){
-        return new Promise(function(res,rej){
-          var wk=new Worker(URL.createObjectURL(new Blob([AR_WORKER],{type:"text/javascript"})));
-          wk.onmessage=function(e){wk.terminate();if(e.data.error){rej(new Error(e.data.error));return}AR=a;arIds=small?new Uint16Array(e.data.ids):new Uint32Array(e.data.ids);res()};
-          wk.onerror=function(){wk.terminate();rej(new Error("areas worker"))};
-          wk.postMessage({blob:blob,small:small});
-        });
-      });
-      return new Promise(function(res,rej){
+      function decodeMain(src){return new Promise(function(res,rej){
         var img=new Image();
         img.onload=function(){
           var w=img.width,h=img.height,c=document.createElement("canvas");c.width=w;c.height=h;var cx=c.getContext("2d",{willReadFrequently:true});cx.drawImage(img,0,0);
           var d=cx.getImageData(0,0,w,h).data,n=w*h,ids=small?new Uint16Array(n):new Uint32Array(n);
           for(var i=0,j=0;i<n;i++,j+=4)ids[i]=d[j]*65536+d[j+1]*256+d[j+2];
-          AR=a;arIds=ids;res();
+          if(typeof src!=="string")URL.revokeObjectURL(img.src);AR=a;arIds=ids;res();
         };
         img.onerror=function(){rej(new Error("areas.png"))};
-        img.src=vq("areas.png");
+        img.src=typeof src==="string"?src:URL.createObjectURL(src);
+      })}
+      if(OFFSCREEN)return fetch(vq("areas.png")).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(blob){
+        return new Promise(function(res,rej){
+          var wk;
+          try{wk=new Worker(URL.createObjectURL(new Blob([AR_WORKER],{type:"text/javascript"})))}catch(err){decodeMain(blob).then(res,rej);return}
+          wk.onmessage=function(e){wk.terminate();if(e.data.error){decodeMain(blob).then(res,rej);return}AR=a;arIds=small?new Uint16Array(e.data.ids):new Uint32Array(e.data.ids);res()};
+          wk.onerror=function(){wk.terminate();decodeMain(blob).then(res,rej)};
+          wk.postMessage({blob:blob,small:small});
+        });
       });
+      return decodeMain(vq("areas.png"));
     });
     areasP.catch(function(){areasFailed();areasP=null});
     return areasP;
