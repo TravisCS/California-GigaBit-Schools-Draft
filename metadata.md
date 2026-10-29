@@ -1,13 +1,15 @@
-# Metadata: California public schools without gigabit broadband
+# Metadata: California BEAD plan: Schools, providers and projects
 
-Title: California Public Schools Without Gigabit Broadband
+Title: California BEAD Plan: Schools, Providers and Projects
 
-Abstract: Interactive statewide map of California census blocks where the fastest fixed consumer broadband download reported to the CPUC is under 1 Gbps, with the public K-12 schools that sit in those blocks. Schools are grouped by county and district, can be spread out to individual schools, and are colored by speed tier. 781 schools (460 districts, 56 counties, 283,360 students) are in blocks under 1 Gbps; 72 more (26,049 students) have no speed data at their block; 9,498 are in gigabit blocks.
+Former title (until October 29, 2026): California Public Schools Without Gigabit Broadband
+
+Abstract: Interactive statewide map of California's BEAD plan (CPUC Resolution T-17920, ratified September 17, 2026) set against school broadband: the 79 public K-12 schools without gigabit that the plan connects (60 named as anchor institutions, 19 sharing a site with one), the 774 it does not, and the 83 funded project areas from 20 providers, shaded fiber, fixed wireless or satellite. The map opens on the 79 BEAD schools. Underneath is the original layer of California census blocks where the fastest fixed consumer broadband download reported to the CPUC is under 1 Gbps, with the public K-12 schools that sit in those blocks. Schools are grouped by county and district, can be spread out to individual schools, and are colored by speed tier. 781 schools (460 districts, 56 counties, 283,360 students) are in blocks under 1 Gbps; 72 more (26,049 students) have no speed data at their block; 9,498 are in gigabit blocks.
 
 Purpose: Portfolio sample for a BEAD and broadband consulting application (CTC Technology and Energy, California). Shows school-level broadband gap analysis from official state and federal data.
 
 Author and contact: Travis Cody Smith
-Created: 2026-10-28. Last update: 2026-10-28 (Chrome review: keyboard-activated dots and controls-first Tab order; aria-labels instead of native tooltips; coverage shading and the area id map decoded and recolored in a Web Worker; area data loads on demand; lossless 8-color coverage.png; small fallback basemap images; per-file version stamps on data and image URLs; Leaflet served from the site with cdnjs as fallback; the data file preloaded; tiles load for the destination zoom only; county dots nudged apart where they overlap; Areas tap mode ignores dots). Earlier the same day: area tap cards; "Tap opens" switch for schools, areas or both; school dots drawn above group dots; cards restyled with stat tiles and sections.
+Created: 2026-10-28. Last update: 2026-10-29 (retitled around the BEAD plan; BEAD school matching, project areas and a Gaps in the BEAD plan section; county shapes in place of county dots; one tap from county to schools; legend reordered). Earlier, 2026-10-28 (Chrome review: keyboard-activated dots and controls-first Tab order; aria-labels instead of native tooltips; coverage shading and the area id map decoded and recolored in a Web Worker; area data loads on demand; lossless 8-color coverage.png; small fallback basemap images; per-file version stamps on data and image URLs; Leaflet served from the site with cdnjs as fallback; the data file preloaded; tiles load for the destination zoom only; county dots nudged apart where they overlap; Areas tap mode ignores dots). Earlier the same day: area tap cards; "Tap opens" switch for schools, areas or both; school dots drawn above group dots; cards restyled with stat tiles and sections.
 
 Spatial extent (WGS 84 degrees): west -124.596, south 32.226, east -114.248, north 42.094.
 Coordinate system: sources read in WGS 84 / Pseudo-Mercator (EPSG:3857); school points in WGS 84 (EPSG:4326); displayed in EPSG:3857.
@@ -45,7 +47,7 @@ Code and layout generated with Claude (Anthropic), which also gathered and proce
 All sources are U.S. or California government data. Credit the CPUC for speeds, NCES for schools and USGS The National Map for basemaps with any copy of the map.
 
 ## Citation (APA)
-Smith, T. C. (2026). *California public schools without gigabit broadband* [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/
+Smith, T. C. (2026). *California BEAD plan: Schools, providers and projects* [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/
 
 Figure note: *Note.* Speeds from California Public Utilities Commission (2026), data as of December 31, 2024. Schools from National Center for Education Statistics (2026). Basemap from U.S. Geological Survey (2024, 2026). Built with Leaflet; code generated with Claude and not yet reviewed by the author.
 
