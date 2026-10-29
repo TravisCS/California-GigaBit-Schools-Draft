@@ -7,7 +7,7 @@ Abstract: Interactive statewide map of California census blocks where the fastes
 Purpose: Portfolio sample for a BEAD and broadband consulting application (CTC Technology and Energy, California). Shows school-level broadband gap analysis from official state and federal data.
 
 Author and contact: Travis Cody Smith
-Created: 2026-10-28. Last update: 2026-10-28 (Chrome review: keyboard-activated dots and controls-first Tab order; aria-labels instead of native tooltips; coverage shading and the area id map decoded and recolored in a Web Worker; area data loads on demand; lossless 8-color coverage.png; small fallback basemap images; versioned data URLs with a deploy stamp; tiles load for the destination zoom only; county dots nudged apart where they overlap; Areas tap mode ignores dots). Earlier the same day: area tap cards; "Tap opens" switch for schools, areas or both; school dots drawn above group dots; cards restyled with stat tiles and sections.
+Created: 2026-10-28. Last update: 2026-10-28 (Chrome review: keyboard-activated dots and controls-first Tab order; aria-labels instead of native tooltips; coverage shading and the area id map decoded and recolored in a Web Worker; area data loads on demand; lossless 8-color coverage.png; small fallback basemap images; per-file version stamps on data and image URLs; Leaflet served from the site with cdnjs as fallback; the data file preloaded; tiles load for the destination zoom only; county dots nudged apart where they overlap; Areas tap mode ignores dots). Earlier the same day: area tap cards; "Tap opens" switch for schools, areas or both; school dots drawn above group dots; cards restyled with stat tiles and sections.
 
 Spatial extent (WGS 84 degrees): west -124.596, south 32.226, east -114.248, north 42.094.
 Coordinate system: sources read in WGS 84 / Pseudo-Mercator (EPSG:3857); school points in WGS 84 (EPSG:4326); displayed in EPSG:3857.
@@ -52,5 +52,6 @@ Figure note: *Note.* Speeds from California Public Utilities Commission (2026), 
 ## Files
 - index.html: the interactive map (same as the artifact)
 - data.json, coverage.png, areas.json, areas.png, sat.jpg, str.jpg, california.json: map data, images and the state outline. coverage.png is an 8-color indexed PNG (transparent plus the seven tier colors; the page reads the colors back as tier indexes). areas.png encodes area ids in RGB and must stay lossless. sat.jpg and str.jpg are 900 px fallbacks that sit under the live USGS tiles.
+- leaflet-1.9.4.js: the Leaflet library (BSD 2-clause, unchanged copy of the cdnjs build) served from this site so the map works on networks that block CDNs; cdnjs is the fallback
 - tools/stamp.py: bumps the deploy stamp in index.html (the ?v= query on data and image URLs) so a cached index.html never pairs with stale data; run it before committing data or image changes
 - .map-source/: captured tiles, NCES query list and transcribed school rows (nces_rows.tsv), template.html, app.js, about.html, build scripts

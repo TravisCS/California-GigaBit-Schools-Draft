@@ -14,5 +14,6 @@ for f in files:
     fp = root / f
     ver[f] = hashlib.sha1(fp.read_bytes()).hexdigest()[:8] if fp.exists() else "0"
 s2 = s[:m.start(1)] + json.dumps(ver, separators=(",", ":")) + s[m.end(1):]
+s2 = re.sub(r'href="data\.json\?v=[^"]*"', 'href="data.json?v=' + ver["data.json"] + '"', s2, count=1)
 p.write_text(s2)
 print("stamped", ver)
