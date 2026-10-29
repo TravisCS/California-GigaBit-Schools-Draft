@@ -6,9 +6,13 @@ Source: the CPUC's public BEAD map service, layer "Projects" (NTIA-approved July
 Then run:  python3 tools/bead_areas.py areas.json   (then python3 tools/stamp.py)
 
 Each ring is simplified (Douglas-Peucker, about 400 m) and rounded to 3 decimals (about 100 m). A piece too small to keep
-its shape becomes a small box at its own extent, so no funded area disappears from the map.
+its shape becomes a small box at its own extent, so no funded area disappears from the map. Each project also gets "pt",
+a point inside its largest piece where the map draws the project's dot.
 """
 import csv, json, pathlib, sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from counties import label_point, ring_area  # the same "farthest from the edges" point the county labels use
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 TOL = 0.004  # degrees, about 400 m
@@ -70,11 +74,13 @@ def main():
             pts += sum(len(r) for r in out[-1])
         p = f["properties"]
         tech = p["technology"]
+        big = max(polys, key=lambda pl: abs(ring_area(pl[0])))
+        pt = label_point(big)  # [lat, lng] inside the project's largest piece, for its dot
         feats.append({"type": "Feature", "geometry": {"type": "MultiPolygon", "coordinates": out},
                       "properties": {"id": p["project_id"], "who": p["awardee"], "tech": tech,
                                      "g": GROUP.get(tech, "wireless" if tech.endswith("Wireless") else "other"),
                                      "usd": round(p.get("bead_support") or 0), "n": p.get("n") or 0,
-                                     "price": p.get("LCSO_Price"), "end": end.get(p["project_id"], "")}})
+                                     "price": p.get("LCSO_Price"), "end": end.get(p["project_id"], ""), "pt": pt}})
     # draw satellite first, then wireless, then fiber, so the denser technologies sit on top
     order = {"satellite": 0, "wireless": 1, "other": 1, "fiber": 2}
     feats.sort(key=lambda f: order[f["properties"]["g"]])
