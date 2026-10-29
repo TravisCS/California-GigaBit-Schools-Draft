@@ -103,7 +103,7 @@ function start(B){
   }
   function pick(i){
     var s=items[i];if(!s)return;
-    inp.value=s.text;hideSug();
+    inp.value=s.text;hideSug();inp.blur();// close the phone keyboard so the card is not covered
     search(s.text,s.magicKey);
   }
   inp.addEventListener("input",function(){
@@ -127,7 +127,7 @@ function start(B){
       inp.value="";say("");if(ctl)ctl.abort();clearPin();map.closePopup();
     }
   });
-  form.addEventListener("submit",function(e){e.preventDefault();hideSug();search(inp.value.trim())});
+  form.addEventListener("submit",function(e){e.preventDefault();hideSug();inp.blur();search(inp.value.trim())});
 
   // fetch JSON with a timeout; tags failures so the messages can be friendly
   function getJSON(url,sig){

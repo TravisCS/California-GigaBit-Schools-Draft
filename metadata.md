@@ -1,6 +1,8 @@
-# Metadata: California BEAD plan: Schools, providers and projects
+# Metadata: California BEAD plan: Providers and projects
 
-Title: California BEAD Plan: Schools, Providers and Projects
+Title: California BEAD Plan: Providers and Projects
+
+Earlier title (October 29, 2026, before the schools became a side layer): California BEAD Plan: Schools, Providers and Projects
 
 Former title (until October 29, 2026): California Public Schools Without Gigabit Broadband
 
@@ -47,7 +49,7 @@ Code and layout generated with Claude (Anthropic), which also gathered and proce
 All sources are U.S. or California government data. Credit the CPUC for speeds, NCES for schools and USGS The National Map for basemaps with any copy of the map.
 
 ## Citation (APA)
-Smith, T. C. (2026). *California BEAD plan: Schools, providers and projects* [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/
+Smith, T. C. (2026). *California BEAD plan: Providers and projects* [Interactive map]. https://traviscs.github.io/California-GigaBit-Schools-Draft/
 
 Figure note: *Note.* Speeds from California Public Utilities Commission (2026), data as of December 31, 2024. Schools from National Center for Education Statistics (2026). Basemap from U.S. Geological Survey (2024, 2026). Built with Leaflet; code generated with Claude and not yet reviewed by the author.
 
