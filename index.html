@@ -929,7 +929,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>Address lookup.</b> The address lookup under the title finds your address with Esri's World geocoder, then checks it against the funded project areas on this map (simplified to about 400 m, so approximate) and the CPUC list of every funded BEAD location within 150 m. Your address is sent to Esri to place it on the map; this map keeps nothing.</li>
 <li><b>Shareable links.</b> The page address keeps the open project, provider, county and tab (for example <code>#p=CM61-BEAD-CA-67-14226</code>), and every project card has a Copy link button, so a link opens the map on the same view.</li>
 <li><b>Equity context.</b> Low-income areas and tribal lands are optional map overlays drawn from the CPUC's BEAD Public Dashboard map services (PAU_LIA for low-income areas and PAU_TRIBAL for tribal lands). The shapes are dissolved and simplified to about 400 m, so edges are approximate and should not be used for parcel-level questions.</li>
-<li><b>Funded project areas.</b> The legend's "Funded project areas" layer draws the 83 project areas from the CPUC's public BEAD map service, colored by technology: fiber (67 projects, including 8 hybrid), fixed wireless (14) and satellite (2, SpaceX and Amazon Kuiper, which cover much of rural California). Shapes were simplified to about 400 m and rounded to about 100 m, and pieces too small to keep their shape are drawn as small boxes, so edges are approximate. An area covers the homes and businesses its project will connect, not every building inside it. "Color by" switches between technology and provider (the seven largest providers have their own colors; the other 13 share one), and "All 83 projects, by provider" lists every project ID with a link to its area. Each card shows the provider, the number of locations, BEAD support in total and per location, the required low-cost plan price, the deadline, and how many mapped schools sit inside.</li>
+<li><b>Funded project areas.</b> The legend's "Funded project areas" layer draws the 83 project areas from the CPUC's public BEAD map service, colored by technology: fiber (67 projects, including 2 hybrid), fixed wireless (14) and satellite (2, SpaceX and Amazon Kuiper, which cover much of rural California). Shapes were simplified to about 400 m and rounded to about 100 m, and pieces too small to keep their shape are drawn as small boxes, so edges are approximate. An area covers the homes and businesses its project will connect, not every building inside it. "Color by" switches between technology and provider (the seven largest providers have their own colors; the other 13 share one), and "All 83 projects, by provider" lists every project ID with a link to its area. Each card shows the provider, the number of locations, BEAD support in total and per location, the required low-cost plan price, the deadline, and how many mapped schools sit inside.</li>
 <li><b>Funded homes and businesses.</b> The "Funded homes and businesses" layer shows each of the 269,322 locations the plan funds (unserved or underserved homes and businesses) as a dot colored by technology; the dots load live from the CPUC’s public BEAD map service for the area on screen, only at the two closest zoom levels and at most 6,000 at a time, so they need a connection and follow any changes the CPUC makes to that service.</li>
 <li><b>Limitations.</b> Census blocks can be large in rural areas, and a school near a block edge may take its neighbor's speed. Reported speeds are advertised plan speeds, not measured speeds. A school's own connection (often a dedicated circuit through E-Rate or the CENIC K12 High Speed Network) can be much faster than what homes in the same block can buy, so this map shows neighborhood access, not the school's circuit. Enrollment of 0 or below means NCES did not report it.</li>
 <li><b>Basemaps and outline.</b> USGS The National Map tile services, USGS Imagery Topo (satellite imagery with roads, boundaries and labels) and USGS Topo, loaded live and public domain as U.S. government works. A single statewide image of each ships with the page underneath the tiles, so the map still reads if the tiles cannot load. The California outline is the generalized state boundary, and the county shapes are the county boundaries simplified to about 400 m, both from the U.S. Census Bureau's TIGERweb service.</li>
@@ -1220,8 +1220,8 @@ function fitControls(){
   if(!tl||!bl)return;
   tl.style.top=narrow?(tc.offsetTop+tc.offsetHeight+8)+"px":"";
   bl.style.bottom=narrow?(lg.offsetHeight+10)+"px":"";
-  var br=document.querySelector(".leaflet-bottom.leaflet-right");if(br)br.style.bottom=narrow?(lg.offsetHeight+2)+"px":"";
-  if(nb)nb.style.top=narrow?(tc.offsetTop+tc.offsetHeight+90)+"px":"";
+  var br=document.querySelector(".leaflet-bottom.leaflet-right");if(br)br.style.bottom=narrow?(lg.offsetHeight+12)+"px":"";
+  if(nb)nb.style.top=narrow?(tl.offsetTop+tl.offsetHeight+8)+"px":"";
   // cards auto-pan into the space the title card and legend leave free
   var po=L.Popup.prototype.options;
   po.autoPanPaddingTopLeft=narrow?L.point(10,tc.offsetTop+tc.offsetHeight+12):L.point(lg.classList.contains("min")?10:lg.offsetWidth+24,tc.offsetTop+tc.offsetHeight+12);
@@ -1347,7 +1347,7 @@ function zoomProject(id){
   if(dotMode==="proj"){var g0=f.properties.g==="other"?"wireless":f.properties.g;if(!projShow[g0]){projShow[g0]=true;if(g0==="wireless")projShow.other=true;document.getElementById("pg_"+g0).checked=true}
     if(collapseLegend)collapseLegend();var b0=L.geoJSON(f).getBounds();
     // a statewide project (the satellite ones) zoomed to fit on a phone leaves the map too far out to pan its card into view: center on its dot instead
-    var wide=window.innerWidth<=760&&map.getBoundsZoom(b0.pad(0.1),false,L.point(20,20))<7;
+    var wide=map.getBoundsZoom(b0.pad(0.1),false,L.point(20,20))<7;
     afterMove(function(){if(wide)phoneRoom(f.properties.pt);else flyTo(b0.pad(0.1),11)},function(){renderProjDots();openProject0(f)});return}
   var g=f.properties.g==="other"?"wireless":f.properties.g;if(!projShow[g]){projShow[g]=true;if(g==="wireless")projShow.other=true;document.getElementById("pg_"+g).checked=true;projLayer.clearLayers();projLayer.addData(projGJ)}
   var hit=null;projLayer.eachLayer(function(l){if(l.feature.properties.id===id)hit=l});if(!hit)return;
@@ -1430,10 +1430,10 @@ function renderProjDots(){
   var who={},n=0;items.forEach(function(a){who[a.f.properties.who]=1;n+=a.f.properties.n});
   var st=document.getElementById("stat");if(st)st.innerHTML='Showing <b>'+fmt(items.length)+'</b> funded BEAD '+plural(items.length,"project")+' from <b>'+fmt(Object.keys(who).length)+'</b> '+plural(Object.keys(who).length,"provider")+', <b>'+fmt(n)+'</b> homes and businesses to connect.';
 }
-// on a phone, the opening zoom is too far out for the map to pan a card into view, so a tap there zooms in first
+// at the opening zoom the map is too far out to pan a card into view (pan is limited to California), so a click there zooms in first
 function phoneRoom(pt){var z=7,pc=map.project(pt,z),h=map.getSize().y;map.flyTo(map.unproject(pc.subtract(L.point(0,h*0.18)),z),z,{duration:REDUCED?0:0.6,animate:!REDUCED})}
 function openProject(f){
-  if(window.innerWidth<=760&&map.getZoom()<6.9&&f.properties.pt){afterMove(function(){phoneRoom(f.properties.pt)},function(){openProject0(f)});return}
+  if(map.getZoom()<6.9&&f.properties.pt){afterMove(function(){phoneRoom(f.properties.pt)},function(){openProject0(f)});return}
   openProject0(f);
 }
 function openProject0(f){
