@@ -705,7 +705,7 @@ button,input,select{font-family:var(--serif);font-size:14px;color:var(--ink)}
 .btn{background:var(--chip);border:1px solid var(--rule);border-radius:6px;padding:4px 10px;cursor:pointer}
 @media (hover:hover){.btn:hover,.seg button:hover{filter:brightness(.96)}}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-#legend{position:absolute;z-index:800;bottom:calc(30px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:300px;max-height:min(66vh,calc(100% - 80px));overflow:auto;padding:10px 12px}
+#legend{position:absolute;z-index:800;bottom:calc(30px + env(safe-area-inset-bottom,0px));left:calc(10px + env(safe-area-inset-left,0px));width:300px;max-height:min(66vh,calc(100% - 80px));overflow:auto;padding:10px 12px}
 #legend h2{font-size:17px;margin:0;font-weight:700}
 #legend.min .body{display:none}
 #legend .head{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -727,7 +727,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .chip{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:0;font-size:12.5px;white-space:nowrap;box-shadow:var(--shadow);font-family:var(--serif);display:inline-flex;transform:translate(-50%,14px)}
 .chip span{padding:2px 8px}
 .chip .ck{padding:2px 6px 2px 8px;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;border-right:1px solid var(--rule)}
-.chip.county{transform:translate(-50%,46px)}
+.chip.county{transform:translate(-50%,-50%);font-weight:700}
 .chip .cn{cursor:pointer;color:var(--link);text-decoration:underline;text-decoration-color:rgba(11,87,208,.4)}
 .chip .cg{cursor:pointer;border-left:1px solid var(--rule);color:var(--muted)}
 @media (hover:hover){.chip .cn:hover,.chip .cg:hover{background:var(--chip)}}
@@ -769,8 +769,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 @media (max-width:760px){.leaflet-popup-content{font-size:13.5px;margin:10px 12px;max-height:55vh;max-height:var(--cardmax,55vh)}.pc h3{font-size:1rem}.pc .kv b{font-size:1.1rem}}
 .hl{pointer-events:none;image-rendering:pixelated}
 .pc .areabtn{margin:8px 0 0}
-#credit{pointer-events:none}#credit a{pointer-events:auto}@media (max-height:650px){#credit{font-size:10px;max-width:46vw}}@media (max-height:520px){#credit{display:none}}#credit{position:absolute;z-index:600;left:calc(8px + env(safe-area-inset-left,0px));bottom:calc(54px + env(safe-area-inset-bottom,0px));font-size:11.5px;padding:3px 7px;max-width:min(60vw,calc(100% - 350px))}
-#north{position:absolute;z-index:700;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(90px + env(safe-area-inset-bottom,0px));width:28px;text-align:center;font-size:12px;font-weight:700;padding:3px 0}
+#credit{pointer-events:none}#credit a{pointer-events:auto}@media (max-height:650px){#credit{font-size:10px;max-width:46vw}}@media (max-height:520px){#credit{display:none}}#credit{position:absolute;z-index:600;right:calc(8px + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px));text-align:right;font-size:11.5px;padding:3px 7px;max-width:min(46vw,calc(100% - 360px))}
+#north{position:absolute;z-index:700;right:calc(12px + env(safe-area-inset-right,0px));bottom:calc(100px + env(safe-area-inset-bottom,0px));width:28px;text-align:center;font-size:12px;font-weight:700;padding:3px 0}
 .leaflet-control-scale{margin-bottom:calc(6px + env(safe-area-inset-bottom,0px))!important}
 .leaflet-control-home a{font-size:20px;line-height:30px}
 .card-open .leaflet-control-home{visibility:hidden}
@@ -797,7 +797,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
   #legend{top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));right:max(10px,env(safe-area-inset-right,0px));left:max(10px,env(safe-area-inset-left,0px));width:auto;max-height:46vh}
   .leaflet-top.leaflet-left{top:calc(118px + env(safe-area-inset-top,0px))}
   #credit{display:none}
-  #north{bottom:auto}
+  #north{bottom:auto;right:auto;left:calc(12px + env(safe-area-inset-left,0px))}
   .card-open .leaflet-control-zoom,.card-open #north{visibility:hidden}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
@@ -843,7 +843,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
         <button class="btn" id="gatherAll">Gather all</button>
         <button class="btn" id="spreadAll">Spread all</button>
       </div>
-      <p class="note">Counties are shaded by the most common speed among their schools, and the number is how many schools match the speeds checked above. Tap a county to zoom in to its schools (with "Tap opens" set to Schools or Both); the county label below them gathers it again. A school's card names its district and has a button for the whole district. Schools with gigabit at their block are counted in the legend but not drawn.</p>
+      <p class="note">Counties are shaded by the most common speed among their schools, and the number is how many schools match the speeds checked above. Tap a county to zoom in to its schools (with "Tap opens" set to Schools or Both); the county's name label gathers it again. A school's card names its district and has a button for the whole district. Schools with gigabit at their block are counted in the legend but not drawn.</p>
     </details>
     
     <p class="note">Map by Travis Cody Smith, <span id="made"></span>. Web Mercator (EPSG:3857).</p>
@@ -887,7 +887,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>School source.</b> National Center for Education Statistics (NCES), EDGE Public School Characteristics 2024-25, published April 27, 2026. California has 10,351 schools in this file. School names, districts, addresses, enrollment, county and locale come from it. On October 28, 2026 every mapped school was re-checked against that layer by ID: all 853 positions agree to within 1 m, and names, districts, addresses and enrollment match exactly. The file includes 7 "Future" schools not yet open, 6 "New" schools and 2 with a changed boundary or agency; their cards say so under Status.</li>
 <li><b>How schools were picked.</b> School locations were drawn from the NCES service and compared with the speed layer. Schools in or near any block below 1 Gbps (1,342 records) were then pulled from the NCES service by location, and each was given its tier as in note 6. Schools that turned out to be in gigabit blocks were dropped from the dots.</li>
 <li><b>Area cards.</b> Tapping a shaded area outlines one connected patch of 400 m cells that share the same fastest download (8,824 patches statewide) and shows its size, the counties of the schools inside it, and the share of land within 5 km of the tapped point in each tier. Sizes are true ground area, corrected for the Web Mercator stretch. For gigabit patches it also shows the split between 2 Gbps or more, 1 to 1.99 Gbps and placeholder values. A school is listed in a patch when its 400 m cell (or a touching cell) falls in that patch, so a school can appear in a patch of a different color than its own tier (note 7).</li>
-<li><b>Getting around.</b> Tap a county (its shape or its number) to zoom in to its schools; a county with one school opens that school's card at once. Gathering a county zooms back out to its third of the state (north, central or south). The target button under the zoom control shows the whole state. Every card has a Close button. School cards have a button that shows the whole district with its own card, and district cards have one that zooms out to the county. Escape closes any card. Keyboard: Tab moves through the controls and then every dot (the dot's label appears as it gets focus), Enter or Space opens it, and the arrow keys pan the map.</li>
+<li><b>Getting around.</b> Tap a county (its shape or its number) to zoom in to its schools; a county with one school opens that school's card at once. Tapping "gather" on an open county's name label closes it and zooms back out to its third of the state (north, central or south). The target button under the zoom control shows the whole state. Every card has a Close button. School cards have a button that shows the whole district with its own card, and district cards have one that zooms out to the county. Escape closes any card. Keyboard: Tab moves through the controls and then every dot (the dot's label appears as it gets focus), Enter or Space opens it, and the arrow keys pan the map.</li>
 <li><b>Grouping.</b> Schools are grouped by county. Districts are NCES local education agencies, so a single-school charter counts as its own district. Each school sits under its own county, so a district that crosses a county line, such as Coachella Valley Unified (Riverside and Imperial) or Stony Creek Joint Unified (Glenn and Colusa), shows up under each county it reaches; its card covers the whole district. A county's number is the count of schools shown, and its shading is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
 <li><b>Limitations.</b> Census blocks can be large in rural areas, and a school near a block edge may take its neighbor's speed. Reported speeds are advertised plan speeds, not measured speeds. A school's own connection (often a dedicated circuit through E-Rate or the CENIC K12 High Speed Network) can be much faster than what homes in the same block can buy, so this map shows neighborhood access, not the school's circuit. Enrollment of 0 or below means NCES did not report it.</li>
 <li><b>Basemaps and outline.</b> USGS The National Map tile services, USGS Imagery Topo (satellite imagery with roads, boundaries and labels) and USGS Topo, loaded live and public domain as U.S. government works. A single statewide image of each ships with the page underneath the tiles, so the map still reads if the tiles cannot load. The California outline is the generalized state boundary, and the county shapes are the county boundaries simplified to about 400 m, both from the U.S. Census Bureau's TIGERweb service.</li>
@@ -954,6 +954,7 @@ var LOCALE={"11":"City, large","12":"City, midsize","13":"City, small","21":"Sub
 var STATUS={"Future":"Future school, not yet open (NCES 2024-25 status)","New":"New in 2024-25 (NCES status)","Changed Boundary/Agency":"Changed boundary or agency in 2024-25 (NCES status)"};
 var METH=["Read at the school's own census block","Block at the school had no color; nearest blocks within 300 m used","No block with speed data within 300 m"];
 var lastSpread=0,lastSig="",pendingRender=false,collapseLegend=null,setTapG=null;
+var MASK={sat:["#06141c",0.6],str:["#ffffff",0.6]},mask=null;
 var D,S=[],LEA={},CGJ=null,CLAB={},countyLayer=null,map,overlay,ovCanvas,ovBase,base={},tiles={},layer,chipLayer,countyMode={},tapMode="S";
 var NF=new Intl.NumberFormat("en-US");var fmt=function(n){return NF.format(n)};
 function plural(n,one,many){return n===1?one:(many||one+"s")}
@@ -1009,7 +1010,7 @@ function init(){
   document.addEventListener("mouseleave",healDrag);
   map.attributionControl.addAttribution('Basemap: <a href="https://www.usgs.gov/programs/national-geospatial-program/national-map" target="_blank" rel="noopener">USGS The National Map</a> | Speeds: <a href="https://www.broadbandmap.ca.gov/" target="_blank" rel="noopener">CPUC</a> | Schools: <a href="https://nces.ed.gov/programs/edge/Geographic/SchoolLocations" target="_blank" rel="noopener">NCES EDGE</a>');
   var b=D.bounds;
-  map.setMaxBounds(L.latLngBounds(b.max).pad(1));
+  map.setMaxBounds(L.latLngBounds(b.max).pad(0.25));
   var USGS="https://basemap.nationalmap.gov/arcgis/rest/services/";
   var tileOpts={maxNativeZoom:16,maxZoom:16,attribution:"",updateWhenZooming:false};// load tiles for the destination zoom only: 2 to 7 times fewer tile requests during a flight, no visible cost
   tiles.sat=L.tileLayer(USGS+"USGSImageryTopo/MapServer/tile/{z}/{y}/{x}",tileOpts);
@@ -1018,8 +1019,12 @@ function init(){
   base.sat=L.imageOverlay(vq(D.img.sat),b.base,{interactive:false,className:"bm",pane:"tilePane",zIndex:-1});
   base.str=L.imageOverlay(vq(D.img.str),b.base,{interactive:false,className:"bm",pane:"tilePane",zIndex:-1});
   base.sat.addTo(map);tiles.sat.addTo(map);
+  map.createPane("mask");map.getPane("mask").style.zIndex=410;map.getPane("mask").style.pointerEvents="none";
   map.createPane("outline");map.getPane("outline").style.zIndex=450;map.getPane("outline").style.pointerEvents="none";
   fetch(vq("california.json")).then(function(r){return r.json()}).then(function(gj){
+    var g=gj.geometry||(gj.features&&gj.features[0].geometry),polys=g.type==="Polygon"?[g.coordinates]:g.coordinates;
+    mask=L.polygon([[[-85,-179.9],[-85,179.9],[85,179.9],[85,-179.9]]].concat(polys.map(function(pl){return pl[0].map(function(q){return[q[1],q[0]]})})),
+      {pane:"mask",interactive:false,stroke:false,fillColor:MASK.sat[0],fillOpacity:MASK.sat[1]}).addTo(map);
     L.geoJSON(gj,{pane:"outline",interactive:false,style:{color:"#000",weight:5,opacity:.35,fill:false}}).addTo(map);
     L.geoJSON(gj,{pane:"outline",interactive:false,style:{color:"#fff",weight:2,opacity:.9,fill:false}}).addTo(map);
   }).catch(function(){});
@@ -1033,7 +1038,7 @@ function init(){
         if(HOVER)l.bindTooltip(function(){return l._tipAll?countyTip(f.properties.n,l._tipAll,l._tipNd):esc(f.properties.n)+' County<br><span class="tt-hint">No schools below gigabit shown</span>'},{sticky:true,className:"tt",direction:"top",offset:[0,-12],opacity:1});
       }}).addTo(map);
   }
-  L.control.scale({imperial:true,metric:true,position:"bottomleft"}).addTo(map);
+  L.control.scale({imperial:true,metric:true,position:"bottomright"}).addTo(map);
   var Home=L.Control.extend({onAdd:function(){var d=L.DomUtil.create("div","leaflet-bar leaflet-control-home");var a=L.DomUtil.create("a","",d);a.href="#";a.title="Zoom back out to the whole state";a.setAttribute("aria-label","Zoom back out to the whole state");a.innerHTML='<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false" style="display:block;margin:6px auto;fill:none;stroke:currentColor;stroke-width:1.8"><circle cx="10" cy="10" r="5.5"/><path d="M10 1v4M10 15v4M1 10h4M15 10h4"/></svg>';L.DomEvent.on(a,"click",function(e){L.DomEvent.preventDefault(e);L.DomEvent.stopPropagation(e);map.closePopup();countyMode={};render();map.flyToBounds(allBounds(),Object.assign(fitPad(),{duration:0.8,animate:!REDUCED}))});L.DomEvent.disableClickPropagation(d);return d}});
   new Home({position:"topleft"}).addTo(map);
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!map._popup)return;if(e.key==="Escape"&&document.getElementById("about").hidden)map.closePopup()});
@@ -1130,8 +1135,8 @@ function labIcon(n,shift){
 }
 function labPt(c){return CLAB[c]||null}
 function chip(latlng,name,fnGather,fnCard){
-  var html='<span class="chip'+(fnCard?'':' county')+'"><span class="ck">'+(fnCard?'District':'County')+'</span>'+(fnCard?'<span class="cn" role="button" title="Open the card for '+esc(name)+'">'+esc(name)+'</span>':'<span>'+esc(name)+'</span>')+'<span class="cg" role="button" title="Gather '+esc(name)+'">gather</span></span>';
-  var m=L.marker(latlng,{icon:L.divIcon({className:"",iconSize:[0,0],html:html}),zIndexOffset:900,keyboard:false,interactive:true});
+  var html='<span class="chip'+(fnCard?'':' county')+'">'+(fnCard?'<span class="ck">District</span>':'')+(fnCard?'<span class="cn" role="button" title="Open the card for '+esc(name)+'">'+esc(name)+'</span>':'<span>'+esc(name)+' County</span>')+'<span class="cg" role="button" title="Gather '+esc(name)+'">gather</span></span>';
+  var m=L.marker(latlng,{icon:L.divIcon({className:"",iconSize:[0,0],html:html}),zIndexOffset:fnCard?900:1500,keyboard:false,interactive:true});
   m.on("click",function(e){var t=e.originalEvent&&e.originalEvent.target;if(t&&t.classList.contains("cn")&&fnCard)fnCard();else fnGather();});
   m.on("add",function(){var el=m.getElement();if(!el)return;el.querySelectorAll(".cn,.cg").forEach(function(sp){sp.setAttribute("tabindex","0");sp.addEventListener("keydown",function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();ev.stopPropagation();if(sp.classList.contains("cn")&&fnCard)fnCard();else fnGather();}})})});
   return m;
@@ -1148,7 +1153,7 @@ function allBounds(){return L.latLngBounds(S.map(function(s){return[s[9],s[10]]}
 function fitPad(){
   var tc=document.getElementById("titlecard"),lg=document.getElementById("legend"),narrow=window.innerWidth<=760;
   var H=map.getSize().y,W=map.getSize().x,top=Math.min(tc.offsetTop+tc.offsetHeight+40,H*0.35),bot=Math.min((narrow?lg.offsetHeight:0)+(narrow?30:60),H*0.35);
-  return {paddingTopLeft:L.point(Math.min(60,W*0.2),top),paddingBottomRight:narrow?L.point(20,bot):L.point(Math.min(lg.offsetWidth+40,W*0.4),bot)};
+  return narrow?{paddingTopLeft:L.point(Math.min(60,W*0.2),top),paddingBottomRight:L.point(20,bot)}:{paddingTopLeft:L.point(Math.min(lg.offsetWidth+40,W*0.4),top),paddingBottomRight:L.point(60,bot)};
 }
 function flyTo(b,maxZoom){var o=fitPad();o.maxZoom=maxZoom;o.duration=0.6;if(REDUCED)o.animate=false;map.flyToBounds(b,o)}
 function fitControls(){
@@ -1161,8 +1166,9 @@ function fitControls(){
   if(nb)nb.style.top=narrow?(tc.offsetTop+tc.offsetHeight+90)+"px":"";
   // cards auto-pan into the space the title card and legend leave free
   var po=L.Popup.prototype.options;
-  po.autoPanPaddingTopLeft=L.point(10,tc.offsetTop+tc.offsetHeight+12);
-  po.autoPanPaddingBottomRight=narrow?L.point(10,lg.offsetHeight+12):L.point(lg.offsetWidth+24,10);
+  po.autoPanPaddingTopLeft=narrow?L.point(10,tc.offsetTop+tc.offsetHeight+12):L.point(lg.classList.contains("min")?10:lg.offsetWidth+24,tc.offsetTop+tc.offsetHeight+12);
+  po.autoPanPaddingBottomRight=narrow?L.point(10,lg.offsetHeight+12):L.point(10,10);
+  if(!narrow)lg.style.maxHeight=Math.max(160,window.innerHeight-(tc.offsetTop+tc.offsetHeight)-50)+"px";else lg.style.maxHeight="";
   map.getContainer().style.setProperty("--cardmax",Math.max(150,map.getSize().y-(narrow?0:tc.offsetTop+tc.offsetHeight)-(narrow?lg.offsetHeight+70:70))+"px");
 }
 // Push circles apart until none covers another's centre (a sorted sweep keeps this fast for 853 dots).
@@ -1179,11 +1185,10 @@ function spreadApart(items,iters,cap){
 function groupShifts(byC){
   var items=[];
   Object.keys(byC).forEach(function(c){
-    if(countyMode[c])return;
     var all=[];Object.keys(byC[c]).forEach(function(k){all=all.concat(byC[c][k])});
-    var p=map.latLngToLayerPoint(labPt(c)||centroid(all));items.push({key:"c"+c,x:p.x,y:p.y,x0:p.x,y0:p.y,r:Math.max(11,labW(all.length)/2)});
+    var p=map.latLngToLayerPoint(labPt(c)||centroid(all));items.push({key:"c"+c,x:p.x,y:p.y,x0:p.x,y0:p.y,r:countyMode[c]?Math.max(30,(c.length+14)*3.6):Math.max(11,labW(all.length)/2)});
   });
-  spreadApart(items,40,30);
+  spreadApart(items,40,40);
   var out={c:{}};items.forEach(function(a){var sx=Math.round(a.x-a.x0),sy=Math.round(a.y-a.y0);if(sx||sy)out.c[a.key.slice(1)]=[sx,sy]});return out;
 }
 function clusterDots(dots){
@@ -1225,7 +1230,8 @@ function render(){
       m.on("click",function(){openCounty(c)});
       layer.addLayer(m);
     }else{
-      chipLayer.addLayer(chip(bottomOf(all),c,function(){gatherCounty(c)}));
+      var lp=labPt(c)||centroid(all),sh=shifts.c[c];if(sh)lp=map.layerPointToLatLng(map.latLngToLayerPoint(lp).add(L.point(sh[0],sh[1])));
+      chipLayer.addLayer(chip(lp,c,function(){gatherCounty(c)}));
       Object.keys(dists).forEach(function(k){var nm=L_name(k);dists[k].forEach(function(s){dots.push({s:s,k:k,nm:nm,c:c})})});
     }
   });
@@ -1490,8 +1496,8 @@ function wire(){
   si.addEventListener("keydown",function(e){var hs=hitsEl.querySelectorAll("li button");if(e.key==="ArrowDown"&&hs.length){e.preventDefault();hs[0].focus()}else if(e.key==="Enter"&&hs.length){e.preventDefault();hs[0].click()}else if(e.key==="Escape"&&si.value){e.stopPropagation();si.value="";search("")}});
   hitsEl.addEventListener("keydown",function(e){var hs=[].slice.call(hitsEl.querySelectorAll("li button")),i=hs.indexOf(document.activeElement);if(i<0)return;if(e.key==="ArrowDown"){e.preventDefault();(hs[i+1]||hs[0]).focus()}else if(e.key==="ArrowUp"){e.preventDefault();if(i===0)si.focus();else hs[i-1].focus()}else if(e.key==="Escape"){e.stopPropagation();si.focus()}});
   var sat=document.getElementById("bmSat"),str=document.getElementById("bmStr");
-  sat.onclick=function(){map.getContainer().style.background="#102633";map.removeLayer(base.str);map.removeLayer(tiles.str);base.sat.addTo(map);tiles.sat.addTo(map);sat.setAttribute("aria-pressed","true");str.setAttribute("aria-pressed","false")};
-  str.onclick=function(){map.getContainer().style.background="#bde5ff";base.str.addTo(map);tiles.str.addTo(map);tiles.str.setOpacity(1);var drop=function(){map.removeLayer(base.sat);map.removeLayer(tiles.sat)};if(tiles.str.isLoading())tiles.str.once("load",drop);else drop();str.setAttribute("aria-pressed","true");sat.setAttribute("aria-pressed","false")};
+  sat.onclick=function(){map.getContainer().style.background="#102633";if(mask)mask.setStyle({fillColor:MASK.sat[0],fillOpacity:MASK.sat[1]});map.removeLayer(base.str);map.removeLayer(tiles.str);base.sat.addTo(map);tiles.sat.addTo(map);sat.setAttribute("aria-pressed","true");str.setAttribute("aria-pressed","false")};
+  str.onclick=function(){map.getContainer().style.background="#bde5ff";if(mask)mask.setStyle({fillColor:MASK.str[0],fillOpacity:MASK.str[1]});base.str.addTo(map);tiles.str.addTo(map);tiles.str.setOpacity(1);var drop=function(){map.removeLayer(base.sat);map.removeLayer(tiles.sat)};if(tiles.str.isLoading())tiles.str.once("load",drop);else drop();str.setAttribute("aria-pressed","true");sat.setAttribute("aria-pressed","false")};
   document.getElementById("showArea").onchange=paintOverlay;
   // warm the Street tiles for the current view when the mouse reaches the button, so the switch is instant
   if(HOVER)str.addEventListener("mouseenter",function(){var cn=navigator.connection;if(cn&&cn.saveData)return;if(map.hasLayer(tiles.str)||map.hasLayer(base.str))return;tiles.str.setOpacity(0);tiles.str.addTo(map);setTimeout(function(){if(tiles.str.options.opacity===0&&map.hasLayer(tiles.str))map.removeLayer(tiles.str)},8000)});
