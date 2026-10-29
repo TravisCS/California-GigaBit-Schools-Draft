@@ -1130,11 +1130,26 @@ function fitControls(){
   po.autoPanPaddingBottomRight=narrow?L.point(10,lg.offsetHeight+12):L.point(lg.offsetWidth+24,10);
   map.getContainer().style.setProperty("--cardmax",Math.max(150,map.getSize().y-(narrow?0:tc.offsetTop+tc.offsetHeight)-(narrow?lg.offsetHeight+70:70))+"px");
 }
-// Nudge county dots apart when they overlap at the current zoom (Los Angeles, Orange, San Bernardino on a phone), so every dot keeps a tappable centre.
-function countyShifts(byC){
-  var items=[];Object.keys(byC).forEach(function(c){if(countyMode[c])return;var all=[];Object.keys(byC[c]).forEach(function(k){all=all.concat(byC[c][k])});var p=map.latLngToLayerPoint(centroid(all));items.push({c:c,x:p.x,y:p.y,x0:p.x,y0:p.y,r:dotSize(all.length,"county")/2})});
-  for(var it=0;it<40;it++){var moved=false;for(var i=0;i<items.length;i++)for(var j=i+1;j<items.length;j++){var a=items[i],b2=items[j],dx=b2.x-a.x,dy=b2.y-a.y,d=Math.sqrt(dx*dx+dy*dy),min=a.r+b2.r+3;if(d>=min)continue;if(d<0.01){dx=1;dy=0;d=1}var push=(min-d)/2,ux=dx/d,uy=dy/d;a.x-=ux*push;a.y-=uy*push;b2.x+=ux*push;b2.y+=uy*push;moved=true}if(!moved)break}
-  var out={};items.forEach(function(a){var sx=Math.round(a.x-a.x0),sy=Math.round(a.y-a.y0);if(sx||sy)out[a.c]=[sx,sy]});return out;
+// Push circles apart until none covers another's centre (a sorted sweep keeps this fast for 853 dots).
+function spreadApart(items,iters,cap){
+  cap=cap||40;// a dot never drifts more than this far from its true spot, so a dense city stays a dense city
+  for(var it=0;it<(iters||12);it++){
+    items.sort(function(a,b){return a.x-b.x});var moved=false;
+    for(var i=0;i<items.length;i++){var a=items[i];for(var j=i+1;j<items.length;j++){var b2=items[j],dx=b2.x-a.x;if(dx>a.r+b2.r+1)break;var dy=b2.y-a.y,d=Math.sqrt(dx*dx+dy*dy),min=a.r+b2.r+1;if(d>=min)continue;if(d<0.01){dx=1;dy=0;d=1}var push=(min-d)/2,ux=dx/d,uy=dy/d;a.x-=ux*push;a.y-=uy*push;b2.x+=ux*push;b2.y+=uy*push;moved=true}}
+    items.forEach(function(a){if(a.x-a.x0>cap)a.x=a.x0+cap;else if(a.x0-a.x>cap)a.x=a.x0-cap;if(a.y-a.y0>cap)a.y=a.y0+cap;else if(a.y0-a.y>cap)a.y=a.y0-cap});
+    if(!moved)break;
+  }
+}
+// Nudge county and district dots apart when they overlap at the current zoom (Los Angeles, Orange, San Bernardino on a phone; a big district under one-school dots), so every dot keeps a tappable centre.
+function groupShifts(byC){
+  var items=[];
+  Object.keys(byC).forEach(function(c){
+    var dists=byC[c];
+    if(!countyMode[c]){var all=[];Object.keys(dists).forEach(function(k){all=all.concat(dists[k])});var p=map.latLngToLayerPoint(centroid(all));items.push({key:"c"+c,x:p.x,y:p.y,x0:p.x,y0:p.y,r:dotSize(all.length,"county")/2});return}
+    Object.keys(dists).forEach(function(k){if(spread[k])return;var arr=dists[k],q=map.latLngToLayerPoint(centroid(arr));items.push({key:"d"+k,x:q.x,y:q.y,x0:q.x,y0:q.y,r:dotSize(arr.length,"district")/2})});
+  });
+  spreadApart(items,40);
+  var out={c:{},d:{}};items.forEach(function(a){var sx=Math.round(a.x-a.x0),sy=Math.round(a.y-a.y0);if(sx||sy)out[a.key.charAt(0)][a.key.slice(1)]=[sx,sy]});return out;
 }
 function clusterDots(dots){
   dots.forEach(function(d){d.p=map.latLngToLayerPoint([d.s[9],d.s[10]])});
@@ -1144,18 +1159,34 @@ function clusterDots(dots){
     if(best){best.items.push(d);var n=best.items.length;best.cx+=(d.p.x-best.cx)/n;best.cy+=(d.p.y-best.cy)/n}else cl.push({cx:d.p.x,cy:d.p.y,items:[d]})});
   return cl.map(function(c){return c.items});
 }
-function renderSig(cshift,clusters){return JSON.stringify(cshift)+"|"+clusters.map(function(g){return g.map(function(d){return d.s[0]}).sort().join(",")}).filter(function(x){return x.indexOf(",")>=0}).sort().join(";")}
-function currentSig(){var byC=groups(),dots=[];Object.keys(byC).forEach(function(c){if(!countyMode[c])return;Object.keys(byC[c]).forEach(function(k){if(spread[k])byC[c][k].forEach(function(s){dots.push({s:s})})})});return renderSig(countyShifts(byC),clusterDots(dots))}
+function layoutSchools(dots){
+  var clusters=clusterDots(dots),items=[];
+  clusters.forEach(function(grp){
+    grp.sort(function(a,b){return a.s[1]<b.s[1]?-1:(a.s[1]>b.s[1]?1:0)});
+    var n=grp.length;
+    grp.forEach(function(d,i){
+      var dx=0,dy=0;
+      if(n>1&&n<=6){var ang=-Math.PI/2+i*2*Math.PI/n,rad=n===2?9:12;dx=Math.cos(ang)*rad;dy=Math.sin(ang)*rad}
+      else if(n>6){var r2=7.2*Math.sqrt(i+1),a2=i*2.39996;dx=Math.cos(a2)*r2;dy=Math.sin(a2)*r2}// sunflower spiral: about 12 px between neighbours however many share the spot
+      d.n=n;items.push({d:d,x:d.p.x+dx,y:d.p.y+dy,x0:d.p.x,y0:d.p.y,r:6.5});
+    });
+  });
+  spreadApart(items,40,36);
+  items.forEach(function(a){a.d.dx=Math.round(a.x-a.x0);a.d.dy=Math.round(a.y-a.y0)});
+  return dots;
+}
+function renderSig(shifts,dots){return JSON.stringify(shifts)+"|"+dots.map(function(d){return d.s[0]+":"+d.dx+","+d.dy}).join(";")}
+function currentSig(){var byC=groups(),dots=[];Object.keys(byC).forEach(function(c){if(!countyMode[c])return;Object.keys(byC[c]).forEach(function(k){if(spread[k])byC[c][k].forEach(function(s){dots.push({s:s})})})});layoutSchools(dots);return renderSig(groupShifts(byC),dots)}
 function render(){
   layer.clearLayers();chipLayer.clearLayers();
-  var byC=groups(),nS=0,nD=0,nC=0,enr=0,nNo=0,seenD={},cshift=countyShifts(byC),dots=[];
+  var byC=groups(),nS=0,nD=0,nC=0,enr=0,nNo=0,seenD={},shifts=groupShifts(byC),dots=[];
   Object.keys(byC).sort().forEach(function(c){
     var dists=byC[c],all=[];Object.keys(dists).forEach(function(k){all=all.concat(dists[k])});
     nC++;Object.keys(dists).forEach(function(k){seenD[k]=1});nS+=all.length;all.forEach(function(s){if(s[6]>0)enr+=s[6];if(s[11]===7)nNo++});
     if(!countyMode[c]){
       var dm=dominant(all),cen=centroid(all);
       var nd=Object.keys(dists).length;
-      var m=L.marker(cen,{icon:dotIcon(all.length,TIERS[dm.tier].color,"county","",cshift[c]),riseOnHover:true});label(m,c+" County: "+fmt(all.length)+" "+plural(all.length,"school")+" in "+nd+" "+plural(nd,"district"));
+      var m=L.marker(cen,{icon:dotIcon(all.length,TIERS[dm.tier].color,"county","",shifts.c[c]),riseOnHover:true});label(m,c+" County: "+fmt(all.length)+" "+plural(all.length,"school")+" in "+nd+" "+plural(nd,"district"));
       if(HOVER)m.bindTooltip('<b>'+esc(c)+' County</b><br>'+fmt(all.length)+' '+plural(all.length,"school")+' in '+nd+' '+plural(nd,"district")+'<br><span class="tt-hint">'+(nd===1||all.length<=4?(all.length===1?TAPV+' to open the school':TAPV+' to show its schools'):TAPV+' to show its districts')+'</span>',TT);
       m.on("click",function(){
         if(Date.now()-lastSpread<450)return;lastSpread=Date.now();countyMode[c]=1;map.closePopup();
@@ -1176,7 +1207,7 @@ function render(){
           chipLayer.addLayer(chip(bottomOf(arr),nm,function(){delete spread[k];map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(k,arr)).openOn(map);}));
           arr.forEach(function(s){dots.push({s:s,k:k,nm:nm,c:c})});
         }else{
-          var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",""),riseOnHover:true});label(m,nm+": "+fmt(arr.length)+" "+plural(arr.length,"school")+", "+c+" County");
+          var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district","",shifts.d[k]),riseOnHover:true});label(m,nm+": "+fmt(arr.length)+" "+plural(arr.length,"school")+", "+c+" County");
           if(HOVER)m.bindTooltip('<b>'+esc(nm)+'</b><br>'+fmt(arr.length)+' '+plural(arr.length,"school")+', '+esc(c)+' County<br><span class="tt-hint">'+(arr.length===1?TAPV+' to open the school':TAPV+' to show its schools')+'</span>',TT);
           m.on("click",function(){
             if(Date.now()-lastSpread<450)return;lastSpread=Date.now();spread[k]=1;map.closePopup();render();
@@ -1190,22 +1221,16 @@ function render(){
     }
   });
   // school dots: schools that would overlap at this zoom (one campus, or neighbours a few hundred metres apart) fan out in a ring, whatever their district
-  var clusters=clusterDots(dots);
-  clusters.forEach(function(grp){
-    grp.sort(function(a,b){return a.s[1]<b.s[1]?-1:(a.s[1]>b.s[1]?1:0)});
-    var n=grp.length;
-    grp.forEach(function(d,i){
-      var s=d.s,dx=0,dy=0;
-      if(n>1&&n<=6){var ang=-Math.PI/2+i*2*Math.PI/n,rad=n===2?9:12;dx=Math.round(Math.cos(ang)*rad);dy=Math.round(Math.sin(ang)*rad)}
-      else if(n>6){var r2=7.2*Math.sqrt(i+1),a2=i*2.39996;dx=Math.round(Math.cos(a2)*r2);dy=Math.round(Math.sin(a2)*r2)}// sunflower spiral: about 12 px between neighbours however many share the spot
-      var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"schm",iconSize:[16,16],iconAnchor:[8-dx,8-dy],popupAnchor:[dx,dy-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,riseOnHover:true});
-      label(cm,s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)","")+(n>1?" (shares a site with "+(n-1)+" other "+plural(n-1,"school")+")":""));
-      cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
-      if(HOVER)cm.bindTooltip('<b>'+esc(s[1])+'</b><br>'+esc(TIERS[s[11]].label.replace(" (area only)",""))+(n>1?'<br>Shares a site with '+(n-1)+' other '+plural(n-1,"school"):'')+'<br><span class="tt-hint">'+TAPV+' for its card</span>',TT);
-      layer.addLayer(cm);
-    });
+  layoutSchools(dots);
+  dots.forEach(function(d){
+    var s=d.s,n=d.n,dx=d.dx,dy=d.dy;
+    var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"schm",iconSize:[16,16],iconAnchor:[8-dx,8-dy],popupAnchor:[dx,dy-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,riseOnHover:true});
+    label(cm,s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)","")+(n>1?" (shares a site with "+(n-1)+" other "+plural(n-1,"school")+")":""));
+    cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
+    if(HOVER)cm.bindTooltip('<b>'+esc(s[1])+'</b><br>'+esc(TIERS[s[11]].label.replace(" (area only)",""))+(n>1?'<br>Shares a site with '+(n-1)+' other '+plural(n-1,"school"):'')+'<br><span class="tt-hint">'+TAPV+' for its card</span>',TT);
+    layer.addLayer(cm);
   });
-  lastSig=renderSig(cshift,clusters);
+  lastSig=renderSig(shifts,dots);
   nD=Object.keys(seenD).length;
   document.getElementById("stat").innerHTML='Showing <b>'+fmt(nS)+'</b> schools'+(nNo?' (<b>'+fmt(nS-nNo)+'</b> below 1 Gbps, <b>'+fmt(nNo)+'</b> with no speed data)':'')+' in <b>'+fmt(nD)+'</b> '+plural(nD,"district")+' across <b>'+fmt(nC)+'</b> '+plural(nC,"county","counties")+(enr?', <b>'+fmt(enr)+'</b> students.':'.')+' '+D.statLine;
   updateCounts();fitControls();
