@@ -1171,7 +1171,7 @@ function layoutSchools(dots){
       d.n=n;items.push({d:d,x:d.p.x+dx,y:d.p.y+dy,x0:d.p.x,y0:d.p.y,r:6.5});
     });
   });
-  spreadApart(items,40,36);
+  spreadApart(items,24,36);
   items.forEach(function(a){a.d.dx=Math.round(a.x-a.x0);a.d.dy=Math.round(a.y-a.y0)});
   return dots;
 }
