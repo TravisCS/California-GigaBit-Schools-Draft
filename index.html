@@ -720,7 +720,9 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 #hits li button:focus-visible{background:var(--chip);outline:2px solid var(--accent);outline-offset:-1px}@media (hover:hover){#hits li button:hover{background:var(--chip)}}
 #hits small{color:var(--muted)}
 .dot{display:flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-weight:700;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45);font-family:var(--serif);font-variant-numeric:tabular-nums;cursor:pointer;box-sizing:border-box}
-.dot.county{border-style:double;border-width:4px}
+.clab{display:flex;align-items:center;justify-content:center;height:20px;box-sizing:border-box;border-radius:10px;background:#fff;color:#1d2320;border:1px solid rgba(0,0,0,.25);box-shadow:0 1px 3px rgba(0,0,0,.45);font-family:var(--serif);font-weight:700;font-size:12.5px;font-variant-numeric:tabular-nums;cursor:pointer;position:relative}
+@media (pointer:coarse){.clab::after{content:"";position:absolute;inset:-8px}}
+#map.areas-only .leaflet-counties-pane path{pointer-events:none}
 .chip{background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:0;font-size:12.5px;white-space:nowrap;box-shadow:var(--shadow);font-family:var(--serif);display:inline-flex;transform:translate(-50%,14px)}
 .chip span{padding:2px 8px}
 .chip .ck{padding:2px 6px 2px 8px;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;border-right:1px solid var(--rule)}
@@ -837,10 +839,9 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
       <summary>School groups</summary>
       <div class="row" style="margin-top:4px">
         <button class="btn" id="gatherAll">Gather all</button>
-        <button class="btn" id="districtsAll">Districts</button>
         <button class="btn" id="spreadAll">Spread all</button>
       </div>
-      <p class="note">Ringed dots are counties, plain dots are districts, small dots are schools. The number is how many schools in the group match the speeds checked above, and the color is the most common speed among them. Tap a dot to spread it and zoom in (with "Tap opens" set to Schools or Both). The label below a spread district opens its card (tap the name) or gathers it (tap gather); a county label only gathers. Schools with gigabit at their block are counted in the legend but not drawn.</p>
+      <p class="note">Counties are shaded by the most common speed among their schools, and the number is how many schools match the speeds checked above. Tap a county to zoom in to its schools (with "Tap opens" set to Schools or Both); the county label below them gathers it again. A school's card names its district and has a button for the whole district. Schools with gigabit at their block are counted in the legend but not drawn.</p>
     </details>
     
     <p class="note">Map by Travis Cody Smith, <span id="made"></span>. Web Mercator (EPSG:3857).</p>
@@ -874,7 +875,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 
 <h3>Notes</h3>
 <ol>
-<li><b>What the map shows.</b> Shaded areas are census blocks colored by the fastest fixed (wired or fixed wireless) download speed reported for consumers. Dots are public K-12 schools in blocks below 1 Gbps or with no data, grouped by county, then by district, then shown one by one.</li>
+<li><b>What the map shows.</b> Shaded areas are census blocks colored by the fastest fixed (wired or fixed wireless) download speed reported for consumers. Dots are public K-12 schools in blocks below 1 Gbps or with no data, grouped by county, then shown one by one.</li>
 <li><b>Speed source.</b> California Public Utilities Commission (CPUC), California Interactive Broadband Map, Fixed Consumer Downstream Maximum, end of year 2024. The CPUC describes the layer as "Maximum available download speeds in a Census Block, as determined by the presence of at least one subscriber. Source: CPUC collected deployment and subscription data as of December 31, 2024." The CPUC posted the matching data files on April 1, 2026. The layer covers 362,474 blocks.</li>
 <li><b>Download only.</b> The tiers use download speed alone. BEAD defines unserved as below 25/3 Mbps and underserved as below 100/20 Mbps, so the two lowest tiers (46 schools) and the 25 to 99 Mbps tiers (133 schools) roughly match those groups, but upload speed and latency were not checked.</li>
 <li><b>Why CPUC and not the FCC.</b> The FCC National Broadband Map has a newer release (availability as of December 31, 2025), but its downloads and area summaries could not be retrieved for this build. The CPUC layer is the state's official map and is built from provider subscription data, so it is a narrower measure than FCC availability: a block counts as gigabit only if someone there subscribes to a gigabit plan.</li>
@@ -884,10 +885,10 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>School source.</b> National Center for Education Statistics (NCES), EDGE Public School Characteristics 2024-25, published April 27, 2026. California has 10,351 schools in this file. School names, districts, addresses, enrollment, county and locale come from it. On October 28, 2026 every mapped school was re-checked against that layer by ID: all 853 positions agree to within 1 m, and names, districts, addresses and enrollment match exactly. The file includes 7 "Future" schools not yet open, 6 "New" schools and 2 with a changed boundary or agency; their cards say so under Status.</li>
 <li><b>How schools were picked.</b> School locations were drawn from the NCES service and compared with the speed layer. Schools in or near any block below 1 Gbps (1,342 records) were then pulled from the NCES service by location, and each was given its tier as in note 6. Schools that turned out to be in gigabit blocks were dropped from the dots.</li>
 <li><b>Area cards.</b> Tapping a shaded area outlines one connected patch of 400 m cells that share the same fastest download (8,824 patches statewide) and shows its size, the counties of the schools inside it, and the share of land within 5 km of the tapped point in each tier. Sizes are true ground area, corrected for the Web Mercator stretch. For gigabit patches it also shows the split between 2 Gbps or more, 1 to 1.99 Gbps and placeholder values. A school is listed in a patch when its 400 m cell (or a touching cell) falls in that patch, so a school can appear in a patch of a different color than its own tier (note 7).</li>
-<li><b>Getting around.</b> Tap a dot to spread it and zoom in. A county with one district or four or fewer schools goes straight to its schools, and a one-school district opens that school's card at once. Gathering a district zooms back out to its county, and gathering a county zooms back out to its third of the state (north, central or south). The target button under the zoom control shows the whole state. Every card has a Close button, and school and district cards have a button that zooms back out to the whole district or county. Escape closes any card. Keyboard: Tab moves through the controls and then every dot (the dot's label appears as it gets focus), Enter or Space opens it, and the arrow keys pan the map.</li>
-<li><b>Grouping.</b> Ringed dots are counties and plain dots are districts (NCES local education agency, so a single-school charter counts as its own district). Each school sits under its own county, so a district that crosses a county line, such as Coachella Valley Unified (Riverside and Imperial) or Stony Creek Joint Unified (Glenn and Colusa), shows up under each county it reaches; its card covers the whole district. The number is the count of schools shown, and the color is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
+<li><b>Getting around.</b> Tap a county (its shape or its number) to zoom in to its schools; a county with one school opens that school's card at once. Gathering a county zooms back out to its third of the state (north, central or south). The target button under the zoom control shows the whole state. Every card has a Close button. School cards have a button that shows the whole district with its own card, and district cards have one that zooms out to the county. Escape closes any card. Keyboard: Tab moves through the controls and then every dot (the dot's label appears as it gets focus), Enter or Space opens it, and the arrow keys pan the map.</li>
+<li><b>Grouping.</b> Schools are grouped by county. Districts are NCES local education agencies, so a single-school charter counts as its own district. Each school sits under its own county, so a district that crosses a county line, such as Coachella Valley Unified (Riverside and Imperial) or Stony Creek Joint Unified (Glenn and Colusa), shows up under each county it reaches; its card covers the whole district. A county's number is the count of schools shown, and its shading is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
 <li><b>Limitations.</b> Census blocks can be large in rural areas, and a school near a block edge may take its neighbor's speed. Reported speeds are advertised plan speeds, not measured speeds. A school's own connection (often a dedicated circuit through E-Rate or the CENIC K12 High Speed Network) can be much faster than what homes in the same block can buy, so this map shows neighborhood access, not the school's circuit. Enrollment of 0 or below means NCES did not report it.</li>
-<li><b>Basemaps and outline.</b> USGS The National Map tile services, USGS Imagery Topo (satellite imagery with roads, boundaries and labels) and USGS Topo, loaded live and public domain as U.S. government works. A single statewide image of each ships with the page underneath the tiles, so the map still reads if the tiles cannot load. The California outline is the generalized state boundary from the U.S. Census Bureau's TIGERweb service.</li>
+<li><b>Basemaps and outline.</b> USGS The National Map tile services, USGS Imagery Topo (satellite imagery with roads, boundaries and labels) and USGS Topo, loaded live and public domain as U.S. government works. A single statewide image of each ships with the page underneath the tiles, so the map still reads if the tiles cannot load. The California outline is the generalized state boundary, and the county shapes are the county boundaries simplified to about 400 m, both from the U.S. Census Bureau's TIGERweb service.</li>
 <li><b>Tools and AI use.</b> Built with Leaflet 1.9.4 and Python (NumPy, SciPy, Pillow). Code and layout generated with Claude (Anthropic), which also gathered and processed the data from the sources listed below. Data, placement and accuracy have not yet been reviewed by Travis Cody Smith.</li>
 </ol>
 
@@ -909,7 +910,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <p class="hang">California Public Utilities Commission. (2026). <i>California interactive broadband map: Fixed consumer downstream maximum, end of year 2024</i> [Data set; data as of December 31, 2024]. <a href="https://www.broadbandmap.ca.gov/" target="_blank" rel="noopener">https://www.broadbandmap.ca.gov/</a></p>
 <p class="hang">California Public Utilities Commission. (2026, April 1). <i>CPUC annual collected broadband data</i>. <a href="https://www.cpuc.ca.gov/industries-and-topics/internet-and-phone/broadband-mapping-program/cpuc-annual-collected-broadband-data" target="_blank" rel="noopener">https://www.cpuc.ca.gov/industries-and-topics/internet-and-phone/broadband-mapping-program/cpuc-annual-collected-broadband-data</a></p>
 <p class="hang">National Center for Education Statistics. (2026, April 27). <i>Public school characteristics 2024-25</i> [Data set]. U.S. Department of Education. <a href="https://nces.ed.gov/opengis/rest/services/K12_School_Locations/EDGE_ADMINDATA_PUBLICSCH_2425/MapServer/1" target="_blank" rel="noopener">https://nces.ed.gov/opengis/rest/services/K12_School_Locations/EDGE_ADMINDATA_PUBLICSCH_2425/MapServer/1</a></p>
-<p class="hang">U.S. Census Bureau. (2026). <i>TIGERweb: States</i> [Boundary service]. <a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer" target="_blank" rel="noopener">https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer</a></p>
+<p class="hang">U.S. Census Bureau. (2026). <i>TIGERweb: States and counties</i> [Boundary service]. <a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer" target="_blank" rel="noopener">https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer</a></p>
 <p class="hang">U.S. Geological Survey. (2024). <i>USGS imagery only</i> [Basemap service]. The National Map. <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer" target="_blank" rel="noopener">https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer</a></p>
 <p class="hang">U.S. Geological Survey. (2026). <i>USGS imagery topo</i> [Basemap service]. The National Map. <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer" target="_blank" rel="noopener">https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer</a></p>
 <p class="hang">U.S. Geological Survey. (2026). <i>USGS topo</i> [Basemap service]. The National Map. <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer" target="_blank" rel="noopener">https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer</a></p>
@@ -929,7 +930,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <script>
 (function(){
 "use strict";
-var VER={"data.json":"322fa847","areas.json":"fc8a421e","california.json":"f9ebf2bf","coverage.png":"283041bb","areas.png":"4e71004c","sat.jpg":"6e2a30b3","str.jpg":"f9f9ab81"};// per-file content stamps: tools/stamp.py rewrites them so a cached index.html never pairs with stale data, and a deploy only re-downloads what changed
+var VER={"data.json":"322fa847","counties.json":"2c2d8494","areas.json":"fc8a421e","california.json":"f9ebf2bf","coverage.png":"283041bb","areas.png":"4e71004c","sat.jpg":"6e2a30b3","str.jpg":"f9f9ab81"};// per-file content stamps: tools/stamp.py rewrites them so a cached index.html never pairs with stale data, and a deploy only re-downloads what changed
 function vq(f){return f+"?v="+(VER[f]||"0")}
 var REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 var HOVER=!(window.matchMedia&&window.matchMedia("(hover:none)").matches);
@@ -951,7 +952,7 @@ var LOCALE={"11":"City, large","12":"City, midsize","13":"City, small","21":"Sub
 var STATUS={"Future":"Future school, not yet open (NCES 2024-25 status)","New":"New in 2024-25 (NCES status)","Changed Boundary/Agency":"Changed boundary or agency in 2024-25 (NCES status)"};
 var METH=["Read at the school's own census block","Block at the school had no color; nearest blocks within 300 m used","No block with speed data within 300 m"];
 var lastSpread=0,lastSig="",pendingRender=false,collapseLegend=null,setTapG=null;
-var D,S=[],LEA={},map,overlay,ovCanvas,ovBase,base={},tiles={},layer,chipLayer,countyMode={},spread={},tapMode="S";
+var D,S=[],LEA={},CGJ=null,CLAB={},countyLayer=null,map,overlay,ovCanvas,ovBase,base={},tiles={},layer,chipLayer,countyMode={},tapMode="S";
 var NF=new Intl.NumberFormat("en-US");var fmt=function(n){return NF.format(n)};
 function plural(n,one,many){return n===1?one:(many||one+"s")}
 var TT={direction:"top",offset:[0,-10],opacity:1,className:"tt"};
@@ -1020,8 +1021,18 @@ function init(){
     L.geoJSON(gj,{pane:"outline",interactive:false,style:{color:"#000",weight:5,opacity:.35,fill:false}}).addTo(map);
     L.geoJSON(gj,{pane:"outline",interactive:false,style:{color:"#fff",weight:2,opacity:.9,fill:false}}).addTo(map);
   }).catch(function(){});
+  if(CGJ){
+    map.createPane("counties");map.getPane("counties").style.zIndex=420;
+    countyLayer=L.geoJSON(CGJ,{pane:"counties",renderer:L.svg({pane:"counties"}),bubblingMouseEvents:false,
+      style:{fill:false,color:"#ffffff",weight:0.8,opacity:0.55},
+      onEachFeature:function(f,l){
+        CLAB[f.properties.n]=f.properties.lab;
+        l.on("click",function(){var c=f.properties.n;if(tapMode==="A"||countyMode[c])return;openCounty(c)});
+        if(HOVER)l.bindTooltip(function(){return l._tipAll?countyTip(f.properties.n,l._tipAll,l._tipNd):esc(f.properties.n)+' County<br><span class="tt-hint">No schools below gigabit shown</span>'},{sticky:true,className:"tt",direction:"top",offset:[0,-12],opacity:1});
+      }}).addTo(map);
+  }
   L.control.scale({imperial:true,metric:true,position:"bottomleft"}).addTo(map);
-  var Home=L.Control.extend({onAdd:function(){var d=L.DomUtil.create("div","leaflet-bar leaflet-control-home");var a=L.DomUtil.create("a","",d);a.href="#";a.title="Zoom back out to the whole state";a.setAttribute("aria-label","Zoom back out to the whole state");a.innerHTML='<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false" style="display:block;margin:6px auto;fill:none;stroke:currentColor;stroke-width:1.8"><circle cx="10" cy="10" r="5.5"/><path d="M10 1v4M10 15v4M1 10h4M15 10h4"/></svg>';L.DomEvent.on(a,"click",function(e){L.DomEvent.preventDefault(e);L.DomEvent.stopPropagation(e);map.closePopup();countyMode={};spread={};render();map.flyToBounds(allBounds(),Object.assign(fitPad(),{duration:0.8,animate:!REDUCED}))});L.DomEvent.disableClickPropagation(d);return d}});
+  var Home=L.Control.extend({onAdd:function(){var d=L.DomUtil.create("div","leaflet-bar leaflet-control-home");var a=L.DomUtil.create("a","",d);a.href="#";a.title="Zoom back out to the whole state";a.setAttribute("aria-label","Zoom back out to the whole state");a.innerHTML='<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false" style="display:block;margin:6px auto;fill:none;stroke:currentColor;stroke-width:1.8"><circle cx="10" cy="10" r="5.5"/><path d="M10 1v4M10 15v4M1 10h4M15 10h4"/></svg>';L.DomEvent.on(a,"click",function(e){L.DomEvent.preventDefault(e);L.DomEvent.stopPropagation(e);map.closePopup();countyMode={};render();map.flyToBounds(allBounds(),Object.assign(fitPad(),{duration:0.8,animate:!REDUCED}))});L.DomEvent.disableClickPropagation(d);return d}});
   new Home({position:"topleft"}).addTo(map);
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!map._popup)return;if(e.key==="Escape"&&document.getElementById("about").hidden)map.closePopup()});
   // the title card and legend go before the map panes so keyboard users reach the controls before the 57 county dots
@@ -1107,13 +1118,15 @@ function centroid(arr){var a=0,b=0;arr.forEach(function(s){a+=s[9];b+=s[10]});re
 function topOf(arr){var c=centroid(arr),t=-90;arr.forEach(function(s){if(s[9]>t)t=s[9]});return[t,c[1]]}
 function bottomOf(arr){var c=centroid(arr),t=90;arr.forEach(function(s){if(s[9]<t)t=s[9]});return[t,c[1]]}
 function dominant(arr){var c=TIERS.map(function(){return 0});arr.forEach(function(s){c[s[11]]++});var m=-1,k=0;for(var i=0;i<NT;i++)if(c[i]>m){m=c[i];k=i}return{tier:k,counts:c}}
-function dotSize(n,cls){return Math.round(Math.min(64,(cls==="county"?24:18)+Math.sqrt(n)*(cls==="county"?2.6:3.2)))}
-function dotIcon(n,color,cls,label,shift){
-  var d=dotSize(n,cls),dx=shift?shift[0]:0,dy=shift?shift[1]:0;
-  var fs=n>=1000?11:(n>=100?12:13);
-  return L.divIcon({className:"dotm",iconSize:[d,d],iconAnchor:[d/2-dx,d/2-dy],tooltipAnchor:[dx,dy],
-    html:'<div class="dot '+cls+'" style="width:'+d+'px;height:'+d+'px;background:'+color+';color:'+inkOn(color)+';font-size:'+fs+'px" aria-hidden="true">'+fmt(n)+'</div>'});
+// small count label for a gathered county, placed inside the county shape
+function labText(n){return fmt(n)}
+function labW(n){return 12+7*labText(n).length}
+function labIcon(n,shift){
+  var w=labW(n),h=20,dx=shift?shift[0]:0,dy=shift?shift[1]:0;
+  return L.divIcon({className:"dotm",iconSize:[w,h],iconAnchor:[w/2-dx,h/2-dy],tooltipAnchor:[dx,dy-8],
+    html:'<div class="clab" style="width:'+w+'px" aria-hidden="true">'+labText(n)+'</div>'});
 }
+function labPt(c){return CLAB[c]||null}
 function chip(latlng,name,fnGather,fnCard){
   var html='<span class="chip'+(fnCard?'':' county')+'"><span class="ck">'+(fnCard?'District':'County')+'</span>'+(fnCard?'<span class="cn" role="button" title="Open the card for '+esc(name)+'">'+esc(name)+'</span>':'<span>'+esc(name)+'</span>')+'<span class="cg" role="button" title="Gather '+esc(name)+'">gather</span></span>';
   var m=L.marker(latlng,{icon:L.divIcon({className:"",iconSize:[0,0],html:html}),zIndexOffset:900,keyboard:false,interactive:true});
@@ -1160,16 +1173,16 @@ function spreadApart(items,iters,cap){
     if(!moved)break;
   }
 }
-// Nudge county and district dots apart when they overlap at the current zoom (Los Angeles, Orange, San Bernardino on a phone; a big district under one-school dots), so every dot keeps a tappable centre.
+// Nudge county labels apart when they overlap at the current zoom (the small Bay Area counties), so every label stays readable and tappable.
 function groupShifts(byC){
   var items=[];
   Object.keys(byC).forEach(function(c){
-    var dists=byC[c];
-    if(!countyMode[c]){var all=[];Object.keys(dists).forEach(function(k){all=all.concat(dists[k])});var p=map.latLngToLayerPoint(centroid(all));items.push({key:"c"+c,x:p.x,y:p.y,x0:p.x,y0:p.y,r:dotSize(all.length,"county")/2});return}
-    Object.keys(dists).forEach(function(k){if(spread[k])return;var arr=dists[k],q=map.latLngToLayerPoint(centroid(arr));items.push({key:"d"+k,x:q.x,y:q.y,x0:q.x,y0:q.y,r:dotSize(arr.length,"district")/2})});
+    if(countyMode[c])return;
+    var all=[];Object.keys(byC[c]).forEach(function(k){all=all.concat(byC[c][k])});
+    var p=map.latLngToLayerPoint(labPt(c)||centroid(all));items.push({key:"c"+c,x:p.x,y:p.y,x0:p.x,y0:p.y,r:Math.max(11,labW(all.length)/2)});
   });
-  spreadApart(items,40);
-  var out={c:{},d:{}};items.forEach(function(a){var sx=Math.round(a.x-a.x0),sy=Math.round(a.y-a.y0);if(sx||sy)out[a.key.charAt(0)][a.key.slice(1)]=[sx,sy]});return out;
+  spreadApart(items,40,30);
+  var out={c:{}};items.forEach(function(a){var sx=Math.round(a.x-a.x0),sy=Math.round(a.y-a.y0);if(sx||sy)out.c[a.key.slice(1)]=[sx,sy]});return out;
 }
 function clusterDots(dots){
   dots.forEach(function(d){d.p=map.latLngToLayerPoint([d.s[9],d.s[10]])});
@@ -1196,7 +1209,7 @@ function layoutSchools(dots){
   return dots;
 }
 function renderSig(shifts,dots){return JSON.stringify(shifts)+"|"+dots.map(function(d){return d.s[0]+":"+d.dx+","+d.dy}).join(";")}
-function currentSig(){var byC=groups(),dots=[];Object.keys(byC).forEach(function(c){if(!countyMode[c])return;Object.keys(byC[c]).forEach(function(k){if(spread[k])byC[c][k].forEach(function(s){dots.push({s:s})})})});layoutSchools(dots);return renderSig(groupShifts(byC),dots)}
+function currentSig(){var byC=groups(),dots=[];Object.keys(byC).forEach(function(c){if(!countyMode[c])return;Object.keys(byC[c]).forEach(function(k){byC[c][k].forEach(function(s){dots.push({s:s})})})});layoutSchools(dots);return renderSig(groupShifts(byC),dots)}
 function render(){
   layer.clearLayers();chipLayer.clearLayers();
   var byC=groups(),nS=0,nD=0,nC=0,enr=0,nNo=0,seenD={},shifts=groupShifts(byC),dots=[];
@@ -1204,42 +1217,17 @@ function render(){
     var dists=byC[c],all=[];Object.keys(dists).forEach(function(k){all=all.concat(dists[k])});
     nC++;Object.keys(dists).forEach(function(k){seenD[k]=1});nS+=all.length;all.forEach(function(s){if(s[6]>0)enr+=s[6];if(s[11]===7)nNo++});
     if(!countyMode[c]){
-      var dm=dominant(all),cen=centroid(all);
       var nd=Object.keys(dists).length;
-      var m=L.marker(cen,{icon:dotIcon(all.length,TIERS[dm.tier].color,"county","",shifts.c[c]),riseOnHover:true});label(m,c+" County: "+fmt(all.length)+" "+plural(all.length,"school")+" in "+nd+" "+plural(nd,"district"));
-      if(HOVER)m.bindTooltip('<b>'+esc(c)+' County</b><br>'+fmt(all.length)+' '+plural(all.length,"school")+' in '+nd+' '+plural(nd,"district")+'<br><span class="tt-hint">'+(nd===1||all.length<=4?(all.length===1?TAPV+' to open the school':TAPV+' to show its schools'):TAPV+' to show its districts')+'</span>',TT);
-      m.on("click",function(){
-        if(Date.now()-lastSpread<450)return;lastSpread=Date.now();countyMode[c]=1;map.closePopup();
-        var small=nd===1||all.length<=4;
-        if(small)Object.keys(dists).forEach(function(k){spread[k]=1});
-        render();
-        var b=L.latLngBounds(all.map(function(s){return[s[9],s[10]]}));
-        if(small&&all.length===1){var s1=all[0];afterMove(function(){flyTo(b.pad(0.3),11)},function(){L.popup({maxWidth:320,offset:[0,-8],side:true}).setLatLng([s1[9],s1[10]]).setContent(schoolCard(s1)).openOn(map)})}
-        else flyTo(b.pad(small?0.3:0.15),small?11:10);
-      });
+      var m=L.marker(labPt(c)||centroid(all),{icon:labIcon(all.length,shifts.c[c]),riseOnHover:true});label(m,c+" County: "+fmt(all.length)+" "+plural(all.length,"school")+" in "+nd+" "+plural(nd,"district"));
+      if(HOVER)m.bindTooltip(countyTip(c,all,nd),TT);
+      m.on("click",function(){openCounty(c)});
       layer.addLayer(m);
     }else{
-      var cen2=centroid(all);
-      chipLayer.addLayer(chip(bottomOf(all),c,function(){countyMode[c]=0;Object.keys(dists).forEach(function(k){delete spread[k]});map.closePopup();render();map.flyToBounds(regionBounds(cen2[0]),Object.assign(fitPad(),{duration:0.8,animate:!REDUCED}));}));
-      Object.keys(dists).forEach(function(k){
-        var arr=dists[k],dm=dominant(arr),cen=centroid(arr),nm=(L_name(k));
-        if(spread[k]){
-          chipLayer.addLayer(chip(bottomOf(arr),nm,function(){delete spread[k];map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(k,arr)).openOn(map);}));
-          arr.forEach(function(s){dots.push({s:s,k:k,nm:nm,c:c})});
-        }else{
-          var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district","",shifts.d[k]),riseOnHover:true});label(m,nm+": "+fmt(arr.length)+" "+plural(arr.length,"school")+", "+c+" County");
-          if(HOVER)m.bindTooltip('<b>'+esc(nm)+'</b><br>'+fmt(arr.length)+' '+plural(arr.length,"school")+', '+esc(c)+' County<br><span class="tt-hint">'+(arr.length===1?TAPV+' to open the school':TAPV+' to show its schools')+'</span>',TT);
-          m.on("click",function(){
-            if(Date.now()-lastSpread<450)return;lastSpread=Date.now();spread[k]=1;map.closePopup();render();
-            var b=L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.15);
-            if(arr.length===1){var s1=arr[0];afterMove(function(){flyTo(b,11)},function(){L.popup({maxWidth:320,offset:[0,-8],side:true}).setLatLng([s1[9],s1[10]]).setContent(schoolCard(s1)).openOn(map)})}
-            else flyTo(b,13);
-          });
-          layer.addLayer(m);
-        }
-      });
+      chipLayer.addLayer(chip(bottomOf(all),c,function(){gatherCounty(c)}));
+      Object.keys(dists).forEach(function(k){var nm=L_name(k);dists[k].forEach(function(s){dots.push({s:s,k:k,nm:nm,c:c})})});
     }
   });
+  styleCounties(byC);
   // school dots: schools that would overlap at this zoom (one campus, or neighbours a few hundred metres apart) fan out in a ring, whatever their district
   layoutSchools(dots);
   dots.forEach(function(d){
@@ -1254,6 +1242,30 @@ function render(){
   nD=Object.keys(seenD).length;
   document.getElementById("stat").innerHTML='Showing <b>'+fmt(nS)+'</b> schools'+(nNo?' (<b>'+fmt(nS-nNo)+'</b> below 1 Gbps, <b>'+fmt(nNo)+'</b> with no speed data)':'')+' in <b>'+fmt(nD)+'</b> '+plural(nD,"district")+' across <b>'+fmt(nC)+'</b> '+plural(nC,"county","counties")+(enr?', <b>'+fmt(enr)+'</b> students.':'.')+' '+D.statLine;
   updateCounts();fitControls();
+}
+function countyTip(c,all,nd){return '<b>'+esc(c)+' County</b><br>'+fmt(all.length)+' '+plural(all.length,"school")+' in '+nd+' '+plural(nd,"district")+'<br><span class="tt-hint">'+(all.length===1?TAPV+' to open the school':TAPV+' to show its schools')+'</span>'}
+function openCounty(c){
+  var all=S.filter(function(s){return county(s)===c&&visible(s)});if(!all.length)return;
+  if(Date.now()-lastSpread<450)return;lastSpread=Date.now();
+  countyMode[c]=1;map.closePopup();render();
+  var b=L.latLngBounds(all.map(function(s){return[s[9],s[10]]}));
+  if(all.length===1){var s1=all[0];afterMove(function(){flyTo(b.pad(0.3),11)},function(){L.popup({maxWidth:320,offset:[0,-8],side:true}).setLatLng([s1[9],s1[10]]).setContent(schoolCard(s1)).openOn(map)})}
+  else flyTo(b.pad(0.15),12);
+}
+function gatherCounty(c){
+  var all=S.filter(function(s){return county(s)===c}),cen=centroid(all);
+  countyMode[c]=0;map.closePopup();render();map.flyToBounds(regionBounds(cen[0]),Object.assign(fitPad(),{duration:0.8,animate:!REDUCED}));
+}
+function styleCounties(byC){
+  if(!countyLayer)return;
+  countyLayer.eachLayer(function(l){
+    var c=l.feature.properties.n,g=byC[c];
+    if(!g){l.setStyle({fill:false,color:"#ffffff",weight:0.8,opacity:0.55});l.options.interactive=false;return}
+    var all=[];Object.keys(g).forEach(function(k){all=all.concat(g[k])});
+    if(countyMode[c])l.setStyle({fill:false,color:"#ffffff",weight:1.6,opacity:0.9});
+    else l.setStyle({fill:true,fillColor:TIERS[dominant(all).tier].color,fillOpacity:0.55,color:"#ffffff",weight:1,opacity:0.9});
+    l._tipAll=all;l._tipNd=Object.keys(g).length;
+  });
 }
 function L_name(k){return (LEA[k]&&LEA[k][0])||("District "+k)}
 var EDGEQ="https://nces.ed.gov/opengis/rest/services/K12_School_Locations/EDGE_ADMINDATA_PUBLICSCH_2425/MapServer/1/query?outFields=*&returnGeometry=false&f=html&where=";
@@ -1302,9 +1314,8 @@ function updateCounts(){var c=TIERS.map(function(){return 0});S.forEach(function
 
 function setMode(m){
   var cs={};S.forEach(function(s){cs[county(s)]=1});
-  countyMode={};spread={};
+  countyMode={};
   if(m>0)Object.keys(cs).forEach(function(c){countyMode[c]=1});
-  if(m>1)S.forEach(function(s){spread[s[2]]=1});
   map.closePopup();render();
 }
 
@@ -1329,9 +1340,9 @@ function afterMove(fly,fn){var done=false;fly();map.once("moveend",function(){if
 function go(h){
   if(collapseLegend)collapseLegend();
   if(h.t==="c"){map.closePopup();countyMode[h.c]=1;render();var a=S.filter(function(s){return county(s)===h.c&&visible(s)});if(a.length)flyTo(L.latLngBounds(a.map(function(s){return[s[9],s[10]]})).pad(0.15),10);return}
-  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;if(arr.length===1){go({t:"s",s:arr[0]});return}arr.forEach(function(s){countyMode[county(s)]=1});spread[h.k]=1;render();afterMove(function(){flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12)},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});return}
+  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;if(arr.length===1){go({t:"s",s:arr[0]});return}arr.forEach(function(s){countyMode[county(s)]=1});render();afterMove(function(){flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12)},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});return}
   var s=h.s;if(!visible(s)){TIERS[s[11]].on=true;document.getElementById("tier"+s[11]).checked=true;paintOverlay()}
-  countyMode[county(s)]=1;spread[s[2]]=1;render();afterMove(function(){map.flyTo([s[9],s[10]],12,{duration:0.6})},function(){L.popup({maxWidth:320,offset:[0,-8],side:true}).setLatLng([s[9],s[10]]).setContent(schoolCard(s)).openOn(map)});
+  countyMode[county(s)]=1;render();afterMove(function(){map.flyTo([s[9],s[10]],12,{duration:0.6})},function(){L.popup({maxWidth:320,offset:[0,-8],side:true}).setLatLng([s[9],s[10]]).setContent(schoolCard(s)).openOn(map)});
 }
 
 // ---- tap cards for shaded speed areas ----
@@ -1381,7 +1392,7 @@ function loadAreas(){
     if(t.closest("[data-close]")){map.closePopup();return}
     var dl=t.closest("[data-list]");if(dl){var box=dl.closest(".pc").querySelector(".dlist");var open=box.hidden;box.hidden=!open;dl.setAttribute("aria-expanded",String(open));dl.querySelector(".hint").textContent=open?tapv+" to hide":tapv+" to list";var pp=map._popup;if(pp&&pp._updateLayout){pp._updateLayout();pp._updatePosition();pp._adjustPan()}return}
     var ds=t.closest("[data-school]");if(ds){var id=ds.getAttribute("data-school"),sch=S.filter(function(x){return x[0]===id})[0];if(sch){map.closePopup();go({t:"s",s:sch})}return}
-    var dd=t.closest("[data-district]");if(dd){var k=dd.getAttribute("data-district"),arr=S.filter(function(x){return x[2]===k&&visible(x)});map.closePopup();if(arr.length)flyTo(L.latLngBounds(arr.map(function(x){return[x[9],x[10]]})).pad(0.15),arr.length===1?11:13);return}
+    var dd=t.closest("[data-district]");if(dd){map.closePopup();go({t:"d",k:dd.getAttribute("data-district")});return}
     var dc=t.closest("[data-county]");if(dc){var c=dc.getAttribute("data-county"),a=S.filter(function(x){return x[7]===c&&visible(x)});map.closePopup();if(a.length)flyTo(L.latLngBounds(a.map(function(x){return[x[9],x[10]]})).pad(0.15),10);return}
   });
   map.on("popupopen",function(e){if(window.innerWidth<=760)map.getContainer().classList.add("card-open");});
@@ -1487,8 +1498,7 @@ function wire(){
   function setTap(m){tapMode=m;if(m!=="S"&&ensureAreas)ensureAreas().catch(function(){});Object.keys(tb).forEach(function(k){tb[k].setAttribute("aria-pressed",String(k===m))});map.getContainer().classList.toggle("areas-only",m==="A");map.getContainer().classList.toggle("areas",m!=="S");map.closePopup();}
   tb.S.onclick=function(){setTap("S")};tb.A.onclick=function(){setTap("A")};tb.B.onclick=function(){setTap("B")};
   document.getElementById("gatherAll").onclick=function(){setMode(0)};
-  document.getElementById("districtsAll").onclick=function(){setMode(1)};
-  document.getElementById("spreadAll").onclick=function(){setMode(2)};
+  document.getElementById("spreadAll").onclick=function(){setMode(1)};
   var ab=document.getElementById("about");
   var opener=null;
   function openAbout(){opener=document.activeElement;ab.hidden=false;var mp=document.getElementById("map");if(mp)mp.setAttribute("inert","");document.getElementById("closeAbout").focus()}
@@ -1514,7 +1524,8 @@ function wire(){
   var cp=document.getElementById("copyApa");if(cp)cp.onclick=function(){var t=document.getElementById("apa").textContent;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){cp.textContent="Copied";setTimeout(function(){cp.textContent="Copy citation"},1500)},function(){selectText()});else selectText();function selectText(){var r=document.createRange();r.selectNodeContents(document.getElementById("apa"));var s=window.getSelection();s.removeAllRanges();s.addRange(r)}};
 }
 
-fetch(vq("data.json")).then(function(r){return r.json()}).then(function(d){
+Promise.all([fetch(vq("data.json")).then(function(r){return r.json()}),fetch(vq("counties.json")).then(function(r){return r.ok?r.json():null}).catch(function(){return null})]).then(function(res){
+  var d=res[0];CGJ=res[1];
   D=d;S=d.S;LEA=d.L;TIER_RGB=TIERS.map(function(t){return hexrgb(t.color)});
   wire();init();
 }).catch(function(e){var l=document.getElementById("loading");l.hidden=false;l.textContent="The map data did not load. ";var b=document.createElement("button");b.type="button";b.className="btn";b.textContent="Reload";b.onclick=function(){location.reload()};l.appendChild(b)});
