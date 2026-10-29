@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23d4502a'/%3E%3Ccircle cx='8' cy='8' r='3' fill='%23fff'/%3E%3C/svg%3E"><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://basemap.nationalmap.gov"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}html,body{overscroll-behavior:none}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>California Public Schools Without Gigabit Broadband</title></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23d4502a'/%3E%3Ccircle cx='8' cy='8' r='3' fill='%23fff'/%3E%3C/svg%3E"><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://basemap.nationalmap.gov"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}html,body{overscroll-behavior:none}.leaflet-marker-icon:focus-visible{outline:3px solid #fff;outline-offset:1px;box-shadow:0 0 0 6px rgba(212,80,42,.95);border-radius:50%}.leaflet-popup-content:focus{outline:none}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>California Public Schools Without Gigabit Broadband</title></head><body>
 <style>
 /* required styles */
 
@@ -689,7 +689,7 @@ button,input,select{font-family:var(--serif);font-size:14px;color:var(--ink)}
 #titlecard .head{display:flex;justify-content:space-between;align-items:center;gap:10px}
 #titlecard h1{font-size:19px;margin:0;font-weight:700;text-wrap:balance;line-height:1.2}
 #tcMin{padding:0 9px;font-size:18px;line-height:24px;min-width:30px}
-#titlecard.min .rows{display:none}
+#titlecard.min .rows{display:none}.pc .alist{max-height:32vh;overflow:auto;overscroll-behavior:contain}
 #titlecard.min h1{font-size:16px}
 #titlecard .sub{margin:0;color:var(--muted);font-size:13.5px;line-height:1.35}
 #titlecard .stat{margin:6px 0 0;font-size:14px;line-height:1.35}
@@ -704,7 +704,7 @@ button,input,select{font-family:var(--serif);font-size:14px;color:var(--ink)}
 .btn{background:var(--chip);border:1px solid var(--rule);border-radius:6px;padding:4px 10px;cursor:pointer}
 @media (hover:hover){.btn:hover,.seg button:hover{filter:brightness(.96)}}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-#legend{position:absolute;z-index:800;bottom:calc(30px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:300px;max-height:min(52vh,calc(100% - 80px));overflow:auto;padding:10px 12px}
+#legend{position:absolute;z-index:800;bottom:calc(30px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:300px;max-height:min(66vh,calc(100% - 80px));overflow:auto;padding:10px 12px}
 #legend h2{font-size:17px;margin:0;font-weight:700}
 #legend.min .body{display:none}
 #legend .head{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -735,7 +735,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .leaflet-tooltip-top.tt:before{border-top-color:#fff}
 .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#1d1c19;box-shadow:0 3px 14px rgba(0,0,0,.35)}
 .leaflet-popup-content-wrapper{border-radius:6px}
-.leaflet-popup-content{margin:12px 14px;font-family:var(--serif);font-size:15px;line-height:1.4;min-width:240px;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);overflow:auto;overscroll-behavior:contain}
+.leaflet-popup-content{margin:12px 14px;font-family:var(--serif);font-size:15px;line-height:1.4;min-width:240px;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);max-height:var(--cardmax,calc(100dvh - 150px));overflow:auto;overscroll-behavior:contain}
 .leaflet-container a.leaflet-popup-close-button{color:#5f5b50}
 .pc{color:#1d1c19}
 .pc a{color:#1f4e79}
@@ -763,10 +763,10 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .alink{all:unset;cursor:pointer;display:block;padding:2px 4px;border-radius:3px;color:#1f4e79;font-size:.88rem}
 .alink small{color:#5f5b50}
 .alink:focus-visible{background:#efece2}@media (hover:hover){.alink:hover{background:#efece2}}
-@media (max-width:760px){.leaflet-popup-content{font-size:13.5px;margin:10px 12px;max-height:55vh}.pc h3{font-size:1rem}.pc .kv b{font-size:1.1rem}}
+@media (max-width:760px){.leaflet-popup-content{font-size:13.5px;margin:10px 12px;max-height:55vh;max-height:var(--cardmax,55vh)}.pc h3{font-size:1rem}.pc .kv b{font-size:1.1rem}}
 .hl{pointer-events:none;image-rendering:pixelated}
 .pc .areabtn{margin:8px 0 0}
-#credit{position:absolute;z-index:700;left:calc(8px + env(safe-area-inset-left,0px));bottom:calc(54px + env(safe-area-inset-bottom,0px));font-size:11.5px;padding:3px 7px;max-width:60vw}
+#credit{pointer-events:none}#credit a{pointer-events:auto}@media (max-height:650px){#credit{font-size:10px;max-width:46vw}}@media (max-height:520px){#credit{display:none}}#credit{position:absolute;z-index:700;left:calc(8px + env(safe-area-inset-left,0px));bottom:calc(54px + env(safe-area-inset-bottom,0px));font-size:11.5px;padding:3px 7px;max-width:60vw}
 #north{position:absolute;z-index:700;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(90px + env(safe-area-inset-bottom,0px));width:28px;text-align:center;font-size:12px;font-weight:700;padding:3px 0}
 .leaflet-control-scale{margin-bottom:calc(6px + env(safe-area-inset-bottom,0px))!important}
 .leaflet-control-home a{font-size:20px;line-height:30px}
@@ -785,7 +785,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 #about table{border-collapse:collapse;font-size:14px;margin:6px 0}
 #about th,#about td{border:1px solid var(--rule);padding:4px 8px;text-align:left}
 #about th{font-weight:700;font-style:italic}
-#about .x{float:right}
+#about .x{float:right;position:sticky;top:0;z-index:2}
 .loading{position:fixed;z-index:1300;left:50%;top:50%;transform:translate(-50%,-50%);padding:10px 16px}
 @media (max-width:760px){
   #titlecard{left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px));top:calc(8px + env(safe-area-inset-top,0px));max-width:none;padding:8px 10px}
@@ -822,7 +822,12 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <div id="legend" class="card">
   <div class="head"><h2>Legend</h2><button class="btn" id="legToggle" aria-expanded="true">Hide</button></div>
   <div class="body">
-    <details open>
+    <details>
+      <summary>Find a district or school</summary>
+      <input id="search" type="search" placeholder="District, school or county" autocomplete="off" aria-label="Find a district or school">
+      <ul id="hits"></ul>
+    </details>
+      <details open>
       <summary>Fastest subscribed download</summary>
       <div id="tiers"></div>
       <label class="tier" style="grid-template-columns:18px 1fr"><input type="checkbox" id="showArea" checked><span>Shade coverage areas</span></label>
@@ -837,11 +842,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
       </div>
       <p class="note">Ringed dots are counties, plain dots are districts, small dots are schools. The number is how many schools in the group match the speeds checked above, and the color is the most common speed among them. Tap a dot to spread it and zoom in (with "Tap opens" set to Schools or Both). The label below a spread district opens its card (tap the name) or gathers it (tap gather); a county label only gathers. Schools with gigabit at their block are counted in the legend but not drawn.</p>
     </details>
-    <details>
-      <summary>Find a district or school</summary>
-      <input id="search" type="search" placeholder="District, school or county" autocomplete="off" aria-label="Find a district or school">
-      <ul id="hits"></ul>
-    </details>
+    
     <p class="note">Map by Travis Cody Smith, <span id="made"></span>. Web Mercator (EPSG:3857).</p>
     <p class="note">Every link on this map was checked on October 28, 2026. <a href="#" id="auditWhat">What's this?</a></p>
   </div>
@@ -944,6 +945,7 @@ var NT=TIERS.length;
 var LOCALE={"11":"City, large","12":"City, midsize","13":"City, small","21":"Suburb, large","22":"Suburb, midsize","23":"Suburb, small","31":"Town, fringe","32":"Town, distant","33":"Town, remote","41":"Rural, fringe","42":"Rural, distant","43":"Rural, remote"};
 var STATUS={"Future":"Future school, not yet open (NCES 2024-25 status)","New":"New in 2024-25 (NCES status)","Changed Boundary/Agency":"Changed boundary or agency in 2024-25 (NCES status)"};
 var METH=["Read at the school's own census block","Block at the school had no color; nearest blocks within 300 m used","No block with speed data within 300 m"];
+var lastSpread=0,lastSig="",pendingRender=false;
 var D,S=[],LEA={},map,overlay,ovCanvas,ovBase,base={},tiles={},layer,chipLayer,countyMode={},spread={},tapMode="S";
 var fmt=function(n){return n.toLocaleString("en-US")};
 function plural(n,one,many){return n===1?one:(many||one+"s")}
@@ -973,6 +975,10 @@ function init(){
   function healDrag(){var dr=map.dragging&&map.dragging._draggable;if(dr&&(dr._moving||dr._moved)){if(dr.finishDrag)dr.finishDrag();dr._moved=false;dr._moving=false;L.Draggable._dragging=false;document.body.classList.remove("leaflet-dragging")}}
   document.addEventListener("mousemove",function(e){if(e.buttons===0)healDrag()},true);
   window.addEventListener("blur",healDrag);
+  // a card opened from the keyboard takes focus, and gives it back to its dot when it closes
+  var kbd=false;document.addEventListener("keydown",function(){kbd=true},true);document.addEventListener("pointerdown",function(){kbd=false},true);
+  map.on("popupopen",function(e){if(!kbd||!e.popup.getElement)return;var c=e.popup.getElement();if(!c)return;var w=c.querySelector(".leaflet-popup-content");if(w){w.setAttribute("tabindex","-1");w.focus({preventScroll:true})}e.popup._kbdSrc=e.popup._source&&e.popup._source.getElement?e.popup._source.getElement():null});
+  map.on("popupclose",function(e){var el=e.popup&&e.popup._kbdSrc;if(el&&document.contains(el))el.focus({preventScroll:true})});
   // keyboard: Enter or Space on a focused dot does what a click does (Leaflet itself only opens a bound card on Enter)
   map.getContainer().addEventListener("keydown",function(ev){
     if(ev.key!=="Enter"&&ev.key!==" ")return;var t=ev.target;
@@ -998,7 +1004,7 @@ function init(){
     L.geoJSON(gj,{pane:"outline",interactive:false,style:{color:"#fff",weight:2,opacity:.9,fill:false}}).addTo(map);
   }).catch(function(){});
   L.control.scale({imperial:true,metric:true,position:"bottomleft"}).addTo(map);
-  var Home=L.Control.extend({onAdd:function(){var d=L.DomUtil.create("div","leaflet-bar leaflet-control-home");var a=L.DomUtil.create("a","",d);a.href="#";a.title="Zoom back out to the whole state";a.setAttribute("aria-label","Zoom back out to the whole state");a.innerHTML="&#8982;";L.DomEvent.on(a,"click",function(e){L.DomEvent.preventDefault(e);L.DomEvent.stopPropagation(e);map.closePopup();map.flyToBounds(allBounds(),Object.assign(fitPad(),{duration:0.8}))});L.DomEvent.disableClickPropagation(d);return d}});
+  var Home=L.Control.extend({onAdd:function(){var d=L.DomUtil.create("div","leaflet-bar leaflet-control-home");var a=L.DomUtil.create("a","",d);a.href="#";a.title="Zoom back out to the whole state";a.setAttribute("aria-label","Zoom back out to the whole state");a.innerHTML="&#8982;";L.DomEvent.on(a,"click",function(e){L.DomEvent.preventDefault(e);L.DomEvent.stopPropagation(e);map.closePopup();countyMode={};spread={};render();map.flyToBounds(allBounds(),Object.assign(fitPad(),{duration:0.8,animate:!REDUCED}))});L.DomEvent.disableClickPropagation(d);return d}});
   new Home({position:"topleft"}).addTo(map);
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!map._popup)return;if(e.key==="Escape"&&document.getElementById("about").hidden)map.closePopup()});
   // the title card and legend go before the map panes so keyboard users reach the controls before the 57 county dots
@@ -1008,7 +1014,7 @@ function init(){
   // coverage overlay drawn into a canvas so tiers can be switched on and off.
   // With OffscreenCanvas the 10-million-pixel work (decode, tier lookup, each recolor) runs in a worker that owns the
   // canvas, so the page never blocks; older browsers fall back to doing it on the main thread.
-  function ovFail(){var st=document.getElementById("stat");st.insertAdjacentHTML("beforeend"," Coverage shading did not load; reload to try again.")}
+  function ovFail(){var st=document.getElementById("stat");st.insertAdjacentHTML("beforeend"," Coverage shading did not load; reload to try again.");flash("Coverage shading did not load; reload to try again.")}
   ovCanvas=document.createElement("canvas");
   if(OFFSCREEN){
     fetch(D.img.ov+V).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(blob){
@@ -1039,7 +1045,9 @@ function init(){
   chipLayer=L.layerGroup().addTo(map);
   buildLegend();
   render();
-  map.on("zoomend",function(){if(!Object.keys(countyMode).some(function(k){return countyMode[k]}))render()});
+  // after a zoom, redraw only if some dots now overlap differently (never while a card is open; then right after it closes)
+  map.on("zoomend",function(){if(currentSig()===lastSig)return;if(map._popup){pendingRender=true;return}render()});
+  map.on("popupclose",function(){if(pendingRender){pendingRender=false;setTimeout(function(){if(!map._popup&&currentSig()!==lastSig)render()},0)}});
   document.getElementById("loading").hidden=true;
 }
 
@@ -1099,7 +1107,7 @@ function regionBounds(lat){var band=lat>=38.3?2:(lat>=35.3?1:0);var pts=S.filter
 function allBounds(){return L.latLngBounds(S.map(function(s){return[s[9],s[10]]})).pad(0.04)}
 function fitPad(){
   var tc=document.getElementById("titlecard"),lg=document.getElementById("legend"),narrow=window.innerWidth<=760;
-  var H=map.getSize().y,W=map.getSize().x,top=Math.min(tc.offsetTop+tc.offsetHeight+40,H*0.35),bot=Math.min((narrow?lg.offsetHeight:0)+30,H*0.35);
+  var H=map.getSize().y,W=map.getSize().x,top=Math.min(tc.offsetTop+tc.offsetHeight+40,H*0.35),bot=Math.min((narrow?lg.offsetHeight:0)+(narrow?30:60),H*0.35);
   return {paddingTopLeft:L.point(Math.min(60,W*0.2),top),paddingBottomRight:narrow?L.point(20,bot):L.point(Math.min(lg.offsetWidth+40,W*0.4),bot)};
 }
 function flyTo(b,maxZoom){var o=fitPad();o.maxZoom=maxZoom;o.duration=0.6;if(REDUCED)o.animate=false;map.flyToBounds(b,o)}
@@ -1114,6 +1122,7 @@ function fitControls(){
   var po=L.Popup.prototype.options;
   po.autoPanPaddingTopLeft=L.point(10,tc.offsetTop+tc.offsetHeight+12);
   po.autoPanPaddingBottomRight=narrow?L.point(10,lg.offsetHeight+12):L.point(lg.offsetWidth+24,10);
+  map.getContainer().style.setProperty("--cardmax",Math.max(150,map.getSize().y-(narrow?0:tc.offsetTop+tc.offsetHeight)-(narrow?lg.offsetHeight+70:70))+"px");
 }
 // Nudge county dots apart when they overlap at the current zoom (Los Angeles, Orange, San Bernardino on a phone), so every dot keeps a tappable centre.
 function countyShifts(byC){
@@ -1121,9 +1130,19 @@ function countyShifts(byC){
   for(var it=0;it<40;it++){var moved=false;for(var i=0;i<items.length;i++)for(var j=i+1;j<items.length;j++){var a=items[i],b2=items[j],dx=b2.x-a.x,dy=b2.y-a.y,d=Math.sqrt(dx*dx+dy*dy),min=a.r+b2.r+3;if(d>=min)continue;if(d<0.01){dx=1;dy=0;d=1}var push=(min-d)/2,ux=dx/d,uy=dy/d;a.x-=ux*push;a.y-=uy*push;b2.x+=ux*push;b2.y+=uy*push;moved=true}if(!moved)break}
   var out={};items.forEach(function(a){var sx=Math.round(a.x-a.x0),sy=Math.round(a.y-a.y0);if(sx||sy)out[a.c]=[sx,sy]});return out;
 }
+function clusterDots(dots){
+  dots.forEach(function(d){d.p=map.latLngToLayerPoint([d.s[9],d.s[10]])});
+  dots.sort(function(a,b){return a.p.x-b.p.x||a.p.y-b.p.y});
+  var cl=[];
+  dots.forEach(function(d){var best=null,bd=14*14;for(var i=0;i<cl.length;i++){var c=cl[i],dx=d.p.x-c.cx,dy=d.p.y-c.cy,dd=dx*dx+dy*dy;if(dd<=bd){bd=dd;best=c}}
+    if(best){best.items.push(d);var n=best.items.length;best.cx+=(d.p.x-best.cx)/n;best.cy+=(d.p.y-best.cy)/n}else cl.push({cx:d.p.x,cy:d.p.y,items:[d]})});
+  return cl.map(function(c){return c.items});
+}
+function renderSig(cshift,clusters){return JSON.stringify(cshift)+"|"+clusters.map(function(g){return g.map(function(d){return d.s[0]}).sort().join(",")}).filter(function(x){return x.indexOf(",")>=0}).sort().join(";")}
+function currentSig(){var byC=groups(),dots=[];Object.keys(byC).forEach(function(c){if(!countyMode[c])return;Object.keys(byC[c]).forEach(function(k){if(spread[k])byC[c][k].forEach(function(s){dots.push({s:s})})})});return renderSig(countyShifts(byC),clusterDots(dots))}
 function render(){
   layer.clearLayers();chipLayer.clearLayers();
-  var byC=groups(),nS=0,nD=0,nC=0,enr=0,nNo=0,seenD={},cshift=countyShifts(byC);
+  var byC=groups(),nS=0,nD=0,nC=0,enr=0,nNo=0,seenD={},cshift=countyShifts(byC),dots=[];
   Object.keys(byC).sort().forEach(function(c){
     var dists=byC[c],all=[];Object.keys(dists).forEach(function(k){all=all.concat(dists[k])});
     nC++;Object.keys(dists).forEach(function(k){seenD[k]=1});nS+=all.length;all.forEach(function(s){if(s[6]>0)enr+=s[6];if(s[11]===7)nNo++});
@@ -1133,7 +1152,7 @@ function render(){
       var m=L.marker(cen,{icon:dotIcon(all.length,TIERS[dm.tier].color,"county","",cshift[c]),riseOnHover:true});label(m,c+" County: "+fmt(all.length)+" "+plural(all.length,"school")+" in "+nd+" "+plural(nd,"district"));
       m.bindTooltip('<b>'+esc(c)+' County</b><br>'+fmt(all.length)+' '+plural(all.length,"school")+' in '+nd+' '+plural(nd,"district")+'<br><span class="tt-hint">'+(nd===1||all.length<=4?(all.length===1?'Tap to open the school':'Tap to show its schools'):'Tap to show its districts')+'</span>',TT);
       m.on("click",function(){
-        countyMode[c]=1;map.closePopup();
+        if(Date.now()-lastSpread<450)return;lastSpread=Date.now();countyMode[c]=1;map.closePopup();
         var small=nd===1||all.length<=4;
         if(small)Object.keys(dists).forEach(function(k){spread[k]=1});
         render();
@@ -1149,20 +1168,12 @@ function render(){
         var arr=dists[k],dm=dominant(arr),cen=centroid(arr),nm=(L_name(k));
         if(spread[k]){
           chipLayer.addLayer(chip(bottomOf(arr),nm,function(){delete spread[k];map.closePopup();render();flyTo(L.latLngBounds(all.map(function(s){return[s[9],s[10]]})).pad(0.15),10);},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(k,arr)).openOn(map);}));
-          var stacks={};arr.forEach(function(s){var key=s[9].toFixed(4)+","+s[10].toFixed(4);(stacks[key]=stacks[key]||[]).push(s)});
-          arr.forEach(function(s){
-            var key=s[9].toFixed(4)+","+s[10].toFixed(4),grp=stacks[key],dx=0,dy=0;
-            if(grp.length>1){var i=grp.indexOf(s),ang=-Math.PI/2+i*2*Math.PI/grp.length,rad=grp.length===2?9:12;dx=Math.round(Math.cos(ang)*rad);dy=Math.round(Math.sin(ang)*rad)}
-            var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"schm",iconSize:[16,16],iconAnchor:[8-dx,8-dy],popupAnchor:[dx,dy-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,riseOnHover:true});label(cm,s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)","")+(grp.length>1?" (shares a site with "+(grp.length-1)+" other "+plural(grp.length-1,"school")+")":""));
-            cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
-            cm.bindTooltip('<b>'+esc(s[1])+'</b><br>'+esc(TIERS[s[11]].label.replace(" (area only)",""))+'<br><span class="tt-hint">Tap for its card</span>',TT);
-            layer.addLayer(cm);
-          });
+          arr.forEach(function(s){dots.push({s:s,k:k,nm:nm,c:c})});
         }else{
           var m=L.marker(cen,{icon:dotIcon(arr.length,TIERS[dm.tier].color,"district",""),riseOnHover:true});label(m,nm+": "+fmt(arr.length)+" "+plural(arr.length,"school")+", "+c+" County");
           m.bindTooltip('<b>'+esc(nm)+'</b><br>'+fmt(arr.length)+' '+plural(arr.length,"school")+', '+esc(c)+' County<br><span class="tt-hint">'+(arr.length===1?'Tap to open the school':'Tap to show its schools')+'</span>',TT);
           m.on("click",function(){
-            spread[k]=1;map.closePopup();render();
+            if(Date.now()-lastSpread<450)return;lastSpread=Date.now();spread[k]=1;map.closePopup();render();
             var b=L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.15);
             if(arr.length===1){var s1=arr[0];afterMove(function(){flyTo(b,11)},function(){L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([s1[9],s1[10]]).setContent(schoolCard(s1)).openOn(map)})}
             else flyTo(b,13);
@@ -1172,6 +1183,23 @@ function render(){
       });
     }
   });
+  // school dots: schools that would overlap at this zoom (one campus, or neighbours a few hundred metres apart) fan out in a ring, whatever their district
+  var clusters=clusterDots(dots);
+  clusters.forEach(function(grp){
+    grp.sort(function(a,b){return a.s[1]<b.s[1]?-1:(a.s[1]>b.s[1]?1:0)});
+    var n=grp.length;
+    grp.forEach(function(d,i){
+      var s=d.s,dx=0,dy=0;
+      if(n>1&&n<=6){var ang=-Math.PI/2+i*2*Math.PI/n,rad=n===2?9:12;dx=Math.round(Math.cos(ang)*rad);dy=Math.round(Math.sin(ang)*rad)}
+      else if(n>6){var r2=7.2*Math.sqrt(i+1),a2=i*2.39996;dx=Math.round(Math.cos(a2)*r2);dy=Math.round(Math.sin(a2)*r2)}// sunflower spiral: about 12 px between neighbours however many share the spot
+      var cm=L.marker([s[9],s[10]],{icon:L.divIcon({className:"schm",iconSize:[16,16],iconAnchor:[8-dx,8-dy],popupAnchor:[dx,dy-8],html:'<div class="sdot" style="background:'+TIERS[s[11]].color+'"></div>'}),zIndexOffset:1000,riseOnHover:true});
+      label(cm,s[1]+", "+L_name(s[2])+": "+TIERS[s[11]].label.replace(" (area only)","")+(n>1?" (shares a site with "+(n-1)+" other "+plural(n-1,"school")+")":""));
+      cm.bindPopup(function(){return schoolCard(s)},{maxWidth:320});
+      cm.bindTooltip('<b>'+esc(s[1])+'</b><br>'+esc(TIERS[s[11]].label.replace(" (area only)",""))+(n>1?'<br>Shares a site with '+(n-1)+' other '+plural(n-1,"school"):'')+'<br><span class="tt-hint">Tap for its card</span>',TT);
+      layer.addLayer(cm);
+    });
+  });
+  lastSig=renderSig(cshift,clusters);
   nD=Object.keys(seenD).length;
   document.getElementById("stat").innerHTML='Showing <b>'+fmt(nS)+'</b> schools'+(nNo?' (<b>'+fmt(nS-nNo)+'</b> below 1 Gbps, <b>'+fmt(nNo)+'</b> with no speed data)':'')+' in <b>'+fmt(nD)+'</b> '+plural(nD,"district")+' across <b>'+fmt(nC)+'</b> '+plural(nC,"county","counties")+(enr?', <b>'+fmt(enr)+'</b> students.':'.')+' '+D.statLine;
   updateCounts();fitControls();
@@ -1241,11 +1269,12 @@ function search(q){
     b.onclick=function(){go(h)};li.appendChild(b);ul.appendChild(li);
   });
   if(!out.length)ul.innerHTML='<li class="note">No matching county, district or school among those shown.</li>';
+  if(ul.scrollIntoView)ul.scrollIntoView({block:"nearest"});
 }
 function afterMove(fly,fn){var done=false;fly();map.once("moveend",function(){if(!done){done=true;fn()}});setTimeout(function(){if(!done){done=true;fn()}},2500)}
 function go(h){
   if(h.t==="c"){map.closePopup();countyMode[h.c]=1;render();var a=S.filter(function(s){return county(s)===h.c&&visible(s)});if(a.length)flyTo(L.latLngBounds(a.map(function(s){return[s[9],s[10]]})).pad(0.15),10);return}
-  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;countyMode[county(arr[0])]=1;spread[h.k]=1;render();afterMove(function(){flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12)},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});return}
+  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;if(arr.length===1){go({t:"s",s:arr[0]});return}countyMode[county(arr[0])]=1;spread[h.k]=1;render();afterMove(function(){flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12)},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});return}
   var s=h.s;if(!visible(s)){TIERS[s[11]].on=true;document.getElementById("tier"+s[11]).checked=true;paintOverlay()}
   countyMode[county(s)]=1;spread[s[2]]=1;render();afterMove(function(){map.flyTo([s[9],s[10]],12,{duration:0.6})},function(){L.popup({maxWidth:320,offset:[0,-8]}).setLatLng([s[9],s[10]]).setContent(schoolCard(s)).openOn(map)});
 }
@@ -1253,9 +1282,10 @@ function go(h){
 // ---- tap cards for shaded speed areas ----
 var AR=null,arIds=null,hl=null,areasP=null,ensureAreas=null;
 var AR_WORKER='onmessage=function(e){var m=e.data;createImageBitmap(m.blob).then(function(bm){var w=bm.width,h=bm.height,c=new OffscreenCanvas(w,h),x=c.getContext("2d",{willReadFrequently:true});x.drawImage(bm,0,0);bm.close();var d=x.getImageData(0,0,w,h).data,n=w*h,ids=m.small?new Uint16Array(n):new Uint32Array(n);for(var i=0,j=0;i<n;i++,j+=4)ids[i]=d[j]*65536+d[j+1]*256+d[j+2];postMessage({ids:ids.buffer},[ids.buffer])}).catch(function(err){postMessage({error:String(err)})})}';
+function flash(msg,ms){var ld=document.getElementById("loading");ld.textContent=msg;ld.hidden=false;clearTimeout(flash.t);flash.t=setTimeout(function(){ld.hidden=true},ms||6000)}
 function withAreas(fn){if(AR&&arIds){fn();return}if(!ensureAreas)return;var ld=document.getElementById("loading");ld.textContent="Loading the shaded areas\u2026";ld.hidden=false;ensureAreas().then(function(){ld.hidden=true;fn()},function(){ld.hidden=true})}
 function loadAreas(){
-  function areasFailed(){["tapA","tapB"].forEach(function(id){var b=document.getElementById(id);b.disabled=true;b.title="Area data did not load; reload to try again"});var st=document.getElementById("stat");if(st&&st.textContent.indexOf("Coverage areas did not load")<0)st.insertAdjacentHTML("beforeend"," Coverage areas did not load; reload to try again.")}
+  function areasFailed(){["tapA","tapB"].forEach(function(id){var b=document.getElementById(id);b.disabled=true;b.title="Area data did not load; reload to try again"});var st=document.getElementById("stat");if(st&&st.textContent.indexOf("Coverage areas did not load")<0)st.insertAdjacentHTML("beforeend"," Coverage areas did not load; reload to try again.");flash("The shaded-area data did not load; reload to try again.")}
   ensureAreas=function(){
     if(areasP)return areasP;
     areasP=fetch("areas.json"+V).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(a){
@@ -1384,6 +1414,9 @@ function areaCard(id,a,rc,latlng){
 }
 
 function wire(){
+  var si=document.getElementById("search"),hitsEl=document.getElementById("hits");
+  si.addEventListener("keydown",function(e){var hs=hitsEl.querySelectorAll("li button");if(e.key==="ArrowDown"&&hs.length){e.preventDefault();hs[0].focus()}else if(e.key==="Enter"&&hs.length){e.preventDefault();hs[0].click()}else if(e.key==="Escape"&&si.value){e.stopPropagation();si.value="";search("")}});
+  hitsEl.addEventListener("keydown",function(e){var hs=[].slice.call(hitsEl.querySelectorAll("li button")),i=hs.indexOf(document.activeElement);if(i<0)return;if(e.key==="ArrowDown"){e.preventDefault();(hs[i+1]||hs[0]).focus()}else if(e.key==="ArrowUp"){e.preventDefault();if(i===0)si.focus();else hs[i-1].focus()}else if(e.key==="Escape"){e.stopPropagation();si.focus()}});
   var sat=document.getElementById("bmSat"),str=document.getElementById("bmStr");
   sat.onclick=function(){map.getContainer().style.background="#102633";map.removeLayer(base.str);map.removeLayer(tiles.str);base.sat.addTo(map);tiles.sat.addTo(map);sat.setAttribute("aria-pressed","true");str.setAttribute("aria-pressed","false")};
   str.onclick=function(){map.getContainer().style.background="#bde5ff";map.removeLayer(base.sat);map.removeLayer(tiles.sat);base.str.addTo(map);tiles.str.addTo(map);str.setAttribute("aria-pressed","true");sat.setAttribute("aria-pressed","false")};
@@ -1404,11 +1437,14 @@ function wire(){
   ab.addEventListener("click",function(e){if(e.target===ab)closeAbout()});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!ab.hidden)closeAbout()});
   var tcEl=document.getElementById("titlecard"),tm=document.getElementById("tcMin");
-  tm.onclick=function(){var min=tcEl.classList.toggle("min");tm.innerHTML=min?"+":"&#8211;";tm.title=min?"Show the controls":"Hide the controls";tm.setAttribute("aria-expanded",String(!min));fitControls();};
+  tm.onclick=function(){var wide=window.innerWidth>760,w=tcEl.offsetWidth;var min=tcEl.classList.toggle("min");tcEl.style.width=(min&&wide)?w+"px":"";tm.innerHTML=min?"+":"&#8211;";tm.title=min?"Show the controls":"Hide the controls";tm.setAttribute("aria-expanded",String(!min));fitControls();};
+  if(window.innerHeight<520&&!tcEl.classList.contains("min"))tm.onclick();// short windows (phone landscape, small laptops) start with the controls folded
   var lg=document.getElementById("legend"),lt=document.getElementById("legToggle");
   lt.onclick=function(){var min=lg.classList.toggle("min");lt.textContent=min?"Show":"Hide";lt.setAttribute("aria-expanded",String(!min));fitControls();};
-  window.addEventListener("resize",fitControls);
-  if(window.innerWidth<=760){lg.classList.add("min");lt.textContent="Show";lt.setAttribute("aria-expanded","false")}
+  var rsT=null,rsW=window.innerWidth,rsH=window.innerHeight;
+  window.addEventListener("resize",function(){fitControls();clearTimeout(rsT);rsT=setTimeout(function(){fitControls();var W=window.innerWidth,H=window.innerHeight,big=Math.abs(W-rsW)>40||Math.abs(H-rsH)>150;rsW=W;rsH=H;
+    if(big&&!map._popup&&!Object.keys(countyMode).some(function(k){return countyMode[k]}))map.fitBounds(allBounds(),fitPad())},250)});
+  if(window.innerWidth<=760||window.innerHeight<520){lg.classList.add("min");lt.textContent="Show";lt.setAttribute("aria-expanded","false")}
   var q=document.getElementById("search");q.addEventListener("input",function(){search(q.value)});
   document.querySelectorAll(".made,#made").forEach(function(e){e.textContent=D.made});
   var cp=document.getElementById("copyApa");if(cp)cp.onclick=function(){var t=document.getElementById("apa").textContent;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){cp.textContent="Copied"},function(){selectText()});else selectText();function selectText(){var r=document.createRange();r.selectNodeContents(document.getElementById("apa"));var s=window.getSelection();s.removeAllRanges();s.addRange(r)}};
