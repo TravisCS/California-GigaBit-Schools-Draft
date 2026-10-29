@@ -831,21 +831,9 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <div id="legend" class="card">
   <div class="head"><h2>Legend</h2><button class="btn" id="legToggle" aria-expanded="true">Hide</button></div>
   <div class="body">
-    <details>
-      <summary>Find a district or school</summary>
-      <input id="search" type="search" placeholder="District, school or county" autocomplete="off" aria-label="Find a district or school">
-      <ul id="hits"></ul>
-    </details>
-      <details open>
-      <summary>Fastest subscribed download</summary>
-      <div id="tiers"></div>
-      <label class="tier" style="grid-template-columns:18px 1fr"><input type="checkbox" id="showArea" checked><span>Shade coverage areas</span></label>
-      <p class="note">With "Tap opens" set to Areas or Both, tap any shaded area for its card: speed, size, the speed mix within 3 miles and the schools inside.</p>
-    </details>
     <details open>
       <summary>BEAD plan</summary>
       <label class="tier" style="grid-template-columns:18px 16px 1fr auto"><input type="checkbox" id="beadIn" checked><span class="sdot bead" style="width:14px;height:14px;cursor:default;background:#f2b93b"></span><span>Schools in the BEAD plan</span><span class="n" id="beadN"></span></label>
-      <label class="tier" style="grid-template-columns:18px 16px 1fr auto"><input type="checkbox" id="beadOutBox"><span class="sdot" style="width:14px;height:14px;cursor:default;background:#f2b93b"></span><span>Schools not in the BEAD plan</span><span class="n" id="beadOut"></span></label>
       <label class="tier" style="grid-template-columns:18px 1fr;margin-top:6px"><input type="checkbox" id="projOn"><span><b>Funded project areas</b> (83 projects, 20 providers)</span></label>
       <div id="projKey" hidden style="padding-left:24px">
         <label class="tier" style="grid-template-columns:18px 16px 1fr auto"><input type="checkbox" id="pg_fiber" checked><span class="sw" style="background:#9b59d0"></span><span>Fiber</span><span class="n" id="pn_fiber"></span></label>
@@ -853,24 +841,22 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
         <label class="tier" style="grid-template-columns:18px 16px 1fr auto"><input type="checkbox" id="pg_satellite" checked><span class="sw" style="background:rgba(230,234,238,.5);border:1px dashed #e6eaee"></span><span>Satellite</span><span class="n" id="pn_satellite"></span></label>
         <p class="note" style="margin-top:2px" id="projNote">Tap a shaded project area for its card. An area covers the homes and businesses the project will connect.</p>
       </div>
-      <details id="leftOut" style="border-top:0;margin-top:2px;padding-top:0">
-        <summary style="font-weight:400;font-size:13.5px">About the schools not in the plan</summary>
-        <p class="note" id="leftOutNote"></p>
-        <p class="note" style="margin-top:4px"><b>Slowest schools not in the plan</b> (under 25 Mbps at their block)</p>
-        <ul id="slowList"></ul>
-      </details>
       <p class="note">A blue ring marks a school that California's BEAD plan (ratified September 17, 2026) names as an anchor institution for a funded project, or that shares a site with one. The grant goes to the internet provider that builds the line, not to the school.</p>
+      <p class="note">Counties are shaded by the most common speed among the schools shown, and the number is how many there are. Tap a county to see its schools; tap “gather” on its name label to close it again.</p>
     </details>
     <details open>
-      <summary>School groups</summary>
-      <div class="row" style="margin-top:4px">
-        <button class="btn" id="gatherAll">Gather all</button>
-        <button class="btn" id="spreadAll">Spread all</button>
-      </div>
-      <label class="tier" style="grid-template-columns:18px 1fr;margin-top:4px"><input type="checkbox" id="showChips" checked><span>Name labels on open counties</span></label>
-      <p class="note">Counties are shaded by the most common speed among their schools, and the number is how many schools match the speeds checked above. Tap a county to zoom in to its schools (with "Tap opens" set to Schools or Both); the county's name label gathers it again. Uncheck Name labels on open counties to hide those labels and see every school. A school's card names its district and has a button for the whole district. Schools with gigabit at their block are counted in the legend but not drawn.</p>
+      <summary>Gaps in the BEAD plan</summary>
+      <label class="tier" style="grid-template-columns:18px 16px 1fr auto"><input type="checkbox" id="beadOutBox"><span class="sdot" style="width:14px;height:14px;cursor:default;background:#f2b93b"></span><span>Schools not in the BEAD plan</span><span class="n" id="beadOut"></span></label>
+      <p class="note" id="leftOutNote"></p>
+      <p class="note" style="margin-top:4px"><b>Slowest schools not in the plan</b> (under 25 Mbps at their block)</p>
+      <ul id="slowList"></ul>
     </details>
-    
+    <details open>
+      <summary>Fastest subscribed download</summary>
+      <div id="tiers"></div>
+      <label class="tier" style="grid-template-columns:18px 1fr"><input type="checkbox" id="showArea"><span>Shade coverage areas</span></label>
+      <p class="note">Check "Shade coverage areas" to see speeds across the state. With "Tap opens" set to Areas or Both (which turns shading on), tap any shaded area for its card: speed, size, the speed mix within 3 miles and the schools inside.</p>
+    </details>
     <p class="note">Map by Travis Cody Smith, <span id="made"></span>. Web Mercator (EPSG:3857).</p>
     <p class="note">Every link on this map was checked on October 28, 2026. <a href="#" id="auditWhat">What's this?</a></p>
   </div>
@@ -1593,9 +1579,6 @@ function areaCard(id,a,rc,latlng){
 
 function wire(){
   if(!COARSE){["#titlecard .lbl","#legend","#about"].forEach(function(sel){var root=document.querySelector(sel);if(!root)return;var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),t;while((t=w.nextNode()))if(/\btap\b/i.test(t.nodeValue))t.nodeValue=t.nodeValue.replace(/\bTap\b/g,"Click").replace(/\btap\b/g,"click")})}
-  var si=document.getElementById("search"),hitsEl=document.getElementById("hits");
-  si.addEventListener("keydown",function(e){var hs=hitsEl.querySelectorAll("li button");if(e.key==="ArrowDown"&&hs.length){e.preventDefault();hs[0].focus()}else if(e.key==="Enter"&&hs.length){e.preventDefault();hs[0].click()}else if(e.key==="Escape"&&si.value){e.stopPropagation();si.value="";search("")}});
-  hitsEl.addEventListener("keydown",function(e){var hs=[].slice.call(hitsEl.querySelectorAll("li button")),i=hs.indexOf(document.activeElement);if(i<0)return;if(e.key==="ArrowDown"){e.preventDefault();(hs[i+1]||hs[0]).focus()}else if(e.key==="ArrowUp"){e.preventDefault();if(i===0)si.focus();else hs[i-1].focus()}else if(e.key==="Escape"){e.stopPropagation();si.focus()}});
   var sat=document.getElementById("bmSat"),str=document.getElementById("bmStr");
   sat.onclick=function(){map.getContainer().style.background="#102633";if(mask)mask.setStyle({fillColor:MASK.sat[0],fillOpacity:MASK.sat[1]});map.removeLayer(base.str);map.removeLayer(tiles.str);base.sat.addTo(map);tiles.sat.addTo(map);sat.setAttribute("aria-pressed","true");str.setAttribute("aria-pressed","false")};
   str.onclick=function(){map.getContainer().style.background="#bde5ff";if(mask)mask.setStyle({fillColor:MASK.str[0],fillOpacity:MASK.str[1]});base.str.addTo(map);tiles.str.addTo(map);tiles.str.setOpacity(1);var drop=function(){map.removeLayer(base.sat);map.removeLayer(tiles.sat)};if(tiles.str.isLoading())tiles.str.once("load",drop);else drop();str.setAttribute("aria-pressed","true");sat.setAttribute("aria-pressed","false")};
@@ -1604,16 +1587,13 @@ function wire(){
   if(HOVER)str.addEventListener("mouseenter",function(){var cn=navigator.connection;if(cn&&cn.saveData)return;if(map.hasLayer(tiles.str)||map.hasLayer(base.str))return;tiles.str.setOpacity(0);tiles.str.addTo(map);setTimeout(function(){if(tiles.str.options.opacity===0&&map.hasLayer(tiles.str))map.removeLayer(tiles.str)},8000)});
   var tb={S:document.getElementById("tapS"),A:document.getElementById("tapA"),B:document.getElementById("tapB")};
   setTapG=function(m){setTap(m)};
-  function setTap(m){tapMode=m;if(m!=="S"&&ensureAreas)ensureAreas().catch(function(){});Object.keys(tb).forEach(function(k){tb[k].setAttribute("aria-pressed",String(k===m))});map.getContainer().classList.toggle("areas-only",m==="A");map.getContainer().classList.toggle("areas",m!=="S");map.closePopup();}
+  function setTap(m){tapMode=m;var sa=document.getElementById("showArea");if(m!=="S"&&!sa.checked){sa.checked=true;paintOverlay()}if(m!=="S"&&ensureAreas)ensureAreas().catch(function(){});Object.keys(tb).forEach(function(k){tb[k].setAttribute("aria-pressed",String(k===m))});map.getContainer().classList.toggle("areas-only",m==="A");map.getContainer().classList.toggle("areas",m!=="S");map.closePopup();}
   tb.S.onclick=function(){setTap("S")};tb.A.onclick=function(){setTap("A")};tb.B.onclick=function(){setTap("B")};
-  document.getElementById("gatherAll").onclick=function(){setMode(0)};
   document.getElementById("projOn").onchange=function(e){map.closePopup();showProjects(e.target.checked);if(projP)projP.then(function(){render()});else render()};
   ["fiber","wireless","satellite"].forEach(function(g){document.getElementById("pg_"+g).onchange=function(e){projShow[g]=e.target.checked;if(g==="wireless")projShow.other=e.target.checked;map.closePopup();if(projLayer){projLayer.clearLayers();projLayer.addData(projGJ)}}});
   document.getElementById("beadIn").onchange=function(e){beadIn=e.target.checked;map.closePopup();render()};
   document.getElementById("beadOutBox").onchange=function(e){beadOut=e.target.checked;map.closePopup();render()};
   buildLeftOut();
-  document.getElementById("showChips").onchange=function(e){showChips=e.target.checked;render()};
-  document.getElementById("spreadAll").onclick=function(){setMode(1)};
   var ab=document.getElementById("about");
   var opener=null;
   function openAbout(){opener=document.activeElement;ab.hidden=false;var mp=document.getElementById("map");if(mp)mp.setAttribute("inert","");document.getElementById("closeAbout").focus()}
@@ -1634,7 +1614,7 @@ function wire(){
   window.addEventListener("resize",function(){fitControls();clearTimeout(rsT);rsT=setTimeout(function(){fitControls();var W=window.innerWidth,H=window.innerHeight,big=Math.abs(W-rsW)>40||Math.abs(H-rsH)>150;rsW=W;rsH=H;
     if(big&&!map._popup&&!Object.keys(countyMode).some(function(k){return countyMode[k]}))map.fitBounds(allBounds(),fitPad())},250)});
   if(window.innerWidth<=760||window.innerHeight<520){lg.classList.add("min");lt.textContent="Show";lt.setAttribute("aria-expanded","false")}
-  var q=document.getElementById("search");q.addEventListener("input",function(){search(q.value)});
+
   document.querySelectorAll(".made,#made").forEach(function(e){e.textContent=D.made});
   var cp=document.getElementById("copyApa");if(cp)cp.onclick=function(){var t=document.getElementById("apa").textContent;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){cp.textContent="Copied";setTimeout(function(){cp.textContent="Copy citation"},1500)},function(){selectText()});else selectText();function selectText(){var r=document.createRange();r.selectNodeContents(document.getElementById("apa"));var s=window.getSelection();s.removeAllRanges();s.addRange(r)}};
 }
