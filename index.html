@@ -828,7 +828,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <div id="titlecard" class="card">
   <div class="head"><h1>California BEAD Plan: Providers and Projects</h1><button class="btn" id="tcMin" aria-expanded="true" title="Hide the controls" aria-label="Hide the controls">&#8211;</button></div>
   <p class="kpis" id="kpis">$1.4 billion · 83 projects · 20 providers · 269,322 homes and businesses</p>
-  <p class="upd">Last updated <time id="updated" datetime="2026-10-29T02:26-07:00">October 29, 2026, 2:26 a.m. PDT</time> · <button type="button" class="linkbtn" id="openAbout">About the data</button></p>
+  <p class="upd">Last updated <time id="updated" datetime="2026-10-29T02:33-07:00">October 29, 2026, 2:33 a.m. PDT</time> · <button type="button" class="linkbtn" id="openAbout">About the data</button></p>
   <div class="rows">
   <div id="addrBox"></div>
   <div class="body" hidden>
@@ -923,6 +923,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>Getting around.</b> The legend has two tabs. Projects shows the project dots with the provider filter, the county picker, the project list, the project areas and the funded homes. More holds the basemap switch, the equity overlays, the optional school layers (the schools in the BEAD plan and those left out) and the internet speed shading. Tap a project dot for its card and area, or a school dot for its card. The target button under the zoom control shows the whole state. Every card has a Close button. School cards have a button that shows the whole district with its own card, and district cards have one that zooms out to the county. Escape closes any card. Keyboard: Tab moves through the controls and then every dot (the dot's label appears as it gets focus), Enter or Space opens it, and the arrow keys pan the map.</li>
 <li><b>Grouping.</b> Schools are grouped by county. Districts are NCES local education agencies, so a single-school charter counts as its own district. Each school sits under its own county, so a district that crosses a county line, such as Coachella Valley Unified (Riverside and Imperial) or Stony Creek Joint Unified (Glenn and Colusa), shows up under each county it reaches; its card covers the whole district. A county's number is the count of schools shown, and its shading is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
 <li><b>BEAD plan.</b> California's plan for the federal Broadband Equity, Access, and Deployment program, approved by NTIA on July 17, 2026 and ratified by the CPUC in Resolution T-17920 on September 17, 2026, lists 1,249 community anchor institutions (548 of them schools) that its funded projects will connect. Each mapped school was compared with that list: a school is "named" when a listed school within 1 km has the same distinctive name words and is the same kind of school (60 schools), and "shares a site" when it is not named but a listed anchor of any kind is within 150 m (19 schools). Cards show the project's provider, technology, planned speeds, deadline and total BEAD support. BEAD grants go to the providers that build the lines, not to schools, and the plan's award terms were still being settled when this map was made. The map opens showing only these 79 schools; the legend's "Schools not in the BEAD plan" box adds the other 774, including 43 of the 46 in blocks under 25 Mbps and 170 of the 179 under 100 Mbps. Each school was also checked against the 83 funded project areas in the CPUC's public BEAD map service (a school counts when the area covers its point or a point 1 km away). Of the 774 not in the plan, 147 have a funded fiber project within 1 km, 207 only fixed wireless, 251 only satellite (SpaceX or Amazon Kuiper), and 169 none. A project area covers the homes and businesses the project will connect, not every building inside it, so being inside one does not mean the school will be connected.</li>
+<li><b>Project names.</b> The CPUC identifies projects only by codes such as CM61-BEAD-CA-67-14226 (the first number is the provider, the second its application). The readable names on cards and in the project list, such as "AT&amp;T Fiber \u00b7 Descanso area, San Diego County", are made by this map: the counties each project's area covers (tools/project_names.py) and, for smaller projects, the town with the most funded locations (a count by city from the CPUC's funded-location layer). Projects spread over more than three counties are named by region, and the two satellite projects as rural California.</li>
 <li><b>Project dots.</b> The map opens with one dot per funded BEAD project, placed at the point inside the project's largest piece that is farthest from its edges, sized by the homes and businesses it will connect and colored like the project areas (by technology or provider). Dots that would overlap are nudged apart a little. The school layers under More add the schools as small dots on top. "All providers" narrows the dots and areas to one provider, and "Go to a county" zooms to one county and outlines it.</li>
 <li><b>Address lookup.</b> The address lookup under the title finds your address with Esri's World geocoder, then checks it against the funded project areas on this map (simplified to about 400 m, so approximate) and the CPUC list of every funded BEAD location within 150 m. Your address is sent to Esri to place it on the map; this map keeps nothing.</li>
 <li><b>Shareable links.</b> The page address keeps the open project, provider, county and tab (for example <code>#p=CM61-BEAD-CA-67-14226</code>), and every project card has a Copy link button, so a link opens the map on the same view.</li>
@@ -977,7 +978,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <script>
 (function(){
 "use strict";
-var VER={"data.json":"48e82baa","context_layers.json":"bd0b7269","summary.js":"e961f338","lookup.js":"f4d463c9","context.js":"652ae585","bead_areas.json":"398dc4d3","counties.json":"2c2d8494","areas.json":"fc8a421e","california.json":"f9ebf2bf","coverage.png":"283041bb","areas.png":"4e71004c","sat.jpg":"6e2a30b3","str.jpg":"f9f9ab81"};// per-file content stamps: tools/stamp.py rewrites them so a cached index.html never pairs with stale data, and a deploy only re-downloads what changed
+var VER={"data.json":"48e82baa","context_layers.json":"bd0b7269","summary.js":"e961f338","lookup.js":"f4d463c9","context.js":"652ae585","bead_areas.json":"2720b801","counties.json":"2c2d8494","areas.json":"fc8a421e","california.json":"f9ebf2bf","coverage.png":"283041bb","areas.png":"4e71004c","sat.jpg":"6e2a30b3","str.jpg":"f9f9ab81"};// per-file content stamps: tools/stamp.py rewrites them so a cached index.html never pairs with stale data, and a deploy only re-downloads what changed
 function vq(f){return f+"?v="+(VER[f]||"0")}
 var REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 var HOVER=!(window.matchMedia&&window.matchMedia("(hover:none)").matches);
@@ -1336,7 +1337,7 @@ function buildProjLegend(gj){
   whos.forEach(function(w){
     var hd=document.createElement("li");hd.className="ph";hd.innerHTML='<span class="sw" style="display:inline-block;width:12px;height:10px;border-radius:2px;background:'+provColor(w)+'"></span>'+esc(w);ul.appendChild(hd);
     by[w].list.sort(function(a,b){return b.n-a.n}).forEach(function(p){var li=document.createElement("li"),b=document.createElement("button");
-      b.innerHTML=esc(p.id)+' <small>'+esc(p.tech)+', '+fmt(p.n)+' locations, '+money(p.usd)+'</small>';b.onclick=function(){zoomProject(p.id)};li.appendChild(b);ul.appendChild(li)});
+      b.innerHTML=esc((p.nm||p.id).replace(/^.*? \u00b7 /,""))+' <small>'+esc(p.id)+' \u00b7 '+esc(p.tech)+', '+fmt(p.n)+' locations, '+money(p.usd)+'</small>';b.onclick=function(){zoomProject(p.id)};li.appendChild(b);ul.appendChild(li)});
   });
 }
 function zoomProject(id){
@@ -1351,7 +1352,7 @@ function zoomProject(id){
 function projCard(pr){
   var sch=0;if(D.beadArea)Object.keys(D.beadArea).forEach(function(k){if(D.beadArea[k].some(function(h){return h[3]===pr.id&&h[0]===2}))sch++});
   var g=PROJ[pr.g]||PROJ.other;
-  return '<div class="pc"><h3><span style="display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;background:'+provColor(pr.who)+'"></span>'+esc(pr.who)+'</h3><p class="meta">BEAD project '+esc(pr.id)+'</p>'+
+  return '<div class="pc"><h3><span style="display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;background:'+provColor(pr.who)+'"></span>'+esc(pr.nm||pr.who)+'</h3><p class="meta">'+esc(pr.who)+' \u00b7 BEAD project '+esc(pr.id)+(pr.nm?'<br><span style="font-size:.8rem">Name made by this map from the counties and towns the project covers; the ID is the official one.</span>':'')+'</p>'+
     '<div class="kv"><div><b>'+fmt(pr.n)+'</b><span>homes and businesses to connect</span></div><div><b>'+money(pr.usd)+'</b><span>BEAD support</span></div></div>'+
     '<table><tr><td>Technology</td><td><span class="pill" style="background:'+g.c+';color:'+inkOn(g.c)+'">'+esc(pr.tech)+'</span></td></tr>'+
     (pr.n?'<tr><td>Per location</td><td>'+money(Math.round(pr.usd/pr.n))+'</td></tr>':'')+
@@ -1380,7 +1381,7 @@ function loadProjects(){
       projGJ=gj;projLayer=L.geoJSON(gj,{pane:"projects",bubblingMouseEvents:false,style:projStyle,filter:function(f){return projShow[f.properties.g]!==false&&(!provFilter||f.properties.who===provFilter)},
         onEachFeature:function(f,l){if(f.properties.g==="satellite"){l.options.interactive=false;return}// satellite areas cover most of rural California: they take no hover or tap, so the projects under them stay reachable
           l.on("click",function(){openProject(f)});
-          if(HOVER)l.bindTooltip(function(){return '<b>'+esc(f.properties.who)+'</b><br>'+esc(f.properties.id)+'<br>'+esc(f.properties.tech)+', '+fmt(f.properties.n)+' locations<br><span class="tt-hint">'+TAPV+' for its card</span>'},{sticky:true,className:"tt",direction:"top",offset:[0,-12],opacity:1})}});
+          if(HOVER)l.bindTooltip(function(){return '<b>'+esc(f.properties.nm||f.properties.who)+'</b><br>'+esc(f.properties.id)+'<br>'+esc(f.properties.tech)+', '+fmt(f.properties.n)+' locations<br><span class="tt-hint">'+TAPV+' for its card</span>'},{sticky:true,className:"tt",direction:"top",offset:[0,-12],opacity:1})}});
       if(document.getElementById("projOn").checked)projLayer.addTo(map);
       if(dotMode==="proj")render();
       if(!hashDone){hashDone=true;applyHash()}
@@ -1416,8 +1417,8 @@ function renderProjDots(){
     var p=a.f.properties,c=dotColor(p),sat=p.g==="satellite",d=Math.round(a.r*2-2),dx=Math.round(a.x-a.x0),dy=Math.round(a.y-a.y0);
     var m=L.marker(p.pt,{icon:L.divIcon({className:"pdotm",iconSize:[d,d],iconAnchor:[d/2-dx,d/2-dy],tooltipAnchor:[dx,dy-d/2],
       html:'<div class="pdot'+(sat?' sat':'')+'" style="width:'+d+'px;height:'+d+'px;background:'+c+(sat?'aa':'')+'"></div>'}),zIndexOffset:Math.round(400-a.r*10),riseOnHover:true});
-    label(m,p.who+", project "+p.id+": "+p.tech+", "+fmt(p.n)+" homes and businesses");
-    if(HOVER)m.bindTooltip('<b>'+esc(p.who)+'</b><br>'+esc(p.id)+'<br>'+esc(p.tech)+', '+fmt(p.n)+' locations, '+money(p.usd)+'<br><span class="tt-hint">'+TAPV+' for its card</span>',TT);
+    label(m,(p.nm||p.who)+", project "+p.id+": "+p.tech+", "+fmt(p.n)+" homes and businesses");
+    if(HOVER)m.bindTooltip('<b>'+esc(p.nm||p.who)+'</b><br>'+esc(p.id)+'<br>'+esc(p.tech)+', '+fmt(p.n)+' locations, '+money(p.usd)+'<br><span class="tt-hint">'+TAPV+' for its card</span>',TT);
     m.on("click",function(){openProject(a.f)});
     projDots.addLayer(m);
   });
