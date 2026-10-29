@@ -885,7 +885,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <li><b>How schools were picked.</b> School locations were drawn from the NCES service and compared with the speed layer. Schools in or near any block below 1 Gbps (1,342 records) were then pulled from the NCES service by location, and each was given its tier as in note 6. Schools that turned out to be in gigabit blocks were dropped from the dots.</li>
 <li><b>Area cards.</b> Tapping a shaded area outlines one connected patch of 400 m cells that share the same fastest download (8,824 patches statewide) and shows its size, the counties of the schools inside it, and the share of land within 5 km of the tapped point in each tier. Sizes are true ground area, corrected for the Web Mercator stretch. For gigabit patches it also shows the split between 2 Gbps or more, 1 to 1.99 Gbps and placeholder values. A school is listed in a patch when its 400 m cell (or a touching cell) falls in that patch, so a school can appear in a patch of a different color than its own tier (note 7).</li>
 <li><b>Getting around.</b> Tap a dot to spread it and zoom in. A county with one district or four or fewer schools goes straight to its schools, and a one-school district opens that school's card at once. Gathering a district zooms back out to its county, and gathering a county zooms back out to its third of the state (north, central or south). The target button under the zoom control shows the whole state. Every card has a Close button, and school and district cards have a button that zooms back out to the whole district or county. Escape closes any card. Keyboard: Tab moves through the controls and then every dot (the dot's label appears as it gets focus), Enter or Space opens it, and the arrow keys pan the map.</li>
-<li><b>Grouping.</b> Ringed dots are counties and plain dots are districts (NCES local education agency, so a single-school charter counts as its own district). The number is the count of schools shown, and the color is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
+<li><b>Grouping.</b> Ringed dots are counties and plain dots are districts (NCES local education agency, so a single-school charter counts as its own district). Each school sits under its own county, so a district that crosses a county line, such as Coachella Valley Unified (Riverside and Imperial) or Stony Creek Joint Unified (Glenn and Colusa), shows up under each county it reaches; its card covers the whole district. The number is the count of schools shown, and the color is the most common tier among them. Unchecking a tier in the legend removes its schools and shading.</li>
 <li><b>Limitations.</b> Census blocks can be large in rural areas, and a school near a block edge may take its neighbor's speed. Reported speeds are advertised plan speeds, not measured speeds. A school's own connection (often a dedicated circuit through E-Rate or the CENIC K12 High Speed Network) can be much faster than what homes in the same block can buy, so this map shows neighborhood access, not the school's circuit. Enrollment of 0 or below means NCES did not report it.</li>
 <li><b>Basemaps and outline.</b> USGS The National Map tile services, USGS Imagery Topo (satellite imagery with roads, boundaries and labels) and USGS Topo, loaded live and public domain as U.S. government works. A single statewide image of each ships with the page underneath the tiles, so the map still reads if the tiles cannot load. The California outline is the generalized state boundary from the U.S. Census Bureau's TIGERweb service.</li>
 <li><b>Tools and AI use.</b> Built with Leaflet 1.9.4 and Python (NumPy, SciPy, Pillow). Code and layout generated with Claude (Anthropic), which also gathered and processed the data from the sources listed below. Data, placement and accuracy have not yet been reviewed by Travis Cody Smith.</li>
@@ -1099,7 +1099,9 @@ function paintOverlay(){
 }
 
 function visible(s){return TIERS[s[11]].on}
-function county(s){return (LEA[s[2]]&&LEA[s[2]][1])||s[7]||"Unknown county"}
+function county(s){return s[7]||(LEA[s[2]]&&LEA[s[2]][1])||"Unknown county"}
+function dCounties(k){var n={};S.forEach(function(s){if(s[2]===k&&s[7])n[s[7]]=(n[s[7]]||0)+1});return Object.keys(n).sort(function(a,b){return n[b]-n[a]||(a<b?-1:1)})}
+function countyList(cs){return cs.length<2?(cs[0]||"Unknown")+" County":cs.slice(0,-1).join(", ")+" and "+cs[cs.length-1]+" counties"}
 
 function centroid(arr){var a=0,b=0;arr.forEach(function(s){a+=s[9];b+=s[10]});return[a/arr.length,b/arr.length]}
 function topOf(arr){var c=centroid(arr),t=-90;arr.forEach(function(s){if(s[9]>t)t=s[9]});return[t,c[1]]}
@@ -1276,13 +1278,14 @@ function schoolCard(s){
   '<p class="src">Sources: '+schoolLink(s[0])+' | <a href="'+D.links.cpuc+'" target="_blank" rel="noopener">CPUC broadband map</a> | <a href="'+D.links.ncesLayer+'" target="_blank" rel="noopener">NCES EDGE 2024-25 layer</a></p></div>';
 }
 function districtCard(k,arr){
+  var here=county(arr[0]),cs=dCounties(k);arr=S.filter(function(s){return s[2]===k&&visible(s)});if(!arr.length)arr=[S.find(function(s){return s[2]===k})];
   var dm=dominant(arr),c=dm.counts,max=Math.max.apply(null,c),enr=0,nNo=0;arr.forEach(function(s){if(s[6]>0)enr+=s[6];if(s[11]===7)nNo++});
   var rows="";for(var i=0;i<NT;i++){if(!c[i])continue;rows+='<span>'+esc(TIERS[i].label)+'</span><span class="bar" style="width:'+Math.max(6,Math.round(c[i]/max*100))+'%;background:'+TIERS[i].color+'"></span><span>'+c[i]+'</span>'}
-  return '<div class="pc"><h3>'+esc(L_name(k))+'</h3><p class="meta">'+esc(arr[0][7])+' County. NCES district ID '+esc(k)+'<br><a href="'+gmaps(L_name(k)+', '+arr[0][7]+' County, California')+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
+  return '<div class="pc"><h3>'+esc(L_name(k))+'</h3><p class="meta">'+esc(countyList(cs))+'. NCES district ID '+esc(k)+(cs.length>1?'<br>This district crosses a county line, so its schools appear under each county they sit in.':'')+'<br><a href="'+gmaps(L_name(k)+', '+cs[0]+' County, California')+'" target="_blank" rel="noopener">Open in Google Maps</a></p>'+
   '<div class="kv"><button type="button" class="kvbtn" data-list="1" aria-expanded="false" title="List the schools"><b>'+fmt(arr.length-nNo)+'</b><span>'+plural(arr.length-nNo,"school")+' below gigabit</span><span class="hint">'+tapv+' to list</span></button>'+(nNo?'<div><b>'+fmt(nNo)+'</b><span>no speed data</span></div>':'')+'<div><b>'+(enr?fmt(enr):'Not reported')+'</b><span>students, 2024-25</span></div></div>'+
   '<p class="sec"><i>Schools by fastest download</i></p><div class="bars">'+rows+'</div>'+
   '<div class="dlist" hidden><p class="sec"><i>Schools in this district</i></p><ul class="alist">'+arr.slice().sort(function(x,y){return(x[11]===7?6.5:x[11])-(y[11]===7?6.5:y[11])||(y[6]||0)-(x[6]||0)}).map(function(x){return '<li><button type="button" class="alink" data-school="'+esc(x[0])+'">'+esc(x[1])+' <small>'+esc(TIERS[x[11]].label.replace(" (area only)",""))+(x[6]>0?', '+fmt(x[6])+' students':'')+'</small></button></li>'}).join('')+'</ul></div>'+
-  '<p class="closerow"><button type="button" class="btn" data-close="1">Close</button><button type="button" class="btn" data-county="'+esc(arr[0][7])+'">All of '+esc(arr[0][7])+' County</button></p>'+
+  '<p class="closerow"><button type="button" class="btn" data-close="1">Close</button><button type="button" class="btn" data-county="'+esc(here)+'">All of '+esc(here)+' County</button></p>'+
   '<p class="src">'+TAPV+' the schools tile for the list, or a dot for its card. '+districtLink(k)+'</p></div>';
 }
 
@@ -1311,7 +1314,7 @@ function search(q){
   if(!SL){SL=S.map(function(s){return s[1].toLowerCase()});DL={};Object.keys(LEA).forEach(function(k){DL[k]=L_name(k).toLowerCase()})}
   var out=[],seen={};
   var visD={},visC={};S.forEach(function(s){if(visible(s)){visD[s[2]]=1;visC[county(s)]=1}});
-  Object.keys(LEA).forEach(function(k){if(visD[k]&&DL[k].indexOf(q)>=0){out.push({t:"d",k:k,n:L_name(k),c:LEA[k][1]})}});
+  Object.keys(LEA).forEach(function(k){if(visD[k]&&DL[k].indexOf(q)>=0){out.push({t:"d",k:k,n:L_name(k),c:countyList(dCounties(k))})}});
   S.forEach(function(s,i){if(SL[i].indexOf(q)>=0)out.push({t:"s",s:s,n:s[1],c:L_name(s[2])})});
   Object.keys(visC).forEach(function(c){if(c.toLowerCase().indexOf(q)>=0)out.unshift({t:"c",c:c,n:c})});
   out.slice(0,30).forEach(function(h){
@@ -1326,7 +1329,7 @@ function afterMove(fly,fn){var done=false;fly();map.once("moveend",function(){if
 function go(h){
   if(collapseLegend)collapseLegend();
   if(h.t==="c"){map.closePopup();countyMode[h.c]=1;render();var a=S.filter(function(s){return county(s)===h.c&&visible(s)});if(a.length)flyTo(L.latLngBounds(a.map(function(s){return[s[9],s[10]]})).pad(0.15),10);return}
-  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;if(arr.length===1){go({t:"s",s:arr[0]});return}countyMode[county(arr[0])]=1;spread[h.k]=1;render();afterMove(function(){flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12)},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});return}
+  if(h.t==="d"){var arr=S.filter(function(s){return s[2]===h.k&&visible(s)});if(!arr.length)return;if(arr.length===1){go({t:"s",s:arr[0]});return}arr.forEach(function(s){countyMode[county(s)]=1});spread[h.k]=1;render();afterMove(function(){flyTo(L.latLngBounds(arr.map(function(s){return[s[9],s[10]]})).pad(0.3),12)},function(){L.popup({maxWidth:320,offset:[0,-30]}).setLatLng(topOf(arr)).setContent(districtCard(h.k,arr)).openOn(map)});return}
   var s=h.s;if(!visible(s)){TIERS[s[11]].on=true;document.getElementById("tier"+s[11]).checked=true;paintOverlay()}
   countyMode[county(s)]=1;spread[s[2]]=1;render();afterMove(function(){map.flyTo([s[9],s[10]],12,{duration:0.6})},function(){L.popup({maxWidth:320,offset:[0,-8],side:true}).setLatLng([s[9],s[10]]).setContent(schoolCard(s)).openOn(map)});
 }
