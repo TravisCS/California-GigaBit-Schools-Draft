@@ -843,7 +843,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
         <button class="btn" id="gatherAll">Gather all</button>
         <button class="btn" id="spreadAll">Spread all</button>
       </div>
-      <p class="note">Counties are shaded by the most common speed among their schools, and the number is how many schools match the speeds checked above. Tap a county to zoom in to its schools (with "Tap opens" set to Schools or Both); the county's name label gathers it again. A school's card names its district and has a button for the whole district. Schools with gigabit at their block are counted in the legend but not drawn.</p>
+      <label class="tier" style="grid-template-columns:18px 1fr;margin-top:4px"><input type="checkbox" id="showChips" checked><span>Name labels on open counties</span></label>
+      <p class="note">Counties are shaded by the most common speed among their schools, and the number is how many schools match the speeds checked above. Tap a county to zoom in to its schools (with "Tap opens" set to Schools or Both); the county's name label gathers it again. Uncheck Name labels on open counties to hide those labels and see every school. A school's card names its district and has a button for the whole district. Schools with gigabit at their block are counted in the legend but not drawn.</p>
     </details>
     
     <p class="note">Map by Travis Cody Smith, <span id="made"></span>. Web Mercator (EPSG:3857).</p>
@@ -954,6 +955,7 @@ var LOCALE={"11":"City, large","12":"City, midsize","13":"City, small","21":"Sub
 var STATUS={"Future":"Future school, not yet open (NCES 2024-25 status)","New":"New in 2024-25 (NCES status)","Changed Boundary/Agency":"Changed boundary or agency in 2024-25 (NCES status)"};
 var METH=["Read at the school's own census block","Block at the school had no color; nearest blocks within 300 m used","No block with speed data within 300 m"];
 var lastSpread=0,lastSig="",pendingRender=false,collapseLegend=null,setTapG=null;
+var showChips=true;
 var MASK={sat:["#06141c",0.6],str:["#ffffff",0.6]},mask=null;
 var D,S=[],LEA={},CGJ=null,CLAB={},countyLayer=null,map,overlay,ovCanvas,ovBase,base={},tiles={},layer,chipLayer,countyMode={},tapMode="S";
 var NF=new Intl.NumberFormat("en-US");var fmt=function(n){return NF.format(n)};
@@ -1185,6 +1187,7 @@ function spreadApart(items,iters,cap){
 function groupShifts(byC){
   var items=[];
   Object.keys(byC).forEach(function(c){
+    if(countyMode[c]&&!showChips)return;
     var all=[];Object.keys(byC[c]).forEach(function(k){all=all.concat(byC[c][k])});
     var p=map.latLngToLayerPoint(labPt(c)||centroid(all));items.push({key:"c"+c,x:p.x,y:p.y,x0:p.x,y0:p.y,r:countyMode[c]?Math.max(30,(c.length+14)*3.6):Math.max(11,labW(all.length)/2)});
   });
@@ -1231,7 +1234,7 @@ function render(){
       layer.addLayer(m);
     }else{
       var lp=labPt(c)||centroid(all),sh=shifts.c[c];if(sh)lp=map.layerPointToLatLng(map.latLngToLayerPoint(lp).add(L.point(sh[0],sh[1])));
-      chipLayer.addLayer(chip(lp,c,function(){gatherCounty(c)}));
+      if(showChips)chipLayer.addLayer(chip(lp,c,function(){gatherCounty(c)}));
       Object.keys(dists).forEach(function(k){var nm=L_name(k);dists[k].forEach(function(s){dots.push({s:s,k:k,nm:nm,c:c})})});
     }
   });
@@ -1506,6 +1509,7 @@ function wire(){
   function setTap(m){tapMode=m;if(m!=="S"&&ensureAreas)ensureAreas().catch(function(){});Object.keys(tb).forEach(function(k){tb[k].setAttribute("aria-pressed",String(k===m))});map.getContainer().classList.toggle("areas-only",m==="A");map.getContainer().classList.toggle("areas",m!=="S");map.closePopup();}
   tb.S.onclick=function(){setTap("S")};tb.A.onclick=function(){setTap("A")};tb.B.onclick=function(){setTap("B")};
   document.getElementById("gatherAll").onclick=function(){setMode(0)};
+  document.getElementById("showChips").onchange=function(e){showChips=e.target.checked;render()};
   document.getElementById("spreadAll").onclick=function(){setMode(1)};
   var ab=document.getElementById("about");
   var opener=null;
