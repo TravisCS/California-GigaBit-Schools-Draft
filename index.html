@@ -1351,7 +1351,8 @@ function openArea(latlng){
   if(!AR||!arIds||!document.getElementById("showArea").checked)return;
   var rc=cellOf(latlng),id=idAt(rc[0],rc[1]),e={latlng:latlng};
   if(!id){L.popup({maxWidth:300}).setLatLng(latlng).setContent('<div class="pc"><p class="note">No shaded area at this point: the state map has no speed data for this block.</p></div>').openOn(map);return}
-  var a=AR.A[id-1];if(!a||!TIERS[a[0]].on)return;
+  var a=AR.A[id-1];if(!a)return;
+  if(!TIERS[a[0]].on){L.popup({maxWidth:300}).setLatLng(latlng).setContent('<div class="pc"><p class="note">This point is in a '+esc(TIERS[a[0]].label.replace(" (area only)",""))+' area. That tier is switched off in the legend; turn it on to see the area\u2019s card.</p></div>').openOn(map);return}
   L.popup({maxWidth:330,offset:[0,-2]}).setLatLng(e.latlng).setContent(areaCard(id,a,rc,e.latlng)).openOn(map);
   drawHL(id,a);
 }
